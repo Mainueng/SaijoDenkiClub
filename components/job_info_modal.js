@@ -19,6 +19,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { normalize } from "./font";
 
 import { jobInfo, jobStatusLog, checkIn, acceptJob, nav } from "../api/jobs";
+import { invoiceInfo } from "../api/summary";
 import logo from "../assets/image/home/logo.png";
 
 const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
@@ -27,6 +28,11 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
   const [locationStatus, setLocationStatus] = useState("");
   const [checkInStatus, setCheckInStatus] = useState(false);
   const [checkInModal, setCheckInModal] = useState(false);
+  const [invoiceModal, setInvoiceModal] = useState(false);
+  const [invoiceData, setInvoiceData] = useState({});
+  const [page, setPage] = useState(0);
+  const [problemImageUri, setProblemImageUri] = useState(null);
+  const [problemImageModal, setProblemImageModal] = useState(false);
 
   const { width } = Dimensions.get("window");
 
@@ -39,7 +45,7 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
 
         setJobInfoData(res.data.data[0]);
       } catch (error) {
-        console.log(error.response.data.message);
+        console.log(error);
       }
 
       try {
@@ -138,6 +144,17 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
             </View>
           </View>
         );
+      case status_code === 10:
+        return (
+          <View style={styles.modal_button_container}>
+            <Pressable
+              style={styles.summary_button}
+              onPress={() => invoiceHandle(job_id)}
+            >
+              <Text style={styles.modal_button_text}>เอกสารการชำระเงิน</Text>
+            </Pressable>
+          </View>
+        );
       default:
         return (
           <View style={styles.modal_button_container}>
@@ -211,7 +228,10 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
         modalData.openModal = false;
         setJobInfoData({});
         setStatusLog([]);
-        updateRecommend();
+
+        if (updateRecommend) {
+          updateRecommend();
+        }
 
         if (updateUpcoming) {
           updateUpcoming();
@@ -269,6 +289,49 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
     });
   };
 
+  const invoiceHandle = async (job_id) => {
+    modalData.openModal = false;
+    setJobInfoData({});
+    setStatusLog([]);
+    setInvoiceModal(true);
+
+    try {
+      let token = await AsyncStorage.getItem("token");
+
+      try {
+        let res = await invoiceInfo(token, job_id);
+
+        setInvoiceData(res.data.data);
+      } catch (error) {
+        console.log(error.response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const numberFormat = (val) => {
+    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  const change = ({ nativeEvent }) => {
+    let slide = Math.ceil(
+      nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width
+    );
+
+    if (page !== slide) {
+      setPage(slide);
+    }
+  };
+
+  const problemImage = (val) => {
+    if (val) {
+      return val.split(",");
+    } else {
+      return [];
+    }
+  };
+
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -299,6 +362,49 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
         <Modal animationType="fade" transparent={true} visible={checkInModal}>
           <View style={styles.modal_background}>
             <ActivityIndicator size="large" />
+          </View>
+        </Modal>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={problemImageModal}
+        >
+          <View style={styles.modal_background}>
+            <View
+              style={[
+                styles.modal_container,
+                {
+                  backgroundColor: "transparent",
+                  height: "auto",
+                },
+              ]}
+            >
+              <View style={styles.modal_header}>
+                <Text style={styles.modal_header_text}>รูปอาการเสีย</Text>
+                <Pressable
+                  style={styles.close_problem_btn}
+                  onPress={() => {
+                    setProblemImageModal(false);
+                    setProblemImageUri(null);
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="close"
+                    color="#ffffff"
+                    size={normalize(20) > 30 ? 30 : normalize(20)}
+                  />
+                </Pressable>
+              </View>
+              <View style={styles.modal_body}>
+                <Image
+                  source={{
+                    uri: problemImageUri,
+                  }}
+                  style={styles.modal_problem_image}
+                  resizeMode={"cover"}
+                />
+              </View>
+            </View>
           </View>
         </Modal>
         <View style={styles.modal_background}>
@@ -352,6 +458,7 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
               pagingEnabled
               showsHorizontalScrollIndicator={false}
               bounces={false}
+              onScroll={change}
             >
               <View
                 style={{
@@ -419,7 +526,10 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
                             size={normalize(14) > 24 ? 24 : normalize(14)}
                           />
                           <Text style={styles.modal_info_title}>
-                            รายการติดตั้ง
+                            {jobInfoData.job_type_code === "1" ||
+                            jobInfoData.job_type_code === "2"
+                              ? "หมายเลขประจำเครื่อง"
+                              : "รายการติดตั้ง"}
                           </Text>
                         </View>
                         <View style={styles.modal_body_info_container}>
@@ -430,24 +540,38 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
                             />
                           </View>
                           <View style={{ flex: 1 }}>
-                            {jobInfoData.install_list
-                              ? jobInfoData.install_list.map((item, index) => (
-                                  <View
-                                    style={
-                                      styles.modal_info_description_container
-                                    }
-                                    key={index}
-                                  >
-                                    <Text style={styles.modal_info_description}>
-                                      {item.item}
-                                    </Text>
-                                  </View>
-                                ))
-                              : null}
+                            {jobInfoData.job_type_code === "1" ||
+                            jobInfoData.job_type_code === "2" ? (
+                              <Text style={styles.modal_info_description}>
+                                {jobInfoData.serial}
+                              </Text>
+                            ) : jobInfoData.install_list ? (
+                              jobInfoData.install_list.map((item, index) => (
+                                <View
+                                  style={
+                                    styles.modal_info_description_container
+                                  }
+                                  key={index}
+                                >
+                                  <Text style={styles.modal_info_description}>
+                                    {item.item}
+                                  </Text>
+                                </View>
+                              ))
+                            ) : null}
                           </View>
                         </View>
                       </View>
-                      <View style={{ marginBottom: "3%" }}>
+                      <View
+                        style={{
+                          marginBottom: "3%",
+                          display:
+                            jobInfoData.job_type_code === "1" ||
+                            jobInfoData.job_type_code === "2"
+                              ? "none"
+                              : "flex",
+                        }}
+                      >
                         <View style={styles.modal_body_info_container}>
                           <MaterialCommunityIcons
                             name="hammer-wrench"
@@ -483,7 +607,13 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
                           </View>
                         </View>
                       </View>
-                      <View style={{ marginBottom: "3%" }}>
+                      <View
+                        style={{
+                          marginBottom: "3%",
+                          display:
+                            jobInfoData.job_type_code === "2" ? "none" : "flex",
+                        }}
+                      >
                         <View style={styles.modal_body_info_container}>
                           <MaterialCommunityIcons
                             name="cash-multiple"
@@ -503,13 +633,31 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
                               style={styles.modal_info_description_container}
                             >
                               <Text style={styles.modal_info_description}>
-                                {parseFloat(jobInfoData.cost)} บาท
+                                {jobInfoData.job_type_code === "1"
+                                  ? numberFormat(
+                                      parseFloat(
+                                        jobInfoData.service_cost
+                                      ).toFixed(2)
+                                    )
+                                  : numberFormat(
+                                      parseFloat(jobInfoData.cost).toFixed(2)
+                                    )}{" "}
+                                บาท
                               </Text>
                             </View>
                           </View>
                         </View>
                       </View>
-                      <View style={{ marginBottom: "3%" }}>
+                      <View
+                        style={{
+                          marginBottom: "3%",
+                          display:
+                            jobInfoData.job_type_code === "1" ||
+                            jobInfoData.job_type_code === "2"
+                              ? "none"
+                              : "flex",
+                        }}
+                      >
                         <View style={styles.modal_body_info_container}>
                           <MaterialCommunityIcons
                             name="note-text-outline"
@@ -533,6 +681,97 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
                                   ? jobInfoData.comment
                                   : "-"}
                               </Text>
+                            </View>
+                          </View>
+                        </View>
+                      </View>
+                      <View
+                        style={{
+                          marginBottom: "3%",
+                          display:
+                            jobInfoData.job_type_code === "2" ? "flex" : "none",
+                        }}
+                      >
+                        <View style={styles.modal_body_info_container}>
+                          <MaterialCommunityIcons
+                            name="hammer-wrench"
+                            size={normalize(14) > 24 ? 24 : normalize(14)}
+                          />
+                          <Text style={styles.modal_info_title}>อาการเสีย</Text>
+                        </View>
+                        <View style={styles.modal_body_info_container}>
+                          <View style={{ opacity: "0" }}>
+                            <MaterialCommunityIcons
+                              name="shield-check"
+                              size={normalize(14) > 24 ? 24 : normalize(14)}
+                            />
+                          </View>
+                          <View style={{ flex: 1 }}>
+                            <View
+                              style={styles.modal_info_description_container}
+                            >
+                              <Text style={styles.modal_info_description}>
+                                {typeof jobInfoData.symptom === "string"
+                                  ? jobInfoData.symptom
+                                  : null}
+                              </Text>
+                            </View>
+                          </View>
+                        </View>
+                      </View>
+                      <View
+                        style={{
+                          marginBottom: "3%",
+                          display:
+                            jobInfoData.job_type_code === "2" ? "flex" : "none",
+                        }}
+                      >
+                        <View style={styles.modal_body_info_container}>
+                          <MaterialCommunityIcons
+                            name="image-multiple-outline"
+                            size={normalize(14) > 24 ? 24 : normalize(14)}
+                          />
+                          <Text style={styles.modal_info_title}>
+                            รูปอาการเสีย
+                          </Text>
+                        </View>
+                        <View style={styles.modal_body_info_container}>
+                          <View style={{ opacity: "0" }}>
+                            <MaterialCommunityIcons
+                              name="shield-check"
+                              size={normalize(14) > 24 ? 24 : normalize(14)}
+                            />
+                          </View>
+                          <View style={{ flex: 1 }}>
+                            <View style={styles.modal_info_image_container}>
+                              {problemImage(jobInfoData.problem_img).map(
+                                (item, index) => (
+                                  <Pressable
+                                    key={index}
+                                    style={{
+                                      marginRight: "2%",
+                                      marginTop: "2%",
+                                    }}
+                                    onPress={() => {
+                                      setProblemImageUri(
+                                        "https://api.saijo-denki.com/img/club/upload/problem_img/" +
+                                          item
+                                      );
+                                      setProblemImageModal(true);
+                                    }}
+                                  >
+                                    <Image
+                                      source={{
+                                        uri:
+                                          "https://api.saijo-denki.com/img/club/upload/problem_img/" +
+                                          item,
+                                      }}
+                                      resizeMode={"cover"}
+                                      style={styles.problem_image_thumb}
+                                    />
+                                  </Pressable>
+                                )
+                              )}
                             </View>
                           </View>
                         </View>
@@ -688,6 +927,20 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
                 </View>
               </View>
             </ScrollView>
+            <View style={styles.paging_container}>
+              <View
+                style={[
+                  styles.page_bullet,
+                  page === 0 ? styles.active_bullet : null,
+                ]}
+              />
+              <View
+                style={[
+                  styles.page_bullet,
+                  page === 1 ? styles.active_bullet : null,
+                ]}
+              />
+            </View>
             {modalButton(
               parseInt(jobInfoData.job_id),
               parseInt(jobInfoData.status_code),
@@ -697,6 +950,89 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
               jobInfoData.job_type_code,
               jobInfoData.review
             )}
+          </View>
+        </View>
+      </Modal>
+      <Modal animationType="fade" transparent={true} visible={invoiceModal}>
+        <View style={styles.modal_background}>
+          <View style={styles.modal_container}>
+            <View style={styles.modal_header_container}>
+              <Image
+                source={logo}
+                resizeMode={"cover"}
+                style={styles.modal_invoice_image}
+              />
+              <View style={styles.modal_name_container}>
+                <View style={styles.name_container}>
+                  <Text style={styles.modal_name}>
+                    บริษัท ซัยโจ เด็นกิ อินเตอร์เนชั่นแนล จำกัด
+                  </Text>
+                </View>
+              </View>
+              <Pressable
+                style={styles.close_modal_btn}
+                onPress={() => {
+                  setInvoiceModal(false);
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="close"
+                  size={normalize(18) > 28 ? 28 : normalize(18)}
+                  color={"#ffffff"}
+                />
+              </Pressable>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+              }}
+            >
+              <View
+                style={{
+                  width: width * 0.9,
+                  borderBottomColor: "rgba(0,0,0,0.15)",
+                  borderBottomWidth: 1,
+                }}
+              >
+                <View
+                  style={[styles.modal_info_container, { marginTop: "5%" }]}
+                >
+                  <Text style={styles.modal_info_title}>เอกสารเลขที่</Text>
+                  <Text style={styles.modal_info_description}>
+                    {invoiceData.invNo}
+                  </Text>
+                </View>
+                <View style={styles.modal_info_container}>
+                  <Text style={styles.modal_info_title}>หมายเลขงาน</Text>
+                  <Text style={styles.modal_info_description}>
+                    {invoiceData.jobNo}
+                  </Text>
+                </View>
+                <View style={styles.modal_info_container}>
+                  <Text style={styles.modal_info_title}>
+                    ช่องทางการชำระเงิน
+                  </Text>
+                  <Text style={styles.modal_info_description}>
+                    {invoiceData.paymentChannel}
+                  </Text>
+                </View>
+                <View
+                  style={[styles.modal_info_container, { marginBottom: "2%" }]}
+                >
+                  <Text style={styles.modal_info_title}>จำนวนเงิน</Text>
+                  <Text style={styles.modal_info_description}>
+                    {numberFormat(parseFloat(invoiceData.total).toFixed(2))} บาท
+                  </Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.slip_image_container}>
+              <Image
+                source={{ uri: invoiceData.slip + "?" + new Date() }}
+                resizeMode={"contain"}
+                style={styles.slip_image}
+              />
+            </View>
           </View>
         </View>
       </Modal>

@@ -99,6 +99,32 @@ const acceptJob = async (token, job_id) => {
   });
 };
 
+const summary = async (token) => {
+  return await axios({
+    url: SERV_API + "/v1/jobs/summary",
+    method: "GET",
+    timeout: 5000,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data",
+      Authorization: token,
+    },
+  });
+};
+
+const summaryDetail = async (token) => {
+  return await axios({
+    url: SERV_API + "/v1/jobs/detail-summary",
+    method: "GET",
+    timeout: 5000,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data",
+      Authorization: token,
+    },
+  });
+};
+
 export {
   upcoming,
   recommend,
@@ -107,4 +133,6 @@ export {
   jobStatusLog,
   checkIn,
   acceptJob,
+  summary,
+  summaryDetail,
 };

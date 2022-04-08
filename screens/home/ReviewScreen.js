@@ -20,6 +20,7 @@ import {
   assessmentForm,
   uploadAssessmentSign,
   saveAssessmentForm,
+  sendInvoice,
 } from "../../api/summary";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { normalize } from "../../components/font";
@@ -355,6 +356,7 @@ const ReviewScreen = ({ navigation, route }) => {
 
       try {
         await saveAssessmentForm(token, job_id, result);
+        await sendInvoice(token, job_id);
 
         setModalSign(false);
 

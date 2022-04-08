@@ -5,7 +5,6 @@ import {
   Image,
   Text,
   ActivityIndicator,
-  Dimensions,
   Platform,
   Linking,
 } from "react-native";
@@ -28,10 +27,10 @@ import styles from "./assets/stylesheet/auth/auth";
 
 import SignInRootScreen from "./screens/auth/SignInRootScreen";
 import HomeRootScreen from "./screens/home/HomeRootScreen";
+import NotificationRootScreen from "./screens/notification/NotificationRootScreen";
+import ErrorCodeRootScreen from "./screens/error_code/ErrorCodeRootScreen";
 
 const Tab = createBottomTabNavigator();
-
-const { height } = Dimensions.get("window");
 
 const Tabs = () => {
   const [badge, setBadge] = useState("0");
@@ -49,7 +48,7 @@ const Tabs = () => {
     <TabContext.Provider value={tab_context}>
       <PushNotification />
       <Tab.Navigator
-        initialRouteName="HomeScreen"
+        initialRouteName="NotificationRootScreen"
         screenOptions={{
           tabBarActiveTintColor: "#ffffff",
           tabBarInactiveTintColor: "#ffffff",
@@ -68,7 +67,7 @@ const Tabs = () => {
           name="HomeRootScreen"
           component={HomeRootScreen}
           options={{
-            tabBarLabel: "Home",
+            tabBarLabel: "หน้าแรก",
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="home"
@@ -79,14 +78,15 @@ const Tabs = () => {
             tabBarLabelPosition: "below-icon",
             tabBarLabelStyle: {
               fontSize: normalize(10) > 14 ? 14 : normalize(10),
+              fontFamily: "Sukhumvit_Medium",
             },
           }}
         />
-        {/* <Tab.Screen
-          name="Notification"
+        <Tab.Screen
+          name="NotificationRootScreen"
           component={NotificationRootScreen}
           options={{
-            tabBarLabel: i18n.t("notification"),
+            tabBarLabel: "การแจ้งเตือน",
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="bell"
@@ -97,26 +97,28 @@ const Tabs = () => {
             tabBarLabelPosition: "below-icon",
             tabBarLabelStyle: {
               fontSize: normalize(10) > 14 ? 14 : normalize(10),
+              fontFamily: "Sukhumvit_Medium",
             },
             tabBarBadge: badge,
             tabBarBadgeStyle: {
-              backgroundColor: "#a2b07a",
+              backgroundColor: "#11B3AD",
               color: "#ffffff",
               fontSize: normalize(10) > 14 ? 14 : normalize(10),
               position: "absolute",
               top: "-30%",
               left: 0,
+              display: badge ? "flex" : "none",
             },
           }}
         />
         <Tab.Screen
-          name="Booking"
-          component={BookingRootScreen}
+          name="WarrantyRootScreen"
+          component={HomeRootScreen}
           options={{
-            tabBarLabel: i18n.t("booking"),
+            tabBarLabel: "E-Warranty",
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
-                name="clipboard-check"
+                name="qrcode-scan"
                 color={color}
                 size={size * 0.9}
               />
@@ -124,17 +126,18 @@ const Tabs = () => {
             tabBarLabelPosition: "below-icon",
             tabBarLabelStyle: {
               fontSize: normalize(10) > 14 ? 14 : normalize(10),
+              fontFamily: "Sukhumvit_Medium",
             },
           }}
         />
         <Tab.Screen
-          name="More"
-          component={MoreRootScreen}
+          name="ErrorRootScreen"
+          component={ErrorCodeRootScreen}
           options={{
-            tabBarLabel: i18n.t("more"),
+            tabBarLabel: "รหัสความผิดปกติ",
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
-                name="menu"
+                name="alert-circle"
                 color={color}
                 size={size * 0.9}
               />
@@ -142,9 +145,29 @@ const Tabs = () => {
             tabBarLabelPosition: "below-icon",
             tabBarLabelStyle: {
               fontSize: normalize(10) > 14 ? 14 : normalize(10),
+              fontFamily: "Sukhumvit_Medium",
             },
           }}
-        /> */}
+        />
+        <Tab.Screen
+          name="MoreRootScreen"
+          component={HomeRootScreen}
+          options={{
+            tabBarLabel: "อื่นๆ",
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="dots-horizontal"
+                color={color}
+                size={size * 0.9}
+              />
+            ),
+            tabBarLabelPosition: "below-icon",
+            tabBarLabelStyle: {
+              fontSize: normalize(10) > 14 ? 14 : normalize(10),
+              fontFamily: "Sukhumvit_Medium",
+            },
+          }}
+        />
       </Tab.Navigator>
     </TabContext.Provider>
   );

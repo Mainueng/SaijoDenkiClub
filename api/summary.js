@@ -196,6 +196,45 @@ const uploadAssessmentSign = async (token, job_id, signature) => {
   });
 };
 
+const sendInvoice = async (token, job_id) => {
+  return await axios({
+    url: SERV_API + "/v1/jobs/invoice/" + job_id,
+    method: "PUT",
+    timeout: 5000,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data",
+      Authorization: token,
+    },
+  });
+};
+
+const invoices = async (token) => {
+  return await axios({
+    url: SERV_API + "/v1/summary/invoices",
+    method: "GET",
+    timeout: 5000,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data",
+      Authorization: token,
+    },
+  });
+};
+
+const invoiceInfo = async (token, job_id) => {
+  return await axios({
+    url: SERV_API + "/v1/summary/invoice/" + job_id,
+    method: "GET",
+    timeout: 5000,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data",
+      Authorization: token,
+    },
+  });
+};
+
 export {
   summaryForm,
   saveSummaryForm,
@@ -204,4 +243,7 @@ export {
   assessmentForm,
   saveAssessmentForm,
   uploadAssessmentSign,
+  sendInvoice,
+  invoices,
+  invoiceInfo,
 };

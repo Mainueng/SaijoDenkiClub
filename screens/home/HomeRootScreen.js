@@ -49,7 +49,7 @@ const HomeRootScreen = () => {
         options={{
           headerShown: true,
           title: "สรุปงาน: รายงานผลการตรวจสอบบริการ",
-          headerTitleStyle: { fontFamily: "Sukhumvit_Medium" },
+          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
         }}
       />
       <Stack.Screen
@@ -58,7 +58,7 @@ const HomeRootScreen = () => {
         options={{
           headerShown: true,
           title: "รายงาน: รายงานผลการตรวจสอบบริการ",
-          headerTitleStyle: { fontFamily: "Sukhumvit_Medium" },
+          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
         }}
       />
       <Stack.Screen
@@ -67,7 +67,7 @@ const HomeRootScreen = () => {
         options={{
           headerShown: true,
           title: "แบบประเมิน: ความพึงพอใจสินค้าและบริการ",
-          headerTitleStyle: { fontFamily: "Sukhumvit_Medium" },
+          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
         }}
       />
     </Stack.Navigator>
