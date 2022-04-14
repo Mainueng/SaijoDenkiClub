@@ -83,8 +83,8 @@ const HomeScreen = ({ navigation }) => {
 
         countDown(res.data.data);
 
-        let data = setInterval(() => {
-          countDown(res.data.data);
+        let data = setInterval(async () => {
+          await countDown(res.data.data);
         }, 60000);
 
         setJobInterval(data);
@@ -568,6 +568,10 @@ const HomeScreen = ({ navigation }) => {
       getInvoiceList();
     });
 
+    navigation.addListener("blur", () => {
+      clearInterval(jobInterval);
+    });
+
     return () => {
       clearInterval(jobInterval);
     };
@@ -577,7 +581,10 @@ const HomeScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
       <View style={styles.header_container}>
-        <Pressable style={styles.profile_container}>
+        <Pressable
+          style={styles.profile_container}
+          onPress={() => navigation.navigate({ name: "Profile" })}
+        >
           <Image
             source={{
               uri:

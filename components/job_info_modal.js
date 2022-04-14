@@ -61,8 +61,8 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
   };
 
   const openMap = () => {
-    var scheme = Platform.OS === "ios" ? "maps:" : "geo:";
-    var url = scheme + `${"13.8484942"},${"100.5319401"}`;
+    let scheme = Platform.OS === "ios" ? "maps:" : "geo:";
+    let url = scheme + `${"13.8484942"},${"100.5319401"}`;
     Linking.openURL(url);
   };
 

@@ -6,6 +6,7 @@ import JobLocationScreen from "./JobLocationScreen";
 import SummaryScreen from "./SummaryScreen";
 import ReportScreen from "./ReportScreen";
 import ReviewScreen from "./ReviewScreen";
+import ProfileScreen from "./ProfileScreen";
 
 const HomeRootScreen = () => {
   const Stack = createStackNavigator();
@@ -34,6 +35,7 @@ const HomeRootScreen = () => {
         component={RecommendScreen}
         options={{
           headerShown: true,
+          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
         }}
       />
       <Stack.Screen
@@ -41,6 +43,7 @@ const HomeRootScreen = () => {
         component={JobLocationScreen}
         options={{
           headerShown: true,
+          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
         }}
       />
       <Stack.Screen
@@ -67,6 +70,15 @@ const HomeRootScreen = () => {
         options={{
           headerShown: true,
           title: "แบบประเมิน: ความพึงพอใจสินค้าและบริการ",
+          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+        }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          headerShown: true,
+          title: "บัญชีผู้ใช้",
           headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
         }}
       />

@@ -58,4 +58,38 @@ export default StyleSheet.create({
     backgroundColor: "#ffffff",
     marginBottom: "5%",
   },
+  error_card_container: {
+    backgroundColor: "#ffffff",
+    paddingHorizontal: "5%",
+    paddingVertical: "2.5%",
+    justifyContent: "center",
+    borderBottomColor: "#e6e6e6",
+    borderBottomWidth: 1,
+  },
+  error_card_text: {
+    fontFamily: "Sukhumvit_Medium",
+    fontSize: normalize(14) > 18 ? 18 : normalize(14),
+  },
+  error_code_title_container: {
+    backgroundColor: "#b31117",
+    paddingHorizontal: "5%",
+    paddingVertical: "1.5%",
+  },
+  error_code_title: {
+    fontFamily: "Sukhumvit_SemiBold",
+    fontSize: normalize(13) > 17 ? 17 : normalize(13),
+    color: "#ffffff",
+  },
+  error_code_decs_container: {
+    paddingHorizontal: "5%",
+    paddingVertical: "1.5%",
+  },
+  error_code_decs: {
+    fontFamily: "Sukhumvit_Medium",
+    fontSize: normalize(13) > 17 ? 17 : normalize(13),
+  },
+  clip_container: {
+    height: Math.round((width * 9) / 16),
+    width: width,
+  },
 });

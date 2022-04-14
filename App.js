@@ -28,12 +28,14 @@ import styles from "./assets/stylesheet/auth/auth";
 import SignInRootScreen from "./screens/auth/SignInRootScreen";
 import HomeRootScreen from "./screens/home/HomeRootScreen";
 import NotificationRootScreen from "./screens/notification/NotificationRootScreen";
+import WarrantyRootScreen from "./screens/warranty/WarrantyRootScreen";
 import ErrorCodeRootScreen from "./screens/error_code/ErrorCodeRootScreen";
+import MoreRootScreen from "./screens/more/MoreRootScreen";
 
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
-  const [badge, setBadge] = useState("0");
+  const [badge, setBadge] = useState(0);
 
   const tab_context = useMemo(
     () => ({
@@ -48,7 +50,7 @@ const Tabs = () => {
     <TabContext.Provider value={tab_context}>
       <PushNotification />
       <Tab.Navigator
-        initialRouteName="NotificationRootScreen"
+        initialRouteName="HomeRootScreen"
         screenOptions={{
           tabBarActiveTintColor: "#ffffff",
           tabBarInactiveTintColor: "#ffffff",
@@ -113,7 +115,7 @@ const Tabs = () => {
         />
         <Tab.Screen
           name="WarrantyRootScreen"
-          component={HomeRootScreen}
+          component={WarrantyRootScreen}
           options={{
             tabBarLabel: "E-Warranty",
             tabBarIcon: ({ color, size }) => (
@@ -151,7 +153,7 @@ const Tabs = () => {
         />
         <Tab.Screen
           name="MoreRootScreen"
-          component={HomeRootScreen}
+          component={MoreRootScreen}
           options={{
             tabBarLabel: "อื่นๆ",
             tabBarIcon: ({ color, size }) => (

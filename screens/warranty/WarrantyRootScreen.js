@@ -1,14 +1,14 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import ErrorCodeScreen from "./ErrorCodeScreen";
-import ErrorCodeDescriptionScreen from "./ErrorCodeDescription";
+import WarrantyScreen from "./WarrantyScreen";
+import WarrantyInfoScreen from "./WarrantyInfoScreen";
 
-const ErrorCodeRootScreen = () => {
+const NotificationRootScreen = () => {
   const Stack = createStackNavigator();
 
   return (
     <Stack.Navigator
-      initialRouteName="ErrorCode"
+      initialRouteName="Warranty"
       screenOptions={{
         headerMode: "screen",
         headerTintColor: "#ffffff",
@@ -19,21 +19,25 @@ const ErrorCodeRootScreen = () => {
       }}
     >
       <Stack.Screen
-        name="ErrorCode"
-        component={ErrorCodeScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="ErrorCodeDescription"
-        component={ErrorCodeDescriptionScreen}
+        name="Warranty"
+        component={WarrantyScreen}
         options={{
           headerShown: true,
           headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          title: "E-Warranty",
+        }}
+      />
+      <Stack.Screen
+        name="WarrantyInfo"
+        component={WarrantyInfoScreen}
+        options={{
+          headerShown: true,
+          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          title: "E-Warranty",
         }}
       />
     </Stack.Navigator>
   );
 };
-export default ErrorCodeRootScreen;
+
+export default NotificationRootScreen;

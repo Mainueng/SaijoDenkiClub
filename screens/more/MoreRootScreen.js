@@ -1,14 +1,13 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import ErrorCodeScreen from "./ErrorCodeScreen";
-import ErrorCodeDescriptionScreen from "./ErrorCodeDescription";
+import MoreScreen from "./MoreScreen";
 
-const ErrorCodeRootScreen = () => {
+const MoreRootScreen = () => {
   const Stack = createStackNavigator();
 
   return (
     <Stack.Navigator
-      initialRouteName="ErrorCode"
+      initialRouteName="More"
       screenOptions={{
         headerMode: "screen",
         headerTintColor: "#ffffff",
@@ -19,21 +18,15 @@ const ErrorCodeRootScreen = () => {
       }}
     >
       <Stack.Screen
-        name="ErrorCode"
-        component={ErrorCodeScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="ErrorCodeDescription"
-        component={ErrorCodeDescriptionScreen}
+        name="More"
+        component={MoreScreen}
         options={{
           headerShown: true,
           headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          title: "อื่นๆ",
         }}
       />
     </Stack.Navigator>
   );
 };
-export default ErrorCodeRootScreen;
+export default MoreRootScreen;
