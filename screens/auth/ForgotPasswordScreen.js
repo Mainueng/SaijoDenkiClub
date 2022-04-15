@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Pressable,
@@ -41,7 +41,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
           ...data,
           email: val,
           isValidEmail: false,
-          errorEmail: "Invalid format",
+          errorEmail: "รูปแบบไม่ถูกต้อง",
         });
       }
     } else {
@@ -49,7 +49,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
         ...data,
         email: val,
         isValidEmail: false,
-        errorEmail: "Email can't be empty!",
+        errorEmail: "กรุณาระบุอีเมล์!",
       });
     }
   };
@@ -59,26 +59,22 @@ const ForgotPasswordScreen = ({ navigation }) => {
       try {
         await forgot_password(data.email);
 
-        Alert.alert(
-          "Success!",
-          "The new password has been sent to your email.",
-          [
-            {
-              text: "Close",
-              onPress: () => navigation.navigate("Sign In"),
-            },
-          ]
-        );
+        Alert.alert("สำเร็จ!", "รหัสผ่านใหม่จะถูกส่งไปที่อีเมล์.", [
+          {
+            text: "Close",
+            onPress: () => navigation.navigate("Sign In"),
+          },
+        ]);
       } catch (error) {
         console.log(error);
-        Alert.alert("Warring!", error.response.data.message);
+        Alert.alert("ผิดพลาด!", error.response.data.message);
       }
     } else {
       setData({
         ...data,
         errorEmail: data.errorEmail.length
           ? data.errorEmail
-          : "Email can't be empty!",
+          : "กรุณาระบุอีเมล์!",
       });
     }
   };
@@ -100,11 +96,11 @@ const ForgotPasswordScreen = ({ navigation }) => {
           <View style={styles.sub_container}>
             <View style={styles.form_container}>
               <View style={styles.form_group}>
-                <Text style={styles.form_label}>Email</Text>
+                <Text style={styles.form_label}>อีเมล์</Text>
                 <TextInput
                   style={styles.from_input}
-                  placeholder="Email"
-                  placeholderTextColor="rgba(143,116,109,0.5)"
+                  placeholder="อีเมล์"
+                  placeholderTextColor={"rgba(0,0,0,0.5)"}
                   autoCapitalize="none"
                   keyboardType={"email-address"}
                   onChangeText={(val) => emailHandel(val)}
@@ -133,7 +129,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
                     submitHandle();
                   }}
                 >
-                  <Text style={styles.confirm_text}>Sign Up</Text>
+                  <Text style={styles.confirm_text}>ยืนยัน</Text>
                 </Pressable>
               </View>
             </View>

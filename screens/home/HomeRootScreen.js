@@ -7,6 +7,13 @@ import SummaryScreen from "./SummaryScreen";
 import ReportScreen from "./ReportScreen";
 import ReviewScreen from "./ReviewScreen";
 import ProfileScreen from "./ProfileScreen";
+import ProfileNameScreen from "./ProfileNameScreen";
+import ProfilePhoneNumberScreen from "./ProfilePhoneNumberScreen";
+import ProfileAddressScreen from "./ProfileAddressScreen";
+import ProfileLocationScreen from "./ProfileLocationScreen";
+import VerifyScreen from "./VerifyScreen";
+import VerifyIdScreen from "./VerifyIdScreen";
+import VerifyBookBankScreen from "./VerifyBookBankScreen";
 
 const HomeRootScreen = () => {
   const Stack = createStackNavigator();
@@ -79,6 +86,69 @@ const HomeRootScreen = () => {
         options={{
           headerShown: true,
           title: "บัญชีผู้ใช้",
+          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+        }}
+      />
+      <Stack.Screen
+        name="ProfileName"
+        component={ProfileNameScreen}
+        options={{
+          headerShown: true,
+          title: "บัญชีผู้ใช้",
+          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+        }}
+      />
+      <Stack.Screen
+        name="ProfilePhoneNumber"
+        component={ProfilePhoneNumberScreen}
+        options={{
+          headerShown: true,
+          title: "บัญชีผู้ใช้",
+          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+        }}
+      />
+      <Stack.Screen
+        name="ProfileAddress"
+        component={ProfileAddressScreen}
+        options={{
+          headerShown: true,
+          title: "บัญชีผู้ใช้",
+          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+        }}
+      />
+      <Stack.Screen
+        name="ProfileLocation"
+        component={ProfileLocationScreen}
+        options={{
+          headerShown: true,
+          title: "ตำแหน่ง",
+          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+        }}
+      />
+      <Stack.Screen
+        name="SaijoVerify"
+        component={VerifyScreen}
+        options={{
+          headerShown: true,
+          title: "Saijo Denki Verify",
+          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+        }}
+      />
+      <Stack.Screen
+        name="VerifyID"
+        component={VerifyIdScreen}
+        options={{
+          headerShown: true,
+          title: "บัตรประชาชน",
+          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+        }}
+      />
+      <Stack.Screen
+        name="VerifyBookBank"
+        component={VerifyBookBankScreen}
+        options={{
+          headerShown: true,
+          title: "เลขที่บัญชี",
           headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
         }}
       />

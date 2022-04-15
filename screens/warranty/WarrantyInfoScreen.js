@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Dimensions, Platform, SafeAreaView } from "react-native";
+import { Text, View, Dimensions, SafeAreaView } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { normalize } from "../../components/font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { warranty_info } from "../../api/warranty";
 import styles from "../../assets/stylesheet/warranty/warranty";

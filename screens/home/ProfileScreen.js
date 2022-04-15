@@ -17,11 +17,11 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { normalize } from "../../components/font";
 import MapView, { Marker } from "react-native-maps";
 import * as ImagePicker from "expo-image-picker";
-import { user_info } from "../../api/user";
+import { user_info, update_user_info } from "../../api/user";
 import jwt_decode from "jwt-decode";
 import { AuthContext } from "../../components/context";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const [modalMenu, setModalMenu] = useState(false);
   const [image, setImage] = useState(null);
   const [name, setName] = useState("-");
@@ -44,7 +44,7 @@ const ProfileScreen = () => {
   const { logout } = useContext(AuthContext);
 
   useEffect(() => {
-    (async () => {
+    navigation.addListener("focus", async () => {
       const camera = await ImagePicker.requestCameraPermissionsAsync();
       const gallery = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -95,7 +95,7 @@ const ProfileScreen = () => {
       } catch (error) {
         console.log(error);
       }
-    })();
+    });
   }, []);
 
   const cameraImage = async () => {
@@ -110,24 +110,7 @@ const ProfileScreen = () => {
       if (!result.cancelled) {
         setImage(result.uri);
 
-        // try {
-        //   await update_user_info(
-        //     token,
-        //     userID,
-        //     name,
-        //     lastName,
-        //     phoneNumber,
-        //     result.uri,
-        //     address,
-        //     district,
-        //     province,
-        //     postalCode,
-        //     latitude,
-        //     longitude
-        //   );
-        // } catch (error) {
-        //   console.log(error.response.data.message);
-        // }
+        updateUserInfo(result.uri);
       }
     } catch {
       Alert.alert(
@@ -153,30 +136,40 @@ const ProfileScreen = () => {
       if (!result.cancelled) {
         setImage(result.uri);
 
-        // try {
-        //   await update_user_info(
-        //     token,
-        //     userID,
-        //     name,
-        //     lastName,
-        //     phoneNumber,
-        //     result.uri,
-        //     address,
-        //     district,
-        //     province,
-        //     postalCode,
-        //     latitude,
-        //     longitude
-        //   );
-        // } catch (error) {
-        //   console.log(error.response.data.message);
-        // }
+        updateUserInfo(result.uri);
       }
     } catch {
       Alert.alert(
         "Warring!",
         "Please allow Saijo Denki Connect to access gallery on your device."
       );
+    }
+  };
+
+  const updateUserInfo = async (uri) => {
+    try {
+      let token = await AsyncStorage.getItem("token");
+
+      try {
+        await update_user_info(
+          token,
+          userID,
+          name,
+          lastName,
+          phoneNumber,
+          uri,
+          address,
+          district,
+          province,
+          postalCode,
+          latitude,
+          longitude
+        );
+      } catch (error) {
+        console.log(error.response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -224,9 +217,33 @@ const ProfileScreen = () => {
                   />
                 </View>
               </View>
+            </Pressable>
+            <View style={{ alignItems: "center" }}>
               <Text style={styles.profile_name}>
                 {name} {lastName} ({userID})
               </Text>
+            </View>
+            <Pressable
+              style={{ alignItems: "center" }}
+              onPress={() =>
+                navigation.navigate({
+                  name: "ProfileName",
+                  params: {
+                    userID: userID,
+                    name: name,
+                    lastName: lastName,
+                    phoneNumber: phoneNumber,
+                    image: null,
+                    address: address,
+                    district: district,
+                    province: province,
+                    postalCode: postalCode,
+                    latitude: latitude,
+                    longitude: longitude,
+                  },
+                })
+              }
+            >
               <Text style={styles.edit}>แก้ไข</Text>
             </Pressable>
           </View>
@@ -242,7 +259,27 @@ const ProfileScreen = () => {
               <View style={styles.card_center}>
                 <Text style={styles.card_label}>เบอร์โทร</Text>
               </View>
-              <Pressable style={styles.card_right}>
+              <Pressable
+                style={styles.card_right}
+                onPress={() =>
+                  navigation.navigate({
+                    name: "ProfilePhoneNumber",
+                    params: {
+                      userID: userID,
+                      name: name,
+                      lastName: lastName,
+                      phoneNumber: phoneNumber,
+                      image: null,
+                      address: address,
+                      district: district,
+                      province: province,
+                      postalCode: postalCode,
+                      latitude: latitude,
+                      longitude: longitude,
+                    },
+                  })
+                }
+              >
                 <Text style={styles.edit_text}>แก้ไข</Text>
               </Pressable>
             </View>
@@ -266,7 +303,27 @@ const ProfileScreen = () => {
               <View style={styles.card_center}>
                 <Text style={styles.card_label}>ที่อยู่</Text>
               </View>
-              <Pressable style={styles.card_right}>
+              <Pressable
+                style={styles.card_right}
+                onPress={() =>
+                  navigation.navigate({
+                    name: "ProfileAddress",
+                    params: {
+                      userID: userID,
+                      name: name,
+                      lastName: lastName,
+                      phoneNumber: phoneNumber,
+                      image: image,
+                      address: address,
+                      district: district,
+                      province: province,
+                      postalCode: postalCode,
+                      latitude: latitude,
+                      longitude: longitude,
+                    },
+                  })
+                }
+              >
                 <Text style={styles.edit_text}>แก้ไข</Text>
               </Pressable>
             </View>
@@ -292,7 +349,27 @@ const ProfileScreen = () => {
               <View style={styles.card_center}>
                 <Text style={styles.card_label}>ตำแหน่ง</Text>
               </View>
-              <Pressable style={styles.card_right}>
+              <Pressable
+                style={styles.card_right}
+                onPress={() =>
+                  navigation.navigate({
+                    name: "ProfileLocation",
+                    params: {
+                      userID: userID,
+                      name: name,
+                      lastName: lastName,
+                      phoneNumber: phoneNumber,
+                      image: image,
+                      address: address,
+                      district: district,
+                      province: province,
+                      postalCode: postalCode,
+                      latitude: latitude,
+                      longitude: longitude,
+                    },
+                  })
+                }
+              >
                 <Text style={styles.edit_text}>แก้ไข</Text>
               </Pressable>
             </View>
@@ -334,7 +411,10 @@ const ProfileScreen = () => {
               <View style={styles.card_center}>
                 <Text style={styles.card_label}>Saijo Denki Verify</Text>
               </View>
-              <Pressable style={styles.card_right}>
+              <Pressable
+                style={styles.card_right}
+                onPress={() => navigation.navigate({ name: "SaijoVerify" })}
+              >
                 <Text style={styles.edit_text}>ดูข้อมูล</Text>
               </Pressable>
             </View>
@@ -358,7 +438,29 @@ const ProfileScreen = () => {
               <View style={styles.card_center}>
                 <Text style={styles.card_label}>บัตรประชาชน</Text>
               </View>
-              <Pressable style={styles.card_right}>
+              <Pressable
+                style={styles.card_right}
+                onPress={() =>
+                  navigation.navigate({
+                    name: "VerifyID",
+                    params: {
+                      userID: userID,
+                      name: name,
+                      lastName: lastName,
+                      phoneNumber: phoneNumber,
+                      image: image,
+                      address: address,
+                      district: district,
+                      province: province,
+                      postalCode: postalCode,
+                      latitude: latitude,
+                      longitude: longitude,
+                      frontID: frontID,
+                      backID: backID,
+                    },
+                  })
+                }
+              >
                 <Text style={styles.edit_text}>
                   {frontID === "2" && backID === "2" ? "ดูข้อมูล" : "แก้ไข"}
                 </Text>
@@ -387,7 +489,30 @@ const ProfileScreen = () => {
               <View style={styles.card_center}>
                 <Text style={styles.card_label}>เลขที่บัญชี</Text>
               </View>
-              <Pressable style={styles.card_right}>
+              <Pressable
+                style={styles.card_right}
+                onPress={() =>
+                  navigation.navigate({
+                    name: "VerifyBookBank",
+                    params: {
+                      userID: userID,
+                      name: name,
+                      lastName: lastName,
+                      phoneNumber: phoneNumber,
+                      image: image,
+                      address: address,
+                      district: district,
+                      province: province,
+                      postalCode: postalCode,
+                      latitude: latitude,
+                      longitude: longitude,
+                      frontID: null,
+                      backID: null,
+                      bookBank: accountBook,
+                    },
+                  })
+                }
+              >
                 <Text style={styles.edit_text}>
                   {accountBook === "2" ? "ดูข้อมูล" : "แก้ไข"}
                 </Text>

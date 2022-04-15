@@ -82,17 +82,13 @@ const SignInScreen = ({ navigation }) => {
 
   const loginHandle = (username, password) => {
     if (data.username.length == 0) {
-      Alert.alert("Warning!", "Username field cannot be empty.", [
-        { text: "Close" },
-      ]);
+      Alert.alert("ผิดพลาด!", "กรุณาระบุอีเมล์.", [{ text: "ปิด" }]);
 
       return;
     }
 
     if (data.password.length == 0) {
-      Alert.alert("Warning!", "Password field cannot be empty.", [
-        { text: "Close" },
-      ]);
+      Alert.alert("ผิดพลาด!", "กรุณาระบุรหัสผ่าน.", [{ text: "ปิด" }]);
 
       return;
     }
@@ -126,7 +122,7 @@ const SignInScreen = ({ navigation }) => {
             </View>
             <TextInput
               style={styles.input}
-              placeholder="Username"
+              placeholder="อีเมล์"
               placeholderTextColor="rgba(102,102,102,0.5)"
               autoCapitalize="none"
               keyboardType="email-address"
@@ -143,7 +139,7 @@ const SignInScreen = ({ navigation }) => {
             </View>
             <TextInput
               style={styles.input}
-              placeholder="Password"
+              placeholder="รหัสผ่าน"
               placeholderTextColor="rgba(102,102,102,0.5)"
               secureTextEntry={true}
               onChangeText={(val) => handle_password_change(val)}
@@ -154,13 +150,13 @@ const SignInScreen = ({ navigation }) => {
               style={styles.signup_container}
               onPress={() => navigation.navigate("Sign Up")}
             >
-              <Text style={styles.signup_text}>Create Account</Text>
+              <Text style={styles.signup_text}>สมัครสมาชิก</Text>
             </Pressable>
             <Pressable
               style={styles.forget_password_container}
               onPress={() => navigation.navigate("Forgot Password")}
             >
-              <Text style={styles.forgot_password}>Forgot Password ?</Text>
+              <Text style={styles.forgot_password}>ลืมรหัสผ่าน ?</Text>
             </Pressable>
           </View>
           <View style={styles.btn_container}>
@@ -170,11 +166,11 @@ const SignInScreen = ({ navigation }) => {
                 Keyboard.dismiss(), loginHandle(data.username, data.password);
               }}
             >
-              <Text style={styles.login_btn_text}>Sign in</Text>
+              <Text style={styles.login_btn_text}>เข้าสู่ระบบ</Text>
             </Pressable>
             <View style={styles.or_container}>
               <View style={styles.hr}></View>
-              <Text style={styles.hr_text}>or</Text>
+              <Text style={styles.hr_text}>หรือ</Text>
               <View style={styles.hr}></View>
             </View>
             <Pressable
@@ -188,7 +184,9 @@ const SignInScreen = ({ navigation }) => {
                 resizeMode={"contain"}
                 style={styles.social_logo}
               />
-              <Text style={styles.social_btn_text}>Connect with Facebook</Text>
+              <Text style={styles.social_btn_text}>
+                ลงชื่อเข้าใช้ด้วย Facebook
+              </Text>
             </Pressable>
             {Platform.OS === "ios" && (
               <AppleAuthentication.AppleAuthenticationButton

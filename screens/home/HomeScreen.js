@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   Image,
   RefreshControl,
+  Alert,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -83,8 +84,8 @@ const HomeScreen = ({ navigation }) => {
 
         countDown(res.data.data);
 
-        let data = setInterval(async () => {
-          await countDown(res.data.data);
+        let data = setInterval(() => {
+          countDown(res.data.data);
         }, 60000);
 
         setJobInterval(data);
@@ -554,6 +555,17 @@ const HomeScreen = ({ navigation }) => {
           setProfileImage(res.data.data[0].profile_img);
           setRating(res.data.data[0].rating);
           setRatingCount(res.data.data[0].ratingCount);
+
+          if (!res.data.data[0].verify) {
+            Alert.alert("บัญชีของท่านอยู่ระหว่างการตรวจสอบ", "", [
+              {
+                text: "ตกลง",
+                onPress: () => {
+                  navigation.navigate({ name: "Profile" });
+                },
+              },
+            ]);
+          }
         } catch (error) {
           console.log(error.response.data.message);
         }

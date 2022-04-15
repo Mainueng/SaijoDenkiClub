@@ -16,11 +16,10 @@ import { AuthContext } from "../../components/context";
 import * as Animatable from "react-native-animatable";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../../assets/stylesheet/auth/auth";
-import Header from "../../components/header";
 import { validateEmail, validatePhoneNumber } from "../../components/validate";
 import { sign_up } from "../../api/auth";
 
-const SignUpScreen = ({ navigation }) => {
+const SignUpScreen = () => {
   const [data, setData] = useState({
     first_name: "",
     last_name: "",
@@ -57,14 +56,14 @@ const SignUpScreen = ({ navigation }) => {
         ...data,
         first_name: val,
         isValidFirstName: false,
-        errorFirstName: "First name can't must less then 80 character!",
+        errorFirstName: "ชื่อต้องมีความยาวไม่เกิน 80 ตัวอักษร!",
       });
     } else {
       setData({
         ...data,
         first_name: val,
         isValidFirstName: false,
-        errorFirstName: "First name can't be empty!",
+        errorFirstName: "กรุณาระบุชื่อ!",
       });
     }
   };
@@ -82,14 +81,14 @@ const SignUpScreen = ({ navigation }) => {
         ...data,
         last_name: val,
         isValidLastName: false,
-        errorLastName: "Last name can't must less then 80 character!",
+        errorLastName: "นามสกุลต้องมีความยาวไม่เกิน 80 ตัวอักษร!",
       });
     } else {
       setData({
         ...data,
         last_name: val,
         isValidLastName: false,
-        errorLastName: "Last name can't be empty!",
+        errorLastName: "กรุณาระบุนามสกุล!",
       });
     }
   };
@@ -110,7 +109,7 @@ const SignUpScreen = ({ navigation }) => {
           ...data,
           phone_number: val,
           isValidPhoneNumber: false,
-          errorPhoneNumber: "Invalid format",
+          errorPhoneNumber: "รูปแบบไม่ถูกต้อง",
         });
       }
     } else {
@@ -118,7 +117,7 @@ const SignUpScreen = ({ navigation }) => {
         ...data,
         phone_number: val,
         isValidPhoneNumber: false,
-        errorPhoneNumber: "Phone number can't be empty!",
+        errorPhoneNumber: "กรุณาระบุเบอร์โทร!",
       });
     }
   };
@@ -139,7 +138,7 @@ const SignUpScreen = ({ navigation }) => {
           ...data,
           email: val,
           isValidEmail: false,
-          errorEmail: "Invalid format",
+          errorEmail: "รูปแบบไม่ถูกต้อง",
         });
       }
     } else {
@@ -147,7 +146,7 @@ const SignUpScreen = ({ navigation }) => {
         ...data,
         email: val,
         isValidEmail: false,
-        errorEmail: "Email can't be empty!",
+        errorEmail: "กรุณาระบุอีเมล์!",
       });
     }
   };
@@ -165,14 +164,14 @@ const SignUpScreen = ({ navigation }) => {
         ...data,
         password: val,
         isValidPassword: false,
-        errorPassword: "Password must between from 5 to 12 character!",
+        errorPassword: "รหัสผ่านต้องมีความยาว 5 - 12 ตัวอักษร!",
       });
     } else {
       setData({
         ...data,
         password: val,
         isValidPassword: false,
-        errorPassword: "Password can't be empty!",
+        errorPassword: "กรุณาระบุรหัสผ่าน!",
       });
     }
   };
@@ -183,14 +182,14 @@ const SignUpScreen = ({ navigation }) => {
         ...data,
         confirm_password: val,
         isValidConfirmPassword: false,
-        errorConfirmPassword: "Confirm password can't be empty!",
+        errorConfirmPassword: "กรุณาระบุรหัสผ่าน!",
       });
     } else if (data.password !== val) {
       setData({
         ...data,
         confirm_password: val,
         isValidConfirmPassword: false,
-        errorConfirmPassword: "Password don't match!",
+        errorConfirmPassword: "รหัสผ่านไม่ตรง!",
       });
     } else {
       setData({
@@ -226,7 +225,7 @@ const SignUpScreen = ({ navigation }) => {
 
           login(data.email, data.password);
         } catch (error) {
-          Alert.alert("Sign-up failed !", error.response.data.message);
+          Alert.alert("ลงทะเบียนไม่สำเร็จ!", error.response.data.message);
         }
       } catch (error) {
         console.log(error);
@@ -235,26 +234,20 @@ const SignUpScreen = ({ navigation }) => {
       setData({
         ...data,
         errorFirstName:
-          data.errorFirstName === ""
-            ? "First name can't be empty!"
-            : data.errorFirstName,
+          data.errorFirstName === "" ? "กรุณาระบุชื่อ!" : data.errorFirstName,
         errorLastName:
-          data.errorLastName === ""
-            ? "Last name can't be empty!"
-            : data.errorLastName,
+          data.errorLastName === "" ? "กรุณาระบุนามสกุล!" : data.errorLastName,
         errorEmail:
-          data.errorEmail === "" ? "Email can't be empty!" : data.errorEmail,
+          data.errorEmail === "" ? "กรุณาระบุอีเมล์!" : data.errorEmail,
         errorPhoneNumber:
           data.errorPhoneNumber === ""
-            ? "Phone number can't be empty!"
+            ? "กรุณาระบุเบอร์โทร!"
             : data.errorPhoneNumber,
         errorPassword:
-          data.errorPassword === ""
-            ? "Password can't be empty!"
-            : data.errorPassword,
+          data.errorPassword === "" ? "กรุณาระบุรหัสผ่าน!" : data.errorPassword,
         errorConfirmPassword:
           data.errorConfirmPassword === ""
-            ? "Confirm password can't be empty!"
+            ? "กรุณาระบุรหัสผ่าน!"
             : data.errorConfirmPassword,
       });
     }
@@ -277,11 +270,11 @@ const SignUpScreen = ({ navigation }) => {
           <View style={styles.sub_container}>
             <View style={styles.form_container}>
               <View style={styles.form_group}>
-                <Text style={styles.form_label}>First Name</Text>
+                <Text style={styles.form_label}>ชื่อ</Text>
                 <TextInput
                   style={styles.from_input}
-                  placeholder="First Name"
-                  placeholderTextColor="rgba(143,116,109,0.5)"
+                  placeholder="ชื่อ"
+                  placeholderTextColor={"rgba(0,0,0,0.5)"}
                   autoCapitalize="none"
                   onChangeText={(val) => firstNameHandel(val)}
                 />
@@ -302,11 +295,11 @@ const SignUpScreen = ({ navigation }) => {
                 )}
               </View>
               <View style={styles.form_group}>
-                <Text style={styles.form_label}>Last Name</Text>
+                <Text style={styles.form_label}>นามสกุล</Text>
                 <TextInput
                   style={styles.from_input}
-                  placeholder="Last Name"
-                  placeholderTextColor="rgba(143,116,109,0.5)"
+                  placeholder="นามสกุล"
+                  placeholderTextColor={"rgba(0,0,0,0.5)"}
                   autoCapitalize="none"
                   onChangeText={(val) => lastNameHandel(val)}
                 />
@@ -327,11 +320,11 @@ const SignUpScreen = ({ navigation }) => {
                 )}
               </View>
               <View style={styles.form_group}>
-                <Text style={styles.form_label}>Email</Text>
+                <Text style={styles.form_label}>อีเมล์</Text>
                 <TextInput
                   style={styles.from_input}
                   placeholder="Email"
-                  placeholderTextColor="rgba(143,116,109,0.5)"
+                  placeholderTextColor={"rgba(0,0,0,0.5)"}
                   autoCapitalize="none"
                   keyboardType={"email-address"}
                   onChangeText={(val) => emailHandel(val)}
@@ -353,11 +346,11 @@ const SignUpScreen = ({ navigation }) => {
                 )}
               </View>
               <View style={styles.form_group}>
-                <Text style={styles.form_label}>Phone Number</Text>
+                <Text style={styles.form_label}>เบอร์โทร</Text>
                 <TextInput
                   style={styles.from_input}
-                  placeholder="Phone Number"
-                  placeholderTextColor="rgba(143,116,109,0.5)"
+                  placeholder="เบอร์โทร"
+                  placeholderTextColor={"rgba(0,0,0,0.5)"}
                   autoCapitalize="none"
                   keyboardType={"phone-pad"}
                   onChangeText={(val) => phoneNumberHandle(val)}
@@ -379,11 +372,11 @@ const SignUpScreen = ({ navigation }) => {
                 )}
               </View>
               <View style={styles.form_group}>
-                <Text style={styles.form_label}>Password</Text>
+                <Text style={styles.form_label}>รหัสผ่าน</Text>
                 <TextInput
                   style={styles.from_input}
-                  placeholder="Password"
-                  placeholderTextColor="rgba(143,116,109,0.5)"
+                  placeholder="รหัสผ่าน"
+                  placeholderTextColor={"rgba(0,0,0,0.5)"}
                   autoCapitalize="none"
                   secureTextEntry={true}
                   onChangeText={(val) => passwordHandle(val)}
@@ -405,11 +398,11 @@ const SignUpScreen = ({ navigation }) => {
                 )}
               </View>
               <View style={styles.form_group}>
-                <Text style={styles.form_label}>Confirm Password</Text>
+                <Text style={styles.form_label}>ยืนยันรหัสผ่าน</Text>
                 <TextInput
                   style={styles.from_input}
-                  placeholder="Confirm Password"
-                  placeholderTextColor="rgba(143,116,109,0.5)"
+                  placeholder="ยืนยันรหัสผ่าน"
+                  placeholderTextColor={"rgba(0,0,0,0.5)"}
                   autoCapitalize="none"
                   secureTextEntry={true}
                   onChangeText={(val) => confirmPasswordHandle(val)}
@@ -438,7 +431,7 @@ const SignUpScreen = ({ navigation }) => {
                     submitHandle();
                   }}
                 >
-                  <Text style={styles.confirm_text}>Sign Up</Text>
+                  <Text style={styles.confirm_text}>ลงทะเบียน</Text>
                 </Pressable>
               </View>
             </View>
