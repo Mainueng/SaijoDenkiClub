@@ -8,6 +8,7 @@ import {
   Image,
   RefreshControl,
   Alert,
+  Platform,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -611,7 +612,12 @@ const HomeScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[
+        styles.container,
+        { paddingTop: Platform.OS === "android" ? "5%" : 0 },
+      ]}
+    >
       <StatusBar style="dark" />
       <View style={styles.header_container}>
         <Pressable
@@ -633,7 +639,7 @@ const HomeScreen = ({ navigation }) => {
             <MaterialCommunityIcons
               name="pencil"
               color="#ffffff"
-              size={normalize(9) > 13 ? 13 : normalize(9)}
+              size={normalize(10) > 14 ? 14 : normalize(10)}
             />
           </View>
         </Pressable>

@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Platform } from "react-native";
 import { normalize } from "../../../components/font";
 
 const { width, height } = Dimensions.get("window");
@@ -19,7 +19,7 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.05,
     shadowRadius: 3.84,
-    elevation: 0,
+    elevation: 1,
     backgroundColor: "#ffffff",
     zIndex: 1,
     width: "100%",

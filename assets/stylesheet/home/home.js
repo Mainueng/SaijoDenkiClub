@@ -7,7 +7,6 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    // backgroundColor: "#e6e6e6",
     backgroundColor: "#ffffff",
   },
   header_container: {

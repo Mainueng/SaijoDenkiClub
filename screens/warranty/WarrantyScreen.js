@@ -163,90 +163,108 @@ const WarrantyScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style={"light"} />
-      <BarCodeScanner
-        onBarCodeScanned={scanned ? handleScan : undefined}
-        style={StyleSheet.absoluteFill}
-        barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
+      <View
+        style={{
+          height: "100%",
+          width: width,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
-        <ImageBackground
-          source={height > 900 ? QR_Background : QR_Background_Ipad}
-          style={styles.scan_bg}
+        <BarCodeScanner
+          onBarCodeScanned={scanned ? handleScan : undefined}
+          style={[
+            StyleSheet.absoluteFillObject,
+            {
+              height: "110%",
+            },
+          ]}
+          barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
         >
-          <View style={styles.type_container}>
-            <Pressable
-              style={[
-                styles.scan_container,
-                { backgroundColor: type === 1 ? "#b31117" : "#ffffff" },
-              ]}
-              onPress={() => setType(1)}
-            >
-              <Text
-                style={[
-                  styles.scan_text,
-                  { color: type === 1 ? "#ffffff" : "#b31117" },
-                ]}
-              >
-                Scan QR Code
-              </Text>
-            </Pressable>
-            <Pressable
-              style={[
-                styles.input_container,
-                { backgroundColor: type === 2 ? "#b31117" : "#ffffff" },
-              ]}
-              onPress={() => {
-                setType(2);
-                setScanned(false);
-                setIndoorValue("");
-                setOutdoorValue("");
-                setModalInput(true);
-                setIndoor(false);
-              }}
-            >
-              <Text
-                style={[
-                  styles.scan_text,
-                  { color: type === 2 ? "#ffffff" : "#b31117" },
-                ]}
-              >
-                Serial Number
-              </Text>
-            </Pressable>
-          </View>
-          <View style={styles.sn_container}>
-            <View style={styles.indoor_container}>
-              <Text style={[styles.sn_status, { opacity: indoor ? 1 : 0.35 }]}>
-                Indoor
-              </Text>
+          <ImageBackground
+            source={height > 900 ? QR_Background : QR_Background_Ipad}
+            style={styles.scan_bg}
+          >
+            <View style={styles.type_container}>
               <Pressable
-                style={{
-                  display: indoor ? "flex" : "none",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
+                style={[
+                  styles.scan_container,
+                  { backgroundColor: type === 1 ? "#b31117" : "#ffffff" },
+                ]}
+                onPress={() => setType(1)}
+              >
+                <Text
+                  style={[
+                    styles.scan_text,
+                    { color: type === 1 ? "#ffffff" : "#b31117" },
+                  ]}
+                >
+                  Scan QR Code
+                </Text>
+              </Pressable>
+              <Pressable
+                style={[
+                  styles.input_container,
+                  { backgroundColor: type === 2 ? "#b31117" : "#ffffff" },
+                ]}
                 onPress={() => {
-                  setIndoor(false);
+                  setType(2);
+                  setScanned(false);
                   setIndoorValue("");
+                  setOutdoorValue("");
+                  setModalInput(true);
+                  setIndoor(false);
                 }}
               >
-                <Text style={styles.sn_value}>
-                  {indoorValue}{" "}
-                  <FontAwesome5
-                    name="trash-alt"
-                    color={"#ffffff"}
-                    size={width * 0.035}
-                  />
+                <Text
+                  style={[
+                    styles.scan_text,
+                    { color: type === 2 ? "#ffffff" : "#b31117" },
+                  ]}
+                >
+                  Serial Number
                 </Text>
               </Pressable>
             </View>
-            <View style={styles.indoor_container}>
-              <Text style={[styles.sn_status, { opacity: outdoor ? 1 : 0.35 }]}>
-                Outdoor
-              </Text>
+            <View style={styles.sn_container}>
+              <View style={styles.indoor_container}>
+                <Text
+                  style={[styles.sn_status, { opacity: indoor ? 1 : 0.35 }]}
+                >
+                  Indoor
+                </Text>
+                <Pressable
+                  style={{
+                    display: indoor ? "flex" : "none",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                  onPress={() => {
+                    setIndoor(false);
+                    setIndoorValue("");
+                  }}
+                >
+                  <Text style={styles.sn_value}>
+                    {indoorValue}{" "}
+                    <FontAwesome5
+                      name="trash-alt"
+                      color={"#ffffff"}
+                      size={width * 0.035}
+                    />
+                  </Text>
+                </Pressable>
+              </View>
+              <View style={styles.indoor_container}>
+                <Text
+                  style={[styles.sn_status, { opacity: outdoor ? 1 : 0.35 }]}
+                >
+                  Outdoor
+                </Text>
+              </View>
             </View>
-          </View>
-        </ImageBackground>
-      </BarCodeScanner>
+          </ImageBackground>
+        </BarCodeScanner>
+      </View>
       <Modal animationType="fade" transparent={true} visible={modalIndoor}>
         <View style={styles.modal_background}>
           <View style={styles.modal_container}>

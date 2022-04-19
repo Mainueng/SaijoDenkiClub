@@ -382,7 +382,7 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
       >
         <Modal animationType="fade" transparent={true} visible={checkInModal}>
           <View style={styles.modal_background}>
-            <ActivityIndicator size="large" />
+            <ActivityIndicator size="large" color={"#999999"} />
           </View>
         </Modal>
         <Modal
@@ -509,7 +509,7 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
                           { marginBottom: "3%" },
                         ]}
                       >
-                        <View style={{ opacity: "0" }}>
+                        <View style={{ opacity: 0 }}>
                           <MaterialCommunityIcons
                             name="shield-check"
                             size={normalize(14) > 24 ? 24 : normalize(14)}
@@ -531,7 +531,7 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
                           </Text>
                         </View>
                         <View style={styles.modal_body_info_container}>
-                          <View style={{ opacity: "0" }}>
+                          <View style={{ opacity: 0 }}>
                             <MaterialCommunityIcons
                               name="shield-check"
                               size={normalize(14) > 24 ? 24 : normalize(14)}
@@ -557,7 +557,7 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
                           </Text>
                         </View>
                         <View style={styles.modal_body_info_container}>
-                          <View style={{ opacity: "0" }}>
+                          <View style={{ opacity: 0 }}>
                             <MaterialCommunityIcons
                               name="shield-check"
                               size={normalize(14) > 24 ? 24 : normalize(14)}
@@ -604,7 +604,7 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
                           <Text style={styles.modal_info_title}>อุปกรณ์</Text>
                         </View>
                         <View style={styles.modal_body_info_container}>
-                          <View style={{ opacity: "0" }}>
+                          <View style={{ opacity: 0 }}>
                             <MaterialCommunityIcons
                               name="shield-check"
                               size={normalize(14) > 24 ? 24 : normalize(14)}
@@ -646,7 +646,7 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
                           <Text style={styles.modal_info_title}>ค่าบริการ</Text>
                         </View>
                         <View style={styles.modal_body_info_container}>
-                          <View style={{ opacity: "0" }}>
+                          <View style={{ opacity: 0 }}>
                             <MaterialCommunityIcons
                               name="shield-check"
                               size={normalize(14) > 24 ? 24 : normalize(14)}
@@ -690,7 +690,7 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
                           <Text style={styles.modal_info_title}>หมายเหตุ</Text>
                         </View>
                         <View style={styles.modal_body_info_container}>
-                          <View style={{ opacity: "0" }}>
+                          <View style={{ opacity: 0 }}>
                             <MaterialCommunityIcons
                               name="shield-check"
                               size={normalize(14) > 24 ? 24 : normalize(14)}
@@ -724,7 +724,7 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
                           <Text style={styles.modal_info_title}>อาการเสีย</Text>
                         </View>
                         <View style={styles.modal_body_info_container}>
-                          <View style={{ opacity: "0" }}>
+                          <View style={{ opacity: 0 }}>
                             <MaterialCommunityIcons
                               name="shield-check"
                               size={normalize(14) > 24 ? 24 : normalize(14)}
@@ -760,7 +760,7 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
                           </Text>
                         </View>
                         <View style={styles.modal_body_info_container}>
-                          <View style={{ opacity: "0" }}>
+                          <View style={{ opacity: 0 }}>
                             <MaterialCommunityIcons
                               name="shield-check"
                               size={normalize(14) > 24 ? 24 : normalize(14)}
@@ -809,7 +809,7 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
                           <Text style={styles.modal_info_title}>ที่อยู่</Text>
                         </View>
                         <View style={styles.modal_body_info_container}>
-                          <View style={{ opacity: "0" }}>
+                          <View style={{ opacity: 0 }}>
                             <MaterialCommunityIcons
                               name="shield-check"
                               size={normalize(14) > 24 ? 24 : normalize(14)}
@@ -841,7 +841,7 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
                           <Text style={styles.modal_info_title}>ระยะห่าง</Text>
                         </View>
                         <View style={styles.modal_body_info_container}>
-                          <View style={{ opacity: "0" }}>
+                          <View style={{ opacity: 0 }}>
                             <MaterialCommunityIcons
                               name="shield-check"
                               size={normalize(14) > 24 ? 24 : normalize(14)}
@@ -913,7 +913,7 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
                           { marginBottom: "3%" },
                         ]}
                       >
-                        <View style={{ opacity: "0" }}>
+                        <View style={{ opacity: 0 }}>
                           <MaterialCommunityIcons
                             name="checkbox-blank-circle"
                             size={normalize(10) > 20 ? 20 : normalize(10)}
@@ -934,7 +934,7 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
                             </Text>
                           </View>
                           <View style={styles.modal_body_info_container}>
-                            <View style={{ opacity: "0" }}>
+                            <View style={{ opacity: 0 }}>
                               <MaterialCommunityIcons
                                 name="checkbox-blank-circle"
                                 size={normalize(10) > 20 ? 20 : normalize(10)}

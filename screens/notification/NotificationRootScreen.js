@@ -1,6 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import NotificationScreen from "./NotificationScreen";
+import { normalize } from "../../components/font";
 
 const NotificationRootScreen = () => {
   const Stack = createStackNavigator();
@@ -21,7 +22,13 @@ const NotificationRootScreen = () => {
         name="Notification"
         component={NotificationScreen}
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
+          headerTitleAlign: "center",
+          title: "การแจ้งเตือน",
         }}
       />
     </Stack.Navigator>

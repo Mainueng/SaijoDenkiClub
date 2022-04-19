@@ -17,7 +17,7 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   loading_text: {
-    color: "#b31117",
+    color: "#666666",
     position: "absolute",
     bottom: height * 0.05,
     fontSize: normalize(14) > 24 ? 24 : normalize(14),

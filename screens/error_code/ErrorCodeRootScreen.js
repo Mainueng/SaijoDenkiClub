@@ -2,6 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import ErrorCodeScreen from "./ErrorCodeScreen";
 import ErrorCodeDescriptionScreen from "./ErrorCodeDescription";
+import { normalize } from "../../components/font";
 
 const ErrorCodeRootScreen = () => {
   const Stack = createStackNavigator();
@@ -22,7 +23,13 @@ const ErrorCodeRootScreen = () => {
         name="ErrorCode"
         component={ErrorCodeScreen}
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
+          headerTitleAlign: "center",
+          title: "รหัสความผิดปกติ",
         }}
       />
       <Stack.Screen
@@ -30,7 +37,11 @@ const ErrorCodeRootScreen = () => {
         component={ErrorCodeDescriptionScreen}
         options={{
           headerShown: true,
-          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
+          headerTitleAlign: "center",
         }}
       />
     </Stack.Navigator>

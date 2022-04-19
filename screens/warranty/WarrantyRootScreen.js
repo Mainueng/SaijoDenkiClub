@@ -2,6 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import WarrantyScreen from "./WarrantyScreen";
 import WarrantyInfoScreen from "./WarrantyInfoScreen";
+import { normalize } from "../../components/font";
 
 const NotificationRootScreen = () => {
   const Stack = createStackNavigator();
@@ -23,8 +24,12 @@ const NotificationRootScreen = () => {
         component={WarrantyScreen}
         options={{
           headerShown: true,
-          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
           title: "E-Warranty",
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -32,8 +37,12 @@ const NotificationRootScreen = () => {
         component={WarrantyInfoScreen}
         options={{
           headerShown: true,
-          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
           title: "E-Warranty",
+          headerTitleAlign: "center",
         }}
       />
     </Stack.Navigator>

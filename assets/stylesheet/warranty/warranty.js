@@ -1,5 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
-import { color } from "react-native-reanimated";
+import { StyleSheet, Dimensions, Platform } from "react-native";
 import { normalize } from "../../../components/font";
 
 const { width, height } = Dimensions.get("window");
@@ -12,7 +11,7 @@ export default StyleSheet.create({
   },
   scan_bg: {
     height: "100%",
-    width: "100%",
+    width: width,
     justifyContent: "center",
     alignItems: "center",
   },

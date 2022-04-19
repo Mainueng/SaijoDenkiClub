@@ -14,6 +14,7 @@ import ProfileLocationScreen from "./ProfileLocationScreen";
 import VerifyScreen from "./VerifyScreen";
 import VerifyIdScreen from "./VerifyIdScreen";
 import VerifyBookBankScreen from "./VerifyBookBankScreen";
+import { normalize } from "../../components/font";
 
 const HomeRootScreen = () => {
   const Stack = createStackNavigator();
@@ -42,7 +43,11 @@ const HomeRootScreen = () => {
         component={RecommendScreen}
         options={{
           headerShown: true,
-          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -50,7 +55,11 @@ const HomeRootScreen = () => {
         component={JobLocationScreen}
         options={{
           headerShown: true,
-          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -59,7 +68,11 @@ const HomeRootScreen = () => {
         options={{
           headerShown: true,
           title: "สรุปงาน: รายงานผลการตรวจสอบบริการ",
-          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -68,7 +81,11 @@ const HomeRootScreen = () => {
         options={{
           headerShown: true,
           title: "รายงาน: รายงานผลการตรวจสอบบริการ",
-          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -77,7 +94,11 @@ const HomeRootScreen = () => {
         options={{
           headerShown: true,
           title: "แบบประเมิน: ความพึงพอใจสินค้าและบริการ",
-          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -86,7 +107,11 @@ const HomeRootScreen = () => {
         options={{
           headerShown: true,
           title: "บัญชีผู้ใช้",
-          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -95,7 +120,11 @@ const HomeRootScreen = () => {
         options={{
           headerShown: true,
           title: "บัญชีผู้ใช้",
-          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -104,7 +133,11 @@ const HomeRootScreen = () => {
         options={{
           headerShown: true,
           title: "บัญชีผู้ใช้",
-          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -113,7 +146,11 @@ const HomeRootScreen = () => {
         options={{
           headerShown: true,
           title: "บัญชีผู้ใช้",
-          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -122,7 +159,11 @@ const HomeRootScreen = () => {
         options={{
           headerShown: true,
           title: "ตำแหน่ง",
-          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -131,7 +172,11 @@ const HomeRootScreen = () => {
         options={{
           headerShown: true,
           title: "Saijo Denki Verify",
-          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -140,7 +185,11 @@ const HomeRootScreen = () => {
         options={{
           headerShown: true,
           title: "บัตรประชาชน",
-          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -149,7 +198,11 @@ const HomeRootScreen = () => {
         options={{
           headerShown: true,
           title: "เลขที่บัญชี",
-          headerTitleStyle: { fontFamily: "Sukhumvit_SemiBold" },
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+          },
+          headerTitleAlign: "center",
         }}
       />
     </Stack.Navigator>

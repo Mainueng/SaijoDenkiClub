@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Pressable, Text, SafeAreaView, Image } from "react-native";
+import {
+  View,
+  Pressable,
+  Text,
+  SafeAreaView,
+  Image,
+  Platform,
+} from "react-native";
 import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../../assets/stylesheet/notification/notification";
@@ -184,7 +191,7 @@ const NotificationScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container]}>
       <StatusBar style="dark" />
       <View style={styles.tab_container}>
         <Pressable style={styles.tab_header} onPress={() => setTab(1)}>
