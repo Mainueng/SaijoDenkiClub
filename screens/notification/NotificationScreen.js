@@ -10,6 +10,7 @@ import { notifications, read_all, read, remove } from "../../api/notification";
 import NotificationCard from "../../components/notification_card";
 import { TabContext } from "../../components/tab_context";
 import JobInfoModal from "../../components/job_info_modal";
+import * as Notifications from "expo-notifications";
 
 const NotificationScreen = ({ navigation, route }) => {
   const [tab, setTab] = useState(1);
@@ -90,6 +91,10 @@ const NotificationScreen = ({ navigation, route }) => {
         setOtherTotal(other_count);
 
         update_badge(clean_count + repair_count + other_count);
+
+        Notifications.setBadgeCountAsync(
+          clean_count + repair_count + other_count
+        );
       } catch (error) {
         console.log(error.response.data.message);
       }

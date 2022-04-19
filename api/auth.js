@@ -37,7 +37,7 @@ const sign_up = async (
   formData.append("device_id", device_id);
 
   return await axios({
-    url: SERV_API + "/v1/auth",
+    url: SERV_API + "/v1/technician",
     method: "POST",
     data: formData,
     timeout: 5000,
@@ -70,7 +70,7 @@ const facebook_auth = async (fb_token, device_id) => {
   formData.append("device_id", device_id);
 
   return await axios({
-    url: SERV_API + "/v1/auth/login_facebook",
+    url: SERV_API + "/v1/technician/login_facebook",
     method: "POST",
     data: formData,
     timeout: 5000,
@@ -89,7 +89,7 @@ const apple_auth = async (email, name, lastname, device_id) => {
   formData.append("device_id", device_id);
 
   return await axios({
-    url: SERV_API + "/v1/auth/login_apple",
+    url: SERV_API + "/v1/technician/login_apple",
     method: "POST",
     data: formData,
     timeout: 5000,
@@ -102,7 +102,7 @@ const apple_auth = async (email, name, lastname, device_id) => {
 
 const check_version = async (os, version) => {
   const formData = new FormData();
-  formData.append("app", "core");
+  formData.append("app", "club");
   formData.append("device", os);
   formData.append("version", version);
 

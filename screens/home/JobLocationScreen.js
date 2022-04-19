@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   View,
   Pressable,
@@ -20,12 +20,14 @@ import RepairMarker from "../../assets/image/home/repair_marker.png";
 import CleanMarker from "../../assets/image/home/clean_marker.png";
 import InstallMarker from "../../assets/image/home/install_marker.png";
 import { normalize } from "../../components/font";
+import { TabContext } from "../../components/tab_context";
 
 const JobLocationScreen = ({ navigation }) => {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [recommendList, setRecommendList] = useState([]);
-  const [modalData, setModalData] = useState({});
+
+  const { setModalData } = useContext(TabContext);
 
   const { width } = Dimensions.get("window");
 
@@ -146,32 +148,27 @@ const JobLocationScreen = ({ navigation }) => {
                   longitudeDelta: 0.0421 / 3,
                 }}
                 key={index}
+                onPress={() =>
+                  setModalData({
+                    openModal: true,
+                    jobID: item.job_id,
+                    review: item.review,
+                  })
+                }
               >
-                <Pressable
-                  onPress={() => {
-                    console.log("press");
-                    setModalData({
-                      openModal: true,
-                      jobID: item.job_id,
-                      review: item.review,
-                    });
+                <Image
+                  source={imageIcon(item.job_type)}
+                  resizeMode={"contain"}
+                  style={{
+                    height: width * 0.15,
+                    width: width * 0.15,
                   }}
-                >
-                  <Image
-                    source={imageIcon(item.job_type)}
-                    resizeMode={"contain"}
-                    style={{
-                      height: width * 0.15,
-                      width: width * 0.15,
-                    }}
-                  />
-                </Pressable>
+                />
               </Marker>
             ))
           : null}
       </MapView>
       <JobInfoModal
-        modalData={modalData}
         updateUpcoming={null}
         updateRecommend={getRecommendList}
         nav={navigation}

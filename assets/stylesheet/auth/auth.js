@@ -8,7 +8,7 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#e8e6e5",
+    backgroundColor: "#e6e6e6",
     flexDirection: "column",
   },
   loading_logo: {
@@ -17,7 +17,7 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   loading_text: {
-    color: "#8f746d",
+    color: "#b31117",
     position: "absolute",
     bottom: height * 0.05,
     fontSize: normalize(14) > 24 ? 24 : normalize(14),

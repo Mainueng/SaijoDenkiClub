@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Pressable,
@@ -18,11 +18,12 @@ import styles from "../assets/stylesheet/home/home";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { normalize } from "./font";
 
-import { jobInfo, jobStatusLog, checkIn, acceptJob, nav } from "../api/jobs";
+import { jobInfo, jobStatusLog, checkIn, acceptJob } from "../api/jobs";
 import { invoiceInfo } from "../api/summary";
 import logo from "../assets/image/home/logo.png";
+import { TabContext } from "./tab_context";
 
-const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
+const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
   const [jobInfoData, setJobInfoData] = useState({});
   const [statusLog, setStatusLog] = useState([]);
   const [locationStatus, setLocationStatus] = useState("");
@@ -35,6 +36,8 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
   const [problemImageModal, setProblemImageModal] = useState(false);
 
   const { width } = Dimensions.get("window");
+
+  const { modalData, setModalData } = useContext(TabContext);
 
   const openJobInfoModal = async (job_id) => {
     try {
@@ -82,10 +85,13 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
             <Pressable
               style={styles.checkin_button}
               onPress={() => {
-                modalData.openModal = false;
                 setJobInfoData({});
                 setStatusLog([]);
                 setCheckInStatus(false);
+                setModalData({
+                  ...modalData,
+                  openModal: false,
+                });
               }}
             >
               <Text style={styles.modal_button_text}>ปฏิเสธ</Text>
@@ -225,7 +231,10 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
       try {
         await acceptJob(token, job_id);
 
-        modalData.openModal = false;
+        setModalData({
+          ...modalData,
+          openModal: false,
+        });
         setJobInfoData({});
         setStatusLog([]);
 
@@ -246,7 +255,10 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
 
   const summaryJobHandle = async (job_id, job_type_code) => {
     if (checkInStatus) {
-      modalData.openModal = false;
+      setModalData({
+        ...modalData,
+        openModal: false,
+      });
       setJobInfoData({});
       setStatusLog([]);
 
@@ -263,7 +275,10 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
   };
 
   const reportJobHandle = async (job_id, job_type_code) => {
-    modalData.openModal = false;
+    setModalData({
+      ...modalData,
+      openModal: false,
+    });
     setJobInfoData({});
     setStatusLog([]);
 
@@ -277,7 +292,10 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
   };
 
   const reviewJobHandle = async (job_id) => {
-    modalData.openModal = false;
+    setModalData({
+      ...modalData,
+      openModal: false,
+    });
     setJobInfoData({});
     setStatusLog([]);
 
@@ -290,7 +308,10 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
   };
 
   const invoiceHandle = async (job_id) => {
-    modalData.openModal = false;
+    setModalData({
+      ...modalData,
+      openModal: false,
+    });
     setJobInfoData({});
     setStatusLog([]);
     setInvoiceModal(true);
@@ -440,7 +461,10 @@ const JobInfoModal = ({ modalData, updateUpcoming, updateRecommend, nav }) => {
               <Pressable
                 style={styles.close_modal_btn}
                 onPress={() => {
-                  modalData.openModal = false;
+                  setModalData({
+                    ...modalData,
+                    openModal: false,
+                  });
                   setJobInfoData({});
                   setStatusLog([]);
                   setCheckInStatus(false);

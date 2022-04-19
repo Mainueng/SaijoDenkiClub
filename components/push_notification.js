@@ -2,76 +2,85 @@ import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { TabContext } from "./tab_context";
-import { useNavigation } from "@react-navigation/native";
-// import { read_notification, notification_list } from "../api/notification";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { notifications } from "../api/notification";
 
 const PushNotification = () => {
-  const [notification, setNotification] = useState(false);
+  // const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
 
-  const { update_badge } = useContext(TabContext);
-
-  const navigation = useNavigation();
+  const { update_badge, setModalData } = useContext(TabContext);
 
   useEffect(() => {
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
         update_badge(
           notification.request.content.badge > 99
             ? "99+"
             : notification.request.content.badge
         );
+
+        if (notification.request.content.data.job_id !== undefined) {
+          setModalData({
+            openModal: true,
+            jobID: notification.request.content.data.job_id,
+            review: 0,
+          });
+        }
+
+        (async () => {
+          try {
+            let token = await AsyncStorage.getItem("token");
+            let res = await notifications(token);
+
+            let count = 0;
+
+            res.data.data.map((item) => {
+              if (item.status === "1") {
+                count++;
+              }
+            });
+
+            Notifications.setBadgeCountAsync(count);
+            update_badge(count);
+          } catch (error) {
+            console.log(error);
+          }
+        })();
       });
 
     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        if (
-          response.notification.request.content.data.notification_type ===
-          "news_and_promotion"
-        ) {
-          (async () => {
-            let data = await readNotification(
-              parseInt(
-                response.notification.request.content.data.notification_id
-              )
-            );
-
-            update_badge(data);
-
-            if (data > 99) {
-              data = "99+";
-            }
-
-            Notifications.setBadgeCountAsync(data);
-          })();
-
-          navigation.navigate("NotificationInfoScreen", {
-            name: response.notification.request.content.data.title,
-            params: {
-              id: parseInt(
-                response.notification.request.content.data.notification_id
-              ),
-              format: parseInt(
-                response.notification.request.content.data.format
-              ),
-            },
-          });
-        } else if (
-          response.notification.request.content.data.notification_type ===
-          "activity"
-        ) {
-          navigation.navigate("Booking", {
-            screen: "BookingListScreen",
-            params: {
-              job_id: response.notification.request.content.data.job_id,
-            },
+        if (response.notification.request.content.data.job_id !== undefined) {
+          setModalData({
+            openModal: true,
+            jobID: response.notification.request.content.data.job_id,
+            review: 0,
           });
         }
+
+        (async () => {
+          try {
+            let token = await AsyncStorage.getItem("token");
+            let res = await notifications(token);
+
+            let count = 0;
+
+            res.data.data.map((item) => {
+              if (item.status === "1") {
+                count++;
+              }
+            });
+
+            Notifications.setBadgeCountAsync(count);
+            update_badge(count);
+          } catch (error) {
+            console.log(error);
+          }
+        })();
       });
 
     return () => {
@@ -83,32 +92,6 @@ const PushNotification = () => {
   }, []);
 
   return null;
-};
-
-const readNotification = async (id) => {
-  let count = 0;
-
-  try {
-    let token = await AsyncStorage.getItem("token");
-
-    // try {
-    //   await read_notification(token, id);
-    //   let notification = await notification_list(token);
-
-    //   notification.data.data.map((item) => {
-    //     if (item.status === "1") {
-    //       count++;
-    //     }
-    //   });
-
-    // } catch (error) {
-    //   console.log(error);
-    // }
-  } catch (error) {
-    console.log(error);
-  }
-
-  return count;
 };
 
 async function registerForPushNotificationsAsync() {

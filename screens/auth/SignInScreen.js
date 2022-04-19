@@ -32,6 +32,7 @@ const SignInScreen = ({ navigation }) => {
     try {
       Facebook.initializeAsync({
         appId: "1920254808136199",
+        appName: "Saijo Denli Club",
       });
 
       const { type, token } = await Facebook.logInWithReadPermissionsAsync({

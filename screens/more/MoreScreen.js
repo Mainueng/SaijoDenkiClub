@@ -25,6 +25,7 @@ import Catalog from "../../assets/image/more/catalog.png";
 const MoreScreen = () => {
   const openURL = async (val) => {
     let supported;
+
     switch (true) {
       case val === "facebook":
         supported = await Linking.canOpenURL(

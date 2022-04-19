@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
 import {
   View,
   Pressable,
@@ -27,10 +27,13 @@ import {
   summaryDetail,
 } from "../../api/jobs";
 import { invoices } from "../../api/summary";
+import { notifications } from "../../api/notification";
 import JobInfoModal from "../../components/job_info_modal";
 import CleanIcon from "../../assets/image/home/clean_icon.png";
 import RepairIcon from "../../assets/image/home/repair_icon.png";
 import InstallIcon from "../../assets/image/home/install_icon.png";
+import { TabContext } from "../../components/tab_context";
+import * as Notifications from "expo-notifications";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -53,7 +56,6 @@ const HomeScreen = ({ navigation }) => {
   const [rating, setRating] = useState(0);
   const [ratingCount, setRatingCount] = useState(0);
   const [profileImage, setProfileImage] = useState("");
-  const [modalData, setModalData] = useState({});
   const [active, setActive] = useState("0");
   const [invoiceList, setInvoiceList] = useState([]);
 
@@ -159,14 +161,14 @@ const HomeScreen = ({ navigation }) => {
         let mins = Math.floor((countdown % hour) / minute);
 
         if (days) {
-          item.countdown = days + " Day(s)";
+          item.countdown = days + " วัน";
         } else if (hours) {
-          item.countdown = hours + " Hour(s) " + mins + " Min(s)";
+          item.countdown = hours + " ชม. " + mins + " นาที";
         } else {
-          item.countdown = mins + " Min(s)";
+          item.countdown = mins + " นาที";
         }
       } else {
-        item.countdown = "Now";
+        item.countdown = "ถึงเวลานัด";
       }
 
       return item;
@@ -540,6 +542,8 @@ const HomeScreen = ({ navigation }) => {
     }
   };
 
+  const { update_badge, setModalData } = useContext(TabContext);
+
   useEffect(() => {
     navigation.addListener("focus", async () => {
       try {
@@ -554,7 +558,7 @@ const HomeScreen = ({ navigation }) => {
           setLastname(res.data.data[0].lastname);
           setProfileImage(res.data.data[0].profile_img);
           setRating(res.data.data[0].rating);
-          setRatingCount(res.data.data[0].ratingCount);
+          setRatingCount(res.data.data[0].rating_count);
 
           if (!res.data.data[0].verify) {
             Alert.alert("บัญชีของท่านอยู่ระหว่างการตรวจสอบ", "", [
@@ -568,6 +572,23 @@ const HomeScreen = ({ navigation }) => {
           }
         } catch (error) {
           console.log(error.response.data.message);
+        }
+
+        try {
+          let noti = await notifications(token);
+
+          let count = 0;
+
+          noti.data.data.map((item) => {
+            if (item.status === "1") {
+              count++;
+            }
+          });
+
+          Notifications.setBadgeCountAsync(count);
+          update_badge(count);
+        } catch (error) {
+          console.log(error);
         }
       } catch (error) {
         console.log(error);
@@ -634,7 +655,7 @@ const HomeScreen = ({ navigation }) => {
               size={normalize(18) > 28 ? 28 : normalize(18)}
             />
             <Text style={styles.name}>
-              {parseFloat(rating).toFixed(1)} ({ratingCount} points)
+              {parseFloat(rating).toFixed(1)} ({ratingCount} รีวิว)
             </Text>
           </View>
         </View>
@@ -647,7 +668,7 @@ const HomeScreen = ({ navigation }) => {
               tab === 1 ? styles.tab_active : styles.tab_inactive,
             ]}
           >
-            Upcoming
+            งานที่กำลังจะมาถึง
           </Text>
           <View
             style={[styles.tab_bar, tab === 1 ? styles.tab_bar_active : null]}
@@ -660,7 +681,7 @@ const HomeScreen = ({ navigation }) => {
               tab === 2 ? styles.tab_active : styles.tab_inactive,
             ]}
           >
-            History
+            ประวัติการรับงาน
           </Text>
           <View
             style={[
@@ -676,7 +697,7 @@ const HomeScreen = ({ navigation }) => {
               tab === 3 ? styles.tab_active : styles.tab_inactive,
             ]}
           >
-            Summary
+            สรุปการทำงาน
           </Text>
           <View
             style={[styles.tab_bar, tab === 3 ? styles.tab_bar_active : null]}
@@ -742,7 +763,7 @@ const HomeScreen = ({ navigation }) => {
                       </View>
                       <View style={styles.job_card_status_container}>
                         <Text style={styles.job_card_description_text}>
-                          Job ID: {item.job_id}
+                          หมายเลขงาน: {item.job_id}
                         </Text>
                         <View style={{ flexDirection: "row" }}>
                           <Text
@@ -781,11 +802,11 @@ const HomeScreen = ({ navigation }) => {
         </View>
         <View style={{ flex: 1, minHeight: 50 }}>
           <View style={styles.recommend_header_container}>
-            <Text style={styles.recommend_header}>Recommend</Text>
+            <Text style={styles.recommend_header}>งานแนะนำ</Text>
             <Pressable
               onPress={() => navigation.navigate({ name: "Recommend" })}
             >
-              <Text style={styles.recommend_header}>Show All</Text>
+              <Text style={styles.recommend_header}>แสดงทั้งหมด</Text>
             </Pressable>
           </View>
           {recommendList.length ? (
@@ -918,7 +939,7 @@ const HomeScreen = ({ navigation }) => {
                       </View>
                       <View style={styles.job_card_status_container}>
                         <Text style={styles.job_card_description_text}>
-                          Job ID: {item.job_id}
+                          หมายเลขงาน: {item.job_id}
                         </Text>
                         <View style={{ flexDirection: "row" }}>
                           <Text style={styles.job_card_status}>
@@ -1009,7 +1030,6 @@ const HomeScreen = ({ navigation }) => {
         </View>
       </View>
       <JobInfoModal
-        modalData={modalData}
         updateUpcoming={getUpcomingList}
         updateRecommend={getRecommendList}
         nav={navigation}

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState, useMemo } from "react";
 import {
   View,
   Alert,
@@ -36,18 +36,14 @@ const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
   const [badge, setBadge] = useState(0);
+  const [modalData, setModalData] = useState({});
 
-  const tab_context = useMemo(
-    () => ({
-      update_badge: (count) => {
-        setBadge(count);
-      },
-    }),
-    []
-  );
+  const update_badge = (count) => {
+    setBadge(count);
+  };
 
   return (
-    <TabContext.Provider value={tab_context}>
+    <TabContext.Provider value={{ update_badge, modalData, setModalData }}>
       <PushNotification />
       <Tab.Navigator
         initialRouteName="HomeRootScreen"
@@ -270,45 +266,45 @@ const App = () => {
 
         let device_id = null;
 
-        // try {
-        //   registerForPushNotificationsAsync().then(
-        //     async (push_notification_token) => {
-        //       device_id = push_notification_token;
+        try {
+          registerForPushNotificationsAsync().then(
+            async (push_notification_token) => {
+              device_id = push_notification_token;
 
-        //       try {
-        //         await AsyncStorage.setItem(
-        //           "push_notification_token",
-        //           device_id
-        //         );
-        //       } catch (error) {
-        //         console.log(error);
-        //       }
+              try {
+                await AsyncStorage.setItem(
+                  "push_notification_token",
+                  device_id
+                );
+              } catch (error) {
+                console.log(error);
+              }
 
-        //       try {
-        //         token = await facebook_auth(facebook_token, device_id);
+              try {
+                token = await facebook_auth(facebook_token, device_id);
 
-        //         try {
-        //           await AsyncStorage.setItem(
-        //             "token",
-        //             token.data.data[0].auth_token
-        //           );
-        //           dispatch({ type: "LOGIN", token: token });
-        //         } catch (error) {
-        //           console.log(error);
-        //         }
+                try {
+                  await AsyncStorage.setItem(
+                    "token",
+                    token.data.data[0].auth_token
+                  );
+                  dispatch({ type: "LOGIN", token: token });
+                } catch (error) {
+                  console.log(error);
+                }
 
-        //         setProcess(false);
-        //       } catch (error) {
-        //         setProcess(false);
-        //         console.log(facebook_token, device_id);
-        //         Alert.alert(error.response.data.message);
-        //       }
-        //     }
-        //   );
-        // } catch (error) {
-        //   console.log(error);
-        //   setProcess(false);
-        // }
+                setProcess(false);
+              } catch (error) {
+                setProcess(false);
+                console.log(facebook_token, device_id);
+                Alert.alert(error.response.data.message);
+              }
+            }
+          );
+        } catch (error) {
+          console.log(error);
+          setProcess(false);
+        }
       },
       apple: async (identityToken, first_name, last_name) => {
         let token = null;
@@ -316,52 +312,52 @@ const App = () => {
 
         let device_id = null;
 
-        // try {
-        //   registerForPushNotificationsAsync().then(
-        //     async (push_notification_token) => {
-        //       device_id = push_notification_token;
+        try {
+          registerForPushNotificationsAsync().then(
+            async (push_notification_token) => {
+              device_id = push_notification_token;
 
-        //       try {
-        //         await AsyncStorage.setItem(
-        //           "push_notification_token",
-        //           device_id
-        //         );
-        //       } catch (error) {
-        //         console.log(error);
-        //       }
+              try {
+                await AsyncStorage.setItem(
+                  "push_notification_token",
+                  device_id
+                );
+              } catch (error) {
+                console.log(error);
+              }
 
-        //       try {
-        //         let decode = jwt_decode(identityToken);
+              try {
+                let decode = jwt_decode(identityToken);
 
-        //         token = await apple_auth(
-        //           decode.email,
-        //           first_name === null ? "" : first_name,
-        //           last_name === null ? "" : last_name,
-        //           device_id
-        //         );
+                token = await apple_auth(
+                  decode.email,
+                  first_name === null ? "" : first_name,
+                  last_name === null ? "" : last_name,
+                  device_id
+                );
 
-        //         try {
-        //           await AsyncStorage.setItem(
-        //             "token",
-        //             token.data.data[0].auth_token
-        //           );
-        //           setProcess(false);
-        //           dispatch({ type: "LOGIN", token: token });
-        //         } catch (error) {
-        //           console.log(error);
-        //           setProcess(false);
-        //         }
-        //       } catch (error) {
-        //         setProcess(false);
+                try {
+                  await AsyncStorage.setItem(
+                    "token",
+                    token.data.data[0].auth_token
+                  );
+                  setProcess(false);
+                  dispatch({ type: "LOGIN", token: token });
+                } catch (error) {
+                  console.log(error);
+                  setProcess(false);
+                }
+              } catch (error) {
+                setProcess(false);
 
-        //         console.log(error);
-        //         // Alert.alert(error.response.data.message);
-        //       }
-        //     }
-        //   );
-        // } catch (error) {
-        //   console.log(error);
-        // }
+                //console.log(error.response.data.message);
+                Alert.alert(error.response.data.message);
+              }
+            }
+          );
+        } catch (error) {
+          console.log(error);
+        }
       },
       logout: async () => {
         try {
@@ -468,7 +464,7 @@ const App = () => {
       <View style={styles.loading}>
         <StatusBar style="dark" />
         <Image
-          source={require("./assets/image/auth/loading_logo.png")}
+          source={require("./assets/image/auth/logo.png")}
           style={styles.loading_logo}
           resizeMode="contain"
         />

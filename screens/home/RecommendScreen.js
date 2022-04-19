@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import {
   View,
   Pressable,
@@ -17,6 +17,7 @@ import TextTicker from "react-native-text-ticker";
 
 import { recommend } from "../../api/jobs";
 import JobInfoModal from "../../components/job_info_modal";
+import { TabContext } from "../../components/tab_context";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -25,7 +26,8 @@ const wait = (timeout) => {
 const RecommendScreen = ({ navigation }) => {
   const [recommendList, setRecommendList] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [modalData, setModalData] = useState({});
+
+  const { setModalData } = useContext(TabContext);
 
   useEffect(() => {
     navigation.addListener("focus", () => {
@@ -151,7 +153,6 @@ const RecommendScreen = ({ navigation }) => {
         </Pressable>
       </View>
       <JobInfoModal
-        modalData={modalData}
         updateUpcoming={null}
         updateRecommend={getRecommendList}
         nav={navigation}
