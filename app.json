@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "saijo-club",
-    "slug": "saijo-club",
+    "name": "Saijo Denki Club",
+    "slug": "saijo-denki-club",
     "version": "4.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,13 +13,11 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "th.co.saijo-denki.Saijo-Denki-Club",
-      "buildNumber": "1.0.3",
+      "buildNumber": "1.0.4",
       "usesAppleSignIn": true
     },
     "android": {
