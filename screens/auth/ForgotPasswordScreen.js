@@ -103,7 +103,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
                   placeholderTextColor={"rgba(0,0,0,0.5)"}
                   autoCapitalize="none"
                   keyboardType={"email-address"}
-                  onChangeText={(val) => emailHandel(val)}
+                  onChangeText={(val) => emailHandle(val)}
                 />
                 {data.isValidEmail ? null : (
                   <Animatable.View animation="fadeInLeft" duration={500}>

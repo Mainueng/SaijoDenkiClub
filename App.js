@@ -396,21 +396,31 @@ const App = () => {
         token = await AsyncStorage.getItem("token");
 
         if (Platform.OS === "ios") {
-          version = "3.3.0";
+          version = "4.1.1";
         } else {
-          version = "5.1.1";
+          version = "4.1.1";
         }
 
         try {
-          await check_version(Platform.OS, version);
+          let res = await check_version(Platform.OS, version);
+
+          if (!res.data.status) {
+            Alert.alert("โปรดอัปเดตเวอร์ชันใหม่", "", [
+              {
+                text: "ยกเลิก",
+              },
+              {
+                text: "อัพเดต",
+                onPress: () => openUrl(),
+              },
+            ]);
+          }
 
           if (token) {
             let decode = jwt_decode(token);
-
             if (new Date(decode.time * 1000).getTime < new Date().getTime) {
               token = null;
             }
-
             setProcess(false);
             dispatch({ type: "RETRIEVE_TOKEN", token: token });
           } else {
@@ -418,12 +428,12 @@ const App = () => {
             dispatch({ type: "RETRIEVE_TOKEN", token: null });
           }
         } catch (error) {
-          Alert.alert("Please update new version", [
+          Alert.alert("โปรดอัปเดตเวอร์ชันใหม่", "", [
             {
-              text: "Cancel",
+              text: "ยกเลิก",
             },
             {
-              text: "Update",
+              text: "อัพเดต",
               onPress: () => openUrl(),
             },
           ]);

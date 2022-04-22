@@ -95,7 +95,7 @@ const ErrorCodeScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       <View style={styles.tab_container}>
         <Pressable style={styles.tab_header} onPress={() => setTab(1)}>
           <Image

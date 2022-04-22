@@ -7,6 +7,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Keyboard,
+  Alert,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";

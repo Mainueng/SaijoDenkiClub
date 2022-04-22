@@ -140,7 +140,9 @@ const MoreScreen = () => {
           style={styles.banner_image}
           resizeMode={"contain"}
         />
-        <Text style={styles.version}>Version 3.2.8</Text>
+        <Text style={styles.version}>
+          {Platform.OS === "ios" ? "Version 4.1.1" : "Version 4.1.1"}
+        </Text>
       </View>
       <View style={styles.link_icon_container}>
         <Text style={styles.title}>ข่าวสารและคู่มือ</Text>

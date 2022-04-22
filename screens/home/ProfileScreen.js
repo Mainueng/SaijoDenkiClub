@@ -18,6 +18,7 @@ import { normalize } from "../../components/font";
 import MapView, { Marker } from "react-native-maps";
 import * as ImagePicker from "expo-image-picker";
 import { user_info, update_user_info } from "../../api/user";
+import { logout_app } from "../../api/auth";
 import jwt_decode from "jwt-decode";
 import { AuthContext } from "../../components/context";
 
@@ -97,6 +98,23 @@ const ProfileScreen = ({ navigation }) => {
       }
     });
   }, []);
+
+  const logoutHandle = async () => {
+    try {
+      let token = await AsyncStorage.getItem("token");
+      let device_id = await AsyncStorage.getItem("push_notification_token");
+
+      try {
+        await logout_app(token, device_id);
+
+        logout();
+      } catch (error) {
+        console.log(error.response.data.message);
+
+        logout();
+      }
+    } catch {}
+  };
 
   const cameraImage = async () => {
     try {
@@ -528,7 +546,7 @@ const ProfileScreen = ({ navigation }) => {
               <View style={styles.card_right}></View>
             </View>
           </View>
-          <Pressable style={styles.sign_out} onPress={() => logout()}>
+          <Pressable style={styles.sign_out} onPress={() => logoutHandle()}>
             <Text style={styles.sign_out_text}>ออกจากระบบ</Text>
           </Pressable>
         </ScrollView>

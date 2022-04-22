@@ -125,6 +125,19 @@ const summaryDetail = async (token) => {
   });
 };
 
+const summaryDetailSaijo = async (token) => {
+  return await axios({
+    url: SERV_API + "/v1/jobs/detail-summary-saijo",
+    method: "GET",
+    timeout: 5000,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data",
+      Authorization: token,
+    },
+  });
+};
+
 export {
   upcoming,
   recommend,
@@ -135,4 +148,5 @@ export {
   acceptJob,
   summary,
   summaryDetail,
+  summaryDetailSaijo,
 };

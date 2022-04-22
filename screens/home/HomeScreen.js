@@ -26,6 +26,7 @@ import {
   history,
   summary,
   summaryDetail,
+  summaryDetailSaijo,
 } from "../../api/jobs";
 import { invoices } from "../../api/summary";
 import { notifications } from "../../api/notification";
@@ -184,41 +185,82 @@ const HomeScreen = ({ navigation }) => {
       let result = [];
       try {
         let res = await summary(token);
-        setSummaryList(res.data.data);
+
         result = res.data.data;
       } catch (error) {
-        setSummaryList([]);
         console.log(error.response.data.message);
       }
 
       try {
-        let res = await summaryDetail(token);
-        let fee_total = 0;
-        let service_total = 0;
+        let info = await user_info(token);
 
-        setSummaryDetailList(res.data.data);
+        if (info.data.data[0].technician_group === "1") {
+          let res = await summaryDetailSaijo(token);
+          let fee_total = 0;
+          let service_total = 0;
 
-        let summaryData = result.map((item) => {
-          res.data.data.map((data) => {
-            if (item.status_code === data.status_code) {
-              item.serv_cost = data.serv_cost;
+          setSummaryDetailList(res.data.data);
 
-              service_total = service_total + 1;
+          let summaryData = result.map((item) => {
+            res.data.data.map((data) => {
+              if (item.status_code === data.status_code) {
+                if (item.serv_cost) {
+                  item.serv_cost =
+                    parseFloat(item.serv_cost) + parseFloat(data.serv_cost);
+                } else {
+                  item.serv_cost = data.serv_cost;
+                }
 
-              if (data.serv_cost) {
-                fee_total = fee_total + parseFloat(data.serv_cost);
+                service_total = service_total + 1;
+
+                if (data.serv_cost && item.status_code === "10") {
+                  fee_total = fee_total + parseFloat(data.serv_cost);
+                }
               }
-            }
 
-            return data;
+              return data;
+            });
+
+            return item;
           });
 
-          return item;
-        });
+          setFeeTotal(fee_total);
+          setServiceTotal(service_total);
+          setSummaryList(summaryData);
+        } else {
+          let res = await summaryDetail(token);
+          let fee_total = 0;
+          let service_total = 0;
 
-        setFeeTotal(fee_total);
-        setServiceTotal(service_total);
-        setSummaryList(summaryData);
+          setSummaryDetailList(res.data.data);
+
+          let summaryData = result.map((item) => {
+            res.data.data.map((data) => {
+              if (item.status_code === data.status_code) {
+                if (item.serv_cost) {
+                  item.serv_cost =
+                    parseFloat(item.serv_cost) + parseFloat(data.serv_cost);
+                } else {
+                  item.serv_cost = data.serv_cost;
+                }
+
+                service_total = service_total + 1;
+
+                if (data.serv_cost && item.status_code === "10") {
+                  fee_total = fee_total + parseFloat(data.serv_cost);
+                }
+              }
+
+              return data;
+            });
+
+            return item;
+          });
+
+          setFeeTotal(fee_total);
+          setServiceTotal(service_total);
+          setSummaryList(summaryData);
+        }
       } catch (error) {
         setSummaryDetailList([]);
         console.log(error.response.data.message);
@@ -785,7 +827,7 @@ const HomeScreen = ({ navigation }) => {
                               },
                             ]}
                           >
-                            Time left:{" "}
+                            เหลือเวลา:{" "}
                           </Text>
                           <Text style={styles.job_card_status}>
                             {item.countdown ? item.countdown : ""}

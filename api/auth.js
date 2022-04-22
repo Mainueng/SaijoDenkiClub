@@ -118,6 +118,23 @@ const check_version = async (os, version) => {
   });
 };
 
+const logout_app = async (token, device_id) => {
+  const formData = new FormData();
+  formData.append("device_id", device_id);
+
+  return await axios({
+    url: SERV_API + "/v1/logout",
+    method: "POST",
+    data: formData,
+    timeout: 5000,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data",
+      Authorization: token,
+    },
+  });
+};
+
 export {
   sign_in,
   sign_up,
@@ -125,4 +142,5 @@ export {
   facebook_auth,
   apple_auth,
   check_version,
+  logout_app,
 };

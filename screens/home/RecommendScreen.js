@@ -19,6 +19,10 @@ import { recommend } from "../../api/jobs";
 import JobInfoModal from "../../components/job_info_modal";
 import { TabContext } from "../../components/tab_context";
 
+import CleanIcon from "../../assets/image/home/clean_icon.png";
+import RepairIcon from "../../assets/image/home/repair_icon.png";
+import InstallIcon from "../../assets/image/home/install_icon.png";
+
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -59,6 +63,17 @@ const RecommendScreen = ({ navigation }) => {
     }
   };
 
+  const jobIcon = (job_type) => {
+    switch (true) {
+      case job_type === "1":
+        return CleanIcon;
+      case job_type === "2":
+        return RepairIcon;
+      default:
+        return InstallIcon;
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
@@ -92,9 +107,7 @@ const RecommendScreen = ({ navigation }) => {
                   >
                     <Image
                       // source={{ uri: profileImage + "?" + new Date() }}
-                      source={{
-                        uri: "https://api.saijo-denki.com/img/core/upload/profile_img/user.png",
-                      }}
+                      source={jobIcon(item.job_type_code)}
                       resizeMode={"cover"}
                       style={styles.recommend_image}
                     />

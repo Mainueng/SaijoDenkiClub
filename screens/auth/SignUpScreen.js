@@ -43,7 +43,7 @@ const SignUpScreen = () => {
 
   const { login } = useContext(AuthContext);
 
-  const firstNameHandel = (val) => {
+  const firstNameHandle = (val) => {
     if (val.trim().length) {
       setData({
         ...data,
@@ -68,7 +68,7 @@ const SignUpScreen = () => {
     }
   };
 
-  const lastNameHandel = (val) => {
+  const lastNameHandle = (val) => {
     if (val.trim().length) {
       setData({
         ...data,
@@ -122,7 +122,7 @@ const SignUpScreen = () => {
     }
   };
 
-  const emailHandel = (val) => {
+  const emailHandle = (val) => {
     if (val.trim().length) {
       let validate = validateEmail(val);
 
@@ -276,7 +276,7 @@ const SignUpScreen = () => {
                   placeholder="ชื่อ"
                   placeholderTextColor={"rgba(0,0,0,0.5)"}
                   autoCapitalize="none"
-                  onChangeText={(val) => firstNameHandel(val)}
+                  onChangeText={(val) => firstNameHandle(val)}
                 />
                 {data.isValidFirstName ? null : (
                   <Animatable.View animation="fadeInLeft" duration={500}>
@@ -301,7 +301,7 @@ const SignUpScreen = () => {
                   placeholder="นามสกุล"
                   placeholderTextColor={"rgba(0,0,0,0.5)"}
                   autoCapitalize="none"
-                  onChangeText={(val) => lastNameHandel(val)}
+                  onChangeText={(val) => lastNameHandle(val)}
                 />
                 {data.isValidLastName ? null : (
                   <Animatable.View animation="fadeInLeft" duration={500}>
@@ -327,7 +327,7 @@ const SignUpScreen = () => {
                   placeholderTextColor={"rgba(0,0,0,0.5)"}
                   autoCapitalize="none"
                   keyboardType={"email-address"}
-                  onChangeText={(val) => emailHandel(val)}
+                  onChangeText={(val) => emailHandle(val)}
                 />
                 {data.isValidEmail ? null : (
                   <Animatable.View animation="fadeInLeft" duration={500}>

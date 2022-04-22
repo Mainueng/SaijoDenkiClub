@@ -17,13 +17,18 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "th.co.saijo-denki.Saijo-Denki-Club",
-      "buildNumber": "1.0.4",
+      "buildNumber": "1.0.10",
       "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyABX1LY4QiucmVLCOHhCdkaS0GCywC_KYw"
+        }
       },
       "package": "app.saijo.saijo_denki_club",
       "googleServicesFile": "./google-services.json",

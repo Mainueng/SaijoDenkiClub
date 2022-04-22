@@ -106,12 +106,12 @@ export default StyleSheet.create({
     width: "80%",
   },
   signup_container: {
-    width: "50%",
+    // width: "50%",
     borderRightColor: "#b3b3b3",
     borderRightWidth: 0.75,
   },
   forget_password_container: {
-    width: "50%",
+    //width: "50%",
   },
   signup_text: {
     fontSize: normalize(14) > 20 ? 20 : normalize(14),
