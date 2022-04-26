@@ -22,6 +22,8 @@ import { jobInfo, jobStatusLog, checkIn, acceptJob } from "../api/jobs";
 import { invoiceInfo } from "../api/summary";
 import logo from "../assets/image/home/logo.png";
 import { TabContext } from "./tab_context";
+import { user_info } from "../api/user";
+import { saijoTechnicianInvoice } from "../api/jobs";
 
 const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
   const [jobInfoData, setJobInfoData] = useState({});
@@ -320,11 +322,27 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
       let token = await AsyncStorage.getItem("token");
 
       try {
+        let info = await user_info(token);
         let res = await invoiceInfo(token, job_id);
+
+        if (info.data.data[0].technician_group === "1") {
+          let invoice_data = await saijoTechnicianInvoice(token, job_id);
+
+          res.data.data.expense_day_cost =
+            invoice_data.data.data[0].expense_day_cost;
+          res.data.data.room_cost = invoice_data.data.data[0].room_cost;
+          res.data.data.gas_cost = invoice_data.data.data[0].gas_cost;
+          res.data.data.service = res.data.data.total;
+          res.data.data.total =
+            parseFloat(res.data.data.total) +
+            parseFloat(invoice_data.data.data[0].gas_cost) +
+            parseFloat(invoice_data.data.data[0].total_cost);
+        }
 
         setInvoiceData(res.data.data);
       } catch (error) {
-        console.log(error.response.data.message);
+        //console.log(error.response.data.message);
+        console.log(error);
       }
     } catch (error) {
       console.log(error);
@@ -997,6 +1015,9 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
                 style={styles.close_modal_btn}
                 onPress={() => {
                   setInvoiceModal(false);
+                  setJobInfoData({});
+                  setStatusLog([]);
+                  setInvoiceData({});
                 }}
               >
                 <MaterialCommunityIcons
@@ -1033,6 +1054,38 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
                   </Text>
                 </View>
                 <View style={styles.modal_info_container}>
+                  <Text style={styles.modal_info_title}>ค่าเบี้ยเลี้ยง</Text>
+                  <Text style={styles.modal_info_description}>
+                    {invoiceData.expense_day_cost
+                      ? invoiceData.expense_day_cost
+                      : "0.00"}{" "}
+                    บาท
+                  </Text>
+                </View>
+                <View style={styles.modal_info_container}>
+                  <Text style={styles.modal_info_title}>ค่าห้องพัก</Text>
+                  <Text style={styles.modal_info_description}>
+                    {invoiceData.room_cost ? invoiceData.room_cost : "0.00"} บาท
+                  </Text>
+                </View>
+                <View style={styles.modal_info_container}>
+                  <Text style={styles.modal_info_title}>ค่าน้ำมัน</Text>
+                  <Text style={styles.modal_info_description}>
+                    {invoiceData.gas_cost ? invoiceData.gas_cost : "0.00"} บาท
+                  </Text>
+                </View>
+                <View style={styles.modal_info_container}>
+                  <Text style={styles.modal_info_title}>ค่าบริการ</Text>
+                  <Text style={styles.modal_info_description}>
+                    {numberFormat(
+                      parseFloat(
+                        invoiceData.service ? invoiceData.service : 0
+                      ).toFixed(2)
+                    )}{" "}
+                    บาท
+                  </Text>
+                </View>
+                <View style={styles.modal_info_container}>
                   <Text style={styles.modal_info_title}>
                     ช่องทางการชำระเงิน
                   </Text>
@@ -1043,9 +1096,14 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
                 <View
                   style={[styles.modal_info_container, { marginBottom: "2%" }]}
                 >
-                  <Text style={styles.modal_info_title}>จำนวนเงิน</Text>
+                  <Text style={styles.modal_info_title}>รวม</Text>
                   <Text style={styles.modal_info_description}>
-                    {numberFormat(parseFloat(invoiceData.total).toFixed(2))} บาท
+                    {numberFormat(
+                      parseFloat(
+                        invoiceData.total ? invoiceData.total : 0
+                      ).toFixed(2)
+                    )}{" "}
+                    บาท
                   </Text>
                 </View>
               </View>

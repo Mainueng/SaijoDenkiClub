@@ -60,6 +60,7 @@ const HomeScreen = ({ navigation }) => {
   const [profileImage, setProfileImage] = useState("");
   const [active, setActive] = useState("0");
   const [invoiceList, setInvoiceList] = useState([]);
+  const [saijoInvoice, setSaijoInvoice] = useState([]);
 
   const onRefreshUpcoming = useCallback(() => {
     setRefreshing(true);
@@ -278,12 +279,29 @@ const HomeScreen = ({ navigation }) => {
     try {
       let token = await AsyncStorage.getItem("token");
 
-      try {
-        let result = await invoices(token);
+      let result = await invoices(token);
+      let info = await user_info(token);
 
-        setInvoiceList(result.data.data);
-      } catch (error) {
-        console.log(error);
+      let invoice_array = result.data.data;
+
+      if (info.data.data[0].technician_group === "1") {
+        let res = await summaryDetailSaijo(token);
+
+        invoice_array.map((item) => {
+          res.data.data.map((data) => {
+            if (data.jobNo === item.jobNo) {
+              item.total = data.serv_cost;
+            }
+
+            return data;
+          });
+
+          return item;
+        });
+
+        setInvoiceList(invoice_array);
+      } else {
+        setInvoiceList(invoice_array);
       }
     } catch (error) {
       console.log(error);
@@ -991,7 +1009,7 @@ const HomeScreen = ({ navigation }) => {
                         </Text>
                         <View style={{ flexDirection: "row" }}>
                           <Text style={styles.job_card_status}>
-                            {item.job_status_en}
+                            {item.job_status_th}
                           </Text>
                         </View>
                       </View>

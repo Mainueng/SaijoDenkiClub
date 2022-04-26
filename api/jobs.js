@@ -138,6 +138,19 @@ const summaryDetailSaijo = async (token) => {
   });
 };
 
+const saijoTechnicianInvoice = async (token, job_id) => {
+  return await axios({
+    url: SERV_API + "/v1/summary/saijo_technician_invoice/" + job_id,
+    method: "GET",
+    timeout: 5000,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data",
+      Authorization: token,
+    },
+  });
+};
+
 export {
   upcoming,
   recommend,
@@ -149,4 +162,5 @@ export {
   summary,
   summaryDetail,
   summaryDetailSaijo,
+  saijoTechnicianInvoice,
 };

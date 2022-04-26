@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "th.co.saijo-denki.Saijo-Denki-Club",
-      "buildNumber": "1.0.10",
+      "buildNumber": "1.0.11",
       "usesAppleSignIn": true
     },
     "android": {
