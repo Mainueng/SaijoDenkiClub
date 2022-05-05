@@ -27,9 +27,8 @@ const NotificationScreen = ({ navigation, route }) => {
   const [cleanTotal, setCleanTotal] = useState(0);
   const [repairTotal, setRepairTotal] = useState(0);
   const [otherTotal, setOtherTotal] = useState(0);
-  const [modalData, setModalData] = useState({});
 
-  const { update_badge } = useContext(TabContext);
+  const { update_badge, setModalData } = useContext(TabContext);
 
   useEffect(() => {
     navigation.addListener("focus", () => {
@@ -427,7 +426,6 @@ const NotificationScreen = ({ navigation, route }) => {
         </View>
       </View>
       <JobInfoModal
-        modalData={modalData}
         updateUpcoming={null}
         updateRecommend={null}
         nav={navigation}
