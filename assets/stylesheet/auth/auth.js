@@ -190,6 +190,7 @@ export default StyleSheet.create({
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.5)",
     zIndex: 1,
+    elevation: 1,
   },
   processing_container: {
     justifyContent: "center",

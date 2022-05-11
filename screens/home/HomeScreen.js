@@ -18,7 +18,6 @@ import { normalize } from "../../components/font";
 import moment from "moment";
 import TextTicker from "react-native-text-ticker";
 import jwt_decode from "jwt-decode";
-
 import { user_info } from "../../api/user";
 import {
   upcoming,
@@ -27,6 +26,7 @@ import {
   summary,
   summaryDetail,
   summaryDetailSaijo,
+  saijoTechnicianInvoice,
 } from "../../api/jobs";
 import { invoices } from "../../api/summary";
 import { notifications } from "../../api/notification";
@@ -60,7 +60,9 @@ const HomeScreen = ({ navigation }) => {
   const [profileImage, setProfileImage] = useState("");
   const [active, setActive] = useState("0");
   const [invoiceList, setInvoiceList] = useState([]);
-  const [saijoInvoice, setSaijoInvoice] = useState([]);
+  const [technicianGroup, setTechnicianGroup] = useState("2");
+  const [expenseList, setExpenseList] = useState([]);
+  const [expenseTotal, setExpenseTotal] = useState(0);
 
   const onRefreshUpcoming = useCallback(() => {
     setRefreshing(true);
@@ -194,6 +196,8 @@ const HomeScreen = ({ navigation }) => {
 
       try {
         let info = await user_info(token);
+
+        setTechnicianGroup(info.data.data[0].technician_group);
 
         if (info.data.data[0].technician_group === "1") {
           let res = await summaryDetailSaijo(token);
@@ -450,7 +454,17 @@ const HomeScreen = ({ navigation }) => {
                 >
                   {invoiceList.map((item, index) => {
                     return (
-                      <View style={styles.card_body_container} key={index}>
+                      <Pressable
+                        onPress={() => {
+                          setModalData({
+                            openModal: true,
+                            jobID: item.jobNo,
+                            review: false,
+                          });
+                        }}
+                        style={styles.card_body_container}
+                        key={index}
+                      >
                         <Text style={[styles.card_body_text, { flex: 1 }]}>
                           {item.jobNo}
                         </Text>
@@ -470,7 +484,7 @@ const HomeScreen = ({ navigation }) => {
                         >
                           {numberFormat(parseFloat(item.total).toFixed(2))}
                         </Text>
-                      </View>
+                      </Pressable>
                     );
                   })}
                 </ScrollView>
@@ -487,6 +501,107 @@ const HomeScreen = ({ navigation }) => {
                     ]}
                   >
                     {numberFormat(parseFloat(feeTotal).toFixed(2))}
+                  </Text>
+                </View>
+              </View>
+            </ScrollView>
+          </View>
+        );
+      case active === "99":
+        return (
+          <View
+            style={{
+              width: "100%",
+              alignItems: "center",
+            }}
+          >
+            <ScrollView
+              style={{
+                width: "90%",
+                marginBottom: "2.5%",
+              }}
+              showsVerticalScrollIndicator={false}
+              bounces={false}
+            >
+              <View style={styles.total_card}>
+                <View style={styles.card_header_container}>
+                  <Text style={[styles.card_header_text, { flex: 1 }]}>
+                    หมายเลขงาน
+                  </Text>
+                  <Text
+                    style={[
+                      styles.card_header_text,
+                      { flex: 2, textAlign: "right" },
+                    ]}
+                  >
+                    เลขที่เอกสาร
+                  </Text>
+                  <Text
+                    style={[
+                      styles.card_header_text,
+                      { flex: 1, textAlign: "right" },
+                    ]}
+                  >
+                    จำนวนเงิน
+                  </Text>
+                </View>
+                <ScrollView
+                  style={{
+                    width: "100%",
+                    marginBottom: "2.5%",
+                  }}
+                  showsVerticalScrollIndicator={false}
+                  bounces={true}
+                >
+                  {expenseList.map((item, index) => {
+                    return (
+                      <Pressable
+                        onPress={() => {
+                          setModalData({
+                            openModal: true,
+                            jobID: item.job_id,
+                            review: false,
+                          });
+                        }}
+                        style={styles.card_body_container}
+                        key={index}
+                      >
+                        <Text style={[styles.card_body_text, { flex: 1 }]}>
+                          {item.job_id}
+                        </Text>
+                        <Text
+                          style={[
+                            styles.card_body_text,
+                            { flex: 2, textAlign: "right" },
+                          ]}
+                        >
+                          {item.invoice_id}
+                        </Text>
+                        <Text
+                          style={[
+                            styles.card_body_text,
+                            { flex: 1, textAlign: "right" },
+                          ]}
+                        >
+                          {numberFormat(parseFloat(item.total).toFixed(2))}
+                        </Text>
+                      </Pressable>
+                    );
+                  })}
+                </ScrollView>
+                <View
+                  style={[styles.card_header_container, { marginTop: "2%" }]}
+                >
+                  <Text style={[styles.card_header_text, { flex: 3 }]}>
+                    รวม
+                  </Text>
+                  <Text
+                    style={[
+                      styles.card_header_text,
+                      { flex: 1.5, textAlign: "right" },
+                    ]}
+                  >
+                    {numberFormat(parseFloat(expenseTotal).toFixed(2))}
                   </Text>
                 </View>
               </View>
@@ -538,7 +653,17 @@ const HomeScreen = ({ navigation }) => {
                         total = total + parseFloat(item.serv_cost);
                       }
                       return (
-                        <View style={styles.card_body_container} key={index}>
+                        <Pressable
+                          onPress={() => {
+                            setModalData({
+                              openModal: true,
+                              jobID: item.jobNo,
+                              review: false,
+                            });
+                          }}
+                          style={styles.card_body_container}
+                          key={index}
+                        >
                           <Text style={[styles.card_body_text, { flex: 1 }]}>
                             {item.jobNo}
                           </Text>
@@ -554,7 +679,7 @@ const HomeScreen = ({ navigation }) => {
                                 )
                               : "0.00"}
                           </Text>
-                        </View>
+                        </Pressable>
                       );
                     }
                   })}
@@ -596,10 +721,53 @@ const HomeScreen = ({ navigation }) => {
     switch (true) {
       case job_type === "1":
         return CleanIcon;
-      case job_type === "2":
+      case job_type === "2" || job_type === "6":
         return RepairIcon;
       default:
         return InstallIcon;
+    }
+  };
+
+  const expenseHandle = async () => {
+    try {
+      let token = await AsyncStorage.getItem("token");
+
+      let res = await invoices(token);
+      let expenseArr = [];
+      let total = 0;
+
+      res.data.data.map(async (item, index) => {
+        try {
+          let invoice_data = await saijoTechnicianInvoice(token, item.jobNo);
+          expenseArr.push({
+            job_id: item.jobNo,
+            invoice_id: invoice_data.data.data[0].invoice_id,
+            total: invoice_data.data.data[0].total_cost,
+          });
+
+          total = total + parseFloat(invoice_data.data.data[0].total_cost);
+
+          if (index === res.data.data.length - 1) {
+            setExpenseList(expenseArr);
+            setExpenseTotal(total);
+          }
+        } catch (error) {
+          expenseArr.push({
+            job_id: item.jobNo,
+            invoice_id: "-",
+            total: "0.00",
+          });
+
+          total = total + 0;
+
+          if (index === res.data.data.length - 1) {
+            setExpenseList(expenseArr);
+            setExpenseTotal(total);
+          }
+        }
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -819,6 +987,8 @@ const HomeScreen = ({ navigation }) => {
                         bounce
                       >
                         {item.name + " " + item.lastname}
+                        {" - "}
+                        {item.job_type_th}
                       </TextTicker>
                       <View styles={styles.job_appointment_container}>
                         <Text style={styles.job_card_description_text}>
@@ -899,14 +1069,16 @@ const HomeScreen = ({ navigation }) => {
                       style={styles.recommend_card_description_header}
                       duration={9000}
                       loop
-                      bounce
+                      // bounce
                     >
                       {item.name + " " + item.lastname}
+                      {" - "}
+                      {item.job_type_th}
                     </TextTicker>
                     <View style={styles.recommend_card_description}>
                       <MaterialCommunityIcons
                         name="calendar-clock"
-                        color="rgba(0,0,0,0.3)"
+                        color="rgba(0,0,0,0.75)"
                         size={normalize(12) > 22 ? 22 : normalize(12)}
                       />
                       <Text style={styles.recommend_card_description_text}>
@@ -916,7 +1088,7 @@ const HomeScreen = ({ navigation }) => {
                     <View style={styles.recommend_card_description}>
                       <MaterialCommunityIcons
                         name="clock"
-                        color="rgba(0,0,0,0.3)"
+                        color="rgba(0,0,0,0.75)"
                         size={normalize(12) > 22 ? 22 : normalize(12)}
                       />
                       <Text style={styles.recommend_card_description_text}>
@@ -926,7 +1098,7 @@ const HomeScreen = ({ navigation }) => {
                     <View style={styles.recommend_card_description}>
                       <MaterialCommunityIcons
                         name="map-marker"
-                        color="rgba(0,0,0,0.3)"
+                        color="rgba(0,0,0,0.75)"
                         size={normalize(12) > 22 ? 22 : normalize(12)}
                       />
                       <Text style={styles.recommend_card_description_text}>
@@ -992,9 +1164,11 @@ const HomeScreen = ({ navigation }) => {
                         style={styles.job_card_description_header}
                         duration={9000}
                         loop
-                        bounce
+                        //bounce
                       >
                         {item.name + " " + item.lastname}
+                        {" - "}
+                        {item.job_type_th}
                       </TextTicker>
                       <View styles={styles.job_appointment_container}>
                         <Text style={styles.job_card_description_text}>
@@ -1090,6 +1264,33 @@ const HomeScreen = ({ navigation }) => {
                   </Text>
                 </Pressable>
               ))}
+              {technicianGroup === "1" && (
+                <Pressable
+                  style={[
+                    styles.summary_btn,
+                    {
+                      borderColor:
+                        active === "99" ? "#b31117" : "rgba(135,135,135, 0.35)",
+                      backgroundColor: active === "99" ? "#b31117" : "#ffffff",
+                    },
+                  ]}
+                  onPress={() => {
+                    setActive("99");
+                    expenseHandle();
+                  }}
+                >
+                  <Text
+                    style={[
+                      styles.summary_btn_text,
+                      {
+                        color: active === "99" ? "#ffffff" : "#000000",
+                      },
+                    ]}
+                  >
+                    เบี้ยเลี้ยงและอื่นๆ
+                  </Text>
+                </Pressable>
+              )}
             </View>
             {summaryTable()}
           </View>

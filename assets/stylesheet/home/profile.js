@@ -165,7 +165,7 @@ export default StyleSheet.create({
   },
   sign_out_text: {
     fontFamily: "Sukhumvit_SemiBold",
-    color: "rgba(0,0,0,0.35)",
+    color: "rgba(0,0,0,0.75)",
     fontSize: normalize(14) > 18 ? 18 : normalize(14),
   },
 });

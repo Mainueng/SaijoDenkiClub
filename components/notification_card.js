@@ -56,7 +56,7 @@ const NotificationCard = ({ data, closeRow, deleteRow, readHandle }) => {
                 <MaterialCommunityIcons
                   name="map-marker"
                   size={normalize(14) > 24 ? 24 : normalize(14)}
-                  color={"rgba(0,0,0,0.35)"}
+                  color={"rgba(0,0,0,0.75)"}
                 />
                 {data.item.radius}
               </Text>

@@ -45,7 +45,7 @@ const HomeRootScreen = () => {
           headerShown: true,
           headerTitleStyle: {
             fontFamily: "Sukhumvit_SemiBold",
-            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+            fontSize: normalize(16) > 22 ? 22 : normalize(16),
           },
           headerTitleAlign: "center",
         }}
@@ -57,7 +57,7 @@ const HomeRootScreen = () => {
           headerShown: true,
           headerTitleStyle: {
             fontFamily: "Sukhumvit_SemiBold",
-            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+            fontSize: normalize(16) > 22 ? 22 : normalize(16),
           },
           headerTitleAlign: "center",
         }}
@@ -70,7 +70,7 @@ const HomeRootScreen = () => {
           title: "สรุปงาน: รายงานผลการตรวจสอบบริการ",
           headerTitleStyle: {
             fontFamily: "Sukhumvit_SemiBold",
-            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+            fontSize: normalize(16) > 22 ? 22 : normalize(16),
           },
           headerTitleAlign: "center",
         }}
@@ -83,7 +83,7 @@ const HomeRootScreen = () => {
           title: "รายงาน: รายงานผลการตรวจสอบบริการ",
           headerTitleStyle: {
             fontFamily: "Sukhumvit_SemiBold",
-            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+            fontSize: normalize(16) > 22 ? 22 : normalize(16),
           },
           headerTitleAlign: "center",
         }}
@@ -96,7 +96,7 @@ const HomeRootScreen = () => {
           title: "แบบประเมิน: ความพึงพอใจสินค้าและบริการ",
           headerTitleStyle: {
             fontFamily: "Sukhumvit_SemiBold",
-            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+            fontSize: normalize(16) > 22 ? 22 : normalize(16),
           },
           headerTitleAlign: "center",
         }}
@@ -109,7 +109,7 @@ const HomeRootScreen = () => {
           title: "บัญชีผู้ใช้",
           headerTitleStyle: {
             fontFamily: "Sukhumvit_SemiBold",
-            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+            fontSize: normalize(16) > 22 ? 22 : normalize(16),
           },
           headerTitleAlign: "center",
         }}
@@ -135,7 +135,7 @@ const HomeRootScreen = () => {
           title: "บัญชีผู้ใช้",
           headerTitleStyle: {
             fontFamily: "Sukhumvit_SemiBold",
-            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+            fontSize: normalize(16) > 22 ? 22 : normalize(16),
           },
           headerTitleAlign: "center",
         }}
@@ -148,7 +148,7 @@ const HomeRootScreen = () => {
           title: "บัญชีผู้ใช้",
           headerTitleStyle: {
             fontFamily: "Sukhumvit_SemiBold",
-            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+            fontSize: normalize(16) > 22 ? 22 : normalize(16),
           },
           headerTitleAlign: "center",
         }}
@@ -161,7 +161,7 @@ const HomeRootScreen = () => {
           title: "ตำแหน่ง",
           headerTitleStyle: {
             fontFamily: "Sukhumvit_SemiBold",
-            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+            fontSize: normalize(16) > 22 ? 22 : normalize(16),
           },
           headerTitleAlign: "center",
         }}
@@ -174,7 +174,7 @@ const HomeRootScreen = () => {
           title: "Saijo Denki Verify",
           headerTitleStyle: {
             fontFamily: "Sukhumvit_SemiBold",
-            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+            fontSize: normalize(16) > 22 ? 22 : normalize(16),
           },
           headerTitleAlign: "center",
         }}
@@ -187,7 +187,7 @@ const HomeRootScreen = () => {
           title: "บัตรประชาชน",
           headerTitleStyle: {
             fontFamily: "Sukhumvit_SemiBold",
-            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+            fontSize: normalize(16) > 22 ? 22 : normalize(16),
           },
           headerTitleAlign: "center",
         }}
@@ -200,7 +200,7 @@ const HomeRootScreen = () => {
           title: "เลขที่บัญชี",
           headerTitleStyle: {
             fontFamily: "Sukhumvit_SemiBold",
-            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+            fontSize: normalize(16) > 22 ? 22 : normalize(16),
           },
           headerTitleAlign: "center",
         }}

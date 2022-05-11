@@ -75,7 +75,7 @@ const Tabs = () => {
             ),
             tabBarLabelPosition: "below-icon",
             tabBarLabelStyle: {
-              fontSize: normalize(10) > 14 ? 14 : normalize(10),
+              fontSize: normalize(11) > 15 ? 15 : normalize(11),
               fontFamily: "Sukhumvit_Medium",
             },
           }}
@@ -94,18 +94,18 @@ const Tabs = () => {
             ),
             tabBarLabelPosition: "below-icon",
             tabBarLabelStyle: {
-              fontSize: normalize(10) > 14 ? 14 : normalize(10),
+              fontSize: normalize(11) > 15 ? 15 : normalize(11),
               fontFamily: "Sukhumvit_Medium",
             },
             tabBarBadge: badge,
             tabBarBadgeStyle: {
               backgroundColor: "#11B3AD",
               color: "#ffffff",
-              fontSize: normalize(10) > 14 ? 14 : normalize(10),
+              fontSize: normalize(11) > 15 ? 15 : normalize(11),
               position: "absolute",
               top: "-30%",
               left: 0,
-              display: badge ? "flex" : "none",
+              opacity: badge ? 1 : 0,
             },
           }}
         />
@@ -123,7 +123,7 @@ const Tabs = () => {
             ),
             tabBarLabelPosition: "below-icon",
             tabBarLabelStyle: {
-              fontSize: normalize(10) > 14 ? 14 : normalize(10),
+              fontSize: normalize(11) > 15 ? 15 : normalize(11),
               fontFamily: "Sukhumvit_Medium",
             },
           }}
@@ -142,7 +142,7 @@ const Tabs = () => {
             ),
             tabBarLabelPosition: "below-icon",
             tabBarLabelStyle: {
-              fontSize: normalize(10) > 14 ? 14 : normalize(10),
+              fontSize: normalize(11) > 15 ? 15 : normalize(11),
               fontFamily: "Sukhumvit_Medium",
             },
           }}
@@ -161,7 +161,7 @@ const Tabs = () => {
             ),
             tabBarLabelPosition: "below-icon",
             tabBarLabelStyle: {
-              fontSize: normalize(10) > 14 ? 14 : normalize(10),
+              fontSize: normalize(11) > 15 ? 15 : normalize(11),
               fontFamily: "Sukhumvit_Medium",
             },
           }}
@@ -396,9 +396,9 @@ const App = () => {
         token = await AsyncStorage.getItem("token");
 
         if (Platform.OS === "ios") {
-          version = "4.1.2";
+          version = "4.1.3";
         } else {
-          version = "4.1.2";
+          version = "4.1.3";
         }
 
         try {

@@ -333,6 +333,7 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
           res.data.data.room_cost = invoice_data.data.data[0].room_cost;
           res.data.data.gas_cost = invoice_data.data.data[0].gas_cost;
           res.data.data.service = res.data.data.total;
+          res.data.data.incentive_cost = res.data.data.incentive_cost;
           res.data.data.total =
             parseFloat(res.data.data.total) +
             parseFloat(invoice_data.data.data[0].gas_cost) +
@@ -571,6 +572,8 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
                             {jobInfoData.job_type_code === "1" ||
                             jobInfoData.job_type_code === "2"
                               ? "หมายเลขประจำเครื่อง"
+                              : jobInfoData.job_type_code === "6"
+                              ? "รายการซ่อม"
                               : "รายการติดตั้ง"}
                           </Text>
                         </View>
@@ -1058,6 +1061,17 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
                   <Text style={styles.modal_info_description}>
                     {invoiceData.expense_day_cost
                       ? invoiceData.expense_day_cost
+                      : "0.00"}{" "}
+                    บาท
+                  </Text>
+                </View>
+                <View style={styles.modal_info_container}>
+                  <Text style={styles.modal_info_title}>
+                    ค่าเบี้ยเลี้ยงพิเศษ
+                  </Text>
+                  <Text style={styles.modal_info_description}>
+                    {invoiceData.incentive_cost
+                      ? invoiceData.incentive_cost
                       : "0.00"}{" "}
                     บาท
                   </Text>

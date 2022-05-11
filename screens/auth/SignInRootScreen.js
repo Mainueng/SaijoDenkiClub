@@ -33,7 +33,7 @@ const SignInRootScreen = () => {
           title: "สมัครสมาชิก",
           headerTitleStyle: {
             fontFamily: "Sukhumvit_SemiBold",
-            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+            fontSize: normalize(16) > 22 ? 22 : normalize(16),
           },
           headerTitleAlign: "center",
         }}
@@ -46,7 +46,7 @@ const SignInRootScreen = () => {
           title: "ลืมรหัสผ่าน",
           headerTitleStyle: {
             fontFamily: "Sukhumvit_SemiBold",
-            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+            fontSize: normalize(16) > 22 ? 22 : normalize(16),
           },
           headerTitleAlign: "center",
         }}

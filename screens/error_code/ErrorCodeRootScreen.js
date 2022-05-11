@@ -26,7 +26,7 @@ const ErrorCodeRootScreen = () => {
           headerShown: true,
           headerTitleStyle: {
             fontFamily: "Sukhumvit_SemiBold",
-            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+            fontSize: normalize(16) > 22 ? 22 : normalize(16),
           },
           headerTitleAlign: "center",
           title: "รหัสความผิดปกติ",
@@ -39,7 +39,7 @@ const ErrorCodeRootScreen = () => {
           headerShown: true,
           headerTitleStyle: {
             fontFamily: "Sukhumvit_SemiBold",
-            fontSize: normalize(18) > 24 ? 24 : normalize(18),
+            fontSize: normalize(16) > 22 ? 22 : normalize(16),
           },
           headerTitleAlign: "center",
         }}

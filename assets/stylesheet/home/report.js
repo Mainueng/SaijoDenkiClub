@@ -246,7 +246,7 @@ export default StyleSheet.create({
   from_input: {
     borderWidth: 1,
     borderRadius: height * 0.005,
-    borderColor: "rgba(0,0,0,0.35)",
+    borderColor: "rgba(0,0,0,0.75)",
     color: "#000000",
     paddingTop: height * 0.0025,
     paddingBottom: (height * 0.0075) / 2,
@@ -271,7 +271,7 @@ export default StyleSheet.create({
     backgroundColor: "transparent",
     borderWidth: 1,
     borderRadius: height * 0.005,
-    borderColor: "rgba(0,0,0,0.35)",
+    borderColor: "rgba(0,0,0,0.75)",
   },
   dropdownBtnText: {
     fontSize: normalize(12) > 16 ? 16 : normalize(12),

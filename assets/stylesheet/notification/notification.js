@@ -99,7 +99,7 @@ export default StyleSheet.create({
     fontSize: normalize(12) > 14 ? 14 : normalize(12),
     fontFamily: "Sukhumvit_Medium",
     paddingLeft: width * 0.035,
-    color: "rgba(0,0,0,0.35)",
+    color: "rgba(0,0,0,0.75)",
   },
   delete_notification_container: {
     backgroundColor: "red",

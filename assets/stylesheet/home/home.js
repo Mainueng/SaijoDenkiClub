@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Platform } from "react-native";
 import { normalize } from "../../../components/font";
 
 const { width, height } = Dimensions.get("window");
@@ -86,7 +86,7 @@ export default StyleSheet.create({
     width: "90%",
     marginTop: "2%",
     paddingHorizontal: "4%",
-    paddingVertical: "2%",
+    paddingVertical: Platform.OS === "ios" ? "2%" : "2.5%",
     borderRadius: height * 0.01,
     borderWidth: 1,
     borderColor: "rgba(135,135,135, 0.35)",
@@ -123,7 +123,7 @@ export default StyleSheet.create({
   job_card_description_text: {
     fontFamily: "Sukhumvit_Medium",
     fontSize: normalize(12) > 16 ? 16 : normalize(12),
-    color: "rgba(0,0,0,0.35)",
+    color: "rgba(0,0,0,0.75)",
     marginBottom: "-1%",
   },
   recommend_header_container: {
@@ -171,7 +171,7 @@ export default StyleSheet.create({
   recommend_card_description_text: {
     fontFamily: "Sukhumvit_Medium",
     fontSize: normalize(12) > 16 ? 16 : normalize(12),
-    color: "rgba(0,0,0,0.35)",
+    color: "rgba(0,0,0,0.75)",
     marginBottom: "-3%",
     marginLeft: "2.5%",
   },
@@ -258,7 +258,7 @@ export default StyleSheet.create({
     fontSize: normalize(12) > 16 ? 16 : normalize(12),
     fontFamily: "Sukhumvit_Medium",
     marginLeft: "2%",
-    color: "rgba(0,0,0,0.35)",
+    color: "rgba(0,0,0,0.75)",
   },
   modal_info_description_container: {
     flexDirection: "row",
@@ -402,7 +402,7 @@ export default StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    borderBottomColor: "rgba(0,0,0,0.35)",
+    borderBottomColor: "rgba(0,0,0,0.75)",
     borderBottomWidth: 1,
     marginTop: "2%",
   },
@@ -413,7 +413,7 @@ export default StyleSheet.create({
   card_body_text: {
     fontSize: normalize(12) > 16 ? 16 : normalize(12),
     fontFamily: "Sukhumvit_Medium",
-    color: "rgba(0,0,0,0.5)",
+    color: "rgba(0,0,0,0.75)",
   },
   summary_btn: {
     width: "49.5%",

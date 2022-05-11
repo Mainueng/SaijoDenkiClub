@@ -1,12 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  View,
-  Pressable,
-  Text,
-  SafeAreaView,
-  Image,
-  Platform,
-} from "react-native";
+import { View, Pressable, Text, SafeAreaView, Image } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../../assets/stylesheet/notification/notification";
@@ -198,7 +191,7 @@ const NotificationScreen = ({ navigation, route }) => {
             <View
               style={[
                 styles.notification_badge_container,
-                { display: cleanTotal ? "flex" : "none" },
+                { opacity: cleanTotal ? 1 : 0 },
               ]}
             >
               <Text style={styles.notification_badge}>
@@ -228,7 +221,7 @@ const NotificationScreen = ({ navigation, route }) => {
             <View
               style={[
                 styles.notification_badge_container,
-                { display: repairTotal ? "flex" : "none" },
+                { opacity: repairTotal ? 1 : 0 },
               ]}
             >
               <Text style={styles.notification_badge}>
@@ -266,7 +259,7 @@ const NotificationScreen = ({ navigation, route }) => {
             <View
               style={[
                 styles.notification_badge_container,
-                { display: otherTotal ? "flex" : "none" },
+                { opacity: otherTotal ? 1 : 0 },
               ]}
             >
               <Text style={styles.notification_badge}>
