@@ -61,19 +61,7 @@ const ReviewScreen = ({ navigation, route }) => {
   const outputFormat = (index, key, type, value) => {
     switch (true) {
       case type === "date":
-        return (
-          <View style={styles.date_time_container}>
-            {
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode={"datetime"}
-                is24Hour={true}
-                onChange={onChange}
-              />
-            }
-          </View>
-        );
+        return null;
       case type === "text":
         return (
           <View style={styles.assessment_note_container}>
@@ -356,7 +344,7 @@ const ReviewScreen = ({ navigation, route }) => {
 
       try {
         await saveAssessmentForm(token, job_id, result);
-        await sendInvoice(token, job_id);
+        // await sendInvoice(token, job_id);
 
         setModalSign(false);
 

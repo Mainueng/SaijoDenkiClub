@@ -304,51 +304,58 @@ const ExpandableComponent = ({
                   },
                 ]}
               >
-                <Text style={styles.expanded_label}>
-                  {jobType === "1" || jobType === "2"
-                    ? data.title_en + " - " + data.sn
-                    : data.title_en}
-                </Text>
-                <Pressable
-                  onPress={() => {
-                    setModalVisible(true);
-                    setImageUri(
-                      data.value.length
-                        ? data.unit === "before_image"
-                          ? "https://api.saijo-denki.com/img/club/upload/before/" +
-                            data.value
-                          : "https://api.saijo-denki.com/img/club/upload/after/" +
-                            data.value
-                        : null
-                    );
-                    setModalTitle(
-                      jobType === "1" || jobType === "2"
+                {data.value.length ? (
+                  <>
+                    <Text style={styles.expanded_label}>
+                      {jobType === "1" || jobType === "2"
                         ? data.title_en + " - " + data.sn
-                        : data.title_en
-                    );
-                  }}
-                >
-                  <Image
-                    source={
-                      data.value.length
-                        ? {
-                            uri:
-                              data.unit === "before_image"
-                                ? "https://api.saijo-denki.com/img/club/upload/before/" +
-                                  data.value
-                                : "https://api.saijo-denki.com/img/club/upload/after/" +
-                                  data.value,
-                          }
-                        : null
-                    }
-                    style={[
-                      styles.report_image,
-                      {
-                        height: data.value.length ? height * 0.2 : 0,
-                      },
-                    ]}
-                  />
-                </Pressable>
+                        : data.title_en}
+                    </Text>
+                    <Pressable
+                      onPress={() => {
+                        setModalVisible(true);
+                        setImageUri(
+                          data.unit === "before_image"
+                            ? "https://api.saijo-denki.com/img/club/upload/before/" +
+                                data.value
+                            : "https://api.saijo-denki.com/img/club/upload/after/" +
+                                data.value
+                        );
+                        setModalTitle(
+                          jobType === "1" || jobType === "2"
+                            ? data.title_en + " - " + data.sn
+                            : data.title_en
+                        );
+                      }}
+                    >
+                      <Image
+                        source={
+                          data.value.length
+                            ? {
+                                uri:
+                                  data.unit === "before_image"
+                                    ? "https://api.saijo-denki.com/img/club/upload/before/" +
+                                      data.value
+                                    : "https://api.saijo-denki.com/img/club/upload/after/" +
+                                      data.value,
+                              }
+                            : null
+                        }
+                        style={[
+                          styles.report_image,
+                          {
+                            height: data.value.length ? height * 0.2 : 0,
+                          },
+                        ]}
+                      />
+                    </Pressable>
+                  </>
+                ) : null}
+                {data.staff_comment.length ? (
+                  <Text style={styles.expanded_label}>
+                    {data.staff_comment.length}
+                  </Text>
+                ) : null}
               </View>
             ) : (
               <View style={styles.expanded_value_container}>

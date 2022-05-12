@@ -44,6 +44,7 @@ const ExpandableComponent = ({
   setImageUri,
   setModalTitle,
   updateValue,
+  updateTitle,
 }) => {
   const outputFormat = (value, type, unit, index, sn, order) => {
     switch (true) {
@@ -407,12 +408,35 @@ const ExpandableComponent = ({
                     { borderTopRightRadius: key === 0 ? height * 0.005 : 0 },
                   ]}
                 >
-                  <View style={{ flex: 7.5 }}>
-                    <Text style={styles.expanded_label}>
-                      {jobType === "1" || jobType === "2"
-                        ? data.title_en + " - " + data.sn
-                        : data.title_en}
-                    </Text>
+                  <View style={{ flex: 7.5, minHeight: height * 0.04 }}>
+                    {jobType === "6" ? (
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "baseline",
+                        }}
+                      >
+                        <Text style={styles.expanded_title}>ห้อง</Text>
+                        <TextInput
+                          style={styles.title_input}
+                          onChangeText={(val) =>
+                            updateTitle(
+                              index,
+                              val,
+                              data.sn,
+                              data.unit,
+                              data.order
+                            )
+                          }
+                        />
+                      </View>
+                    ) : (
+                      <Text style={styles.expanded_label}>
+                        {jobType === "1" || jobType === "2"
+                          ? data.title_en + " - " + data.sn
+                          : data.title_en}
+                      </Text>
+                    )}
                   </View>
                   <View style={styles.image_button_container}>
                     <Pressable
@@ -441,8 +465,8 @@ const ExpandableComponent = ({
                     setImageUri(data.uri ? data.uri : null);
                     setModalTitle(
                       jobType === "1" || jobType === "2"
-                        ? data.title_en + " - " + data.sn
-                        : data.title_en
+                        ? data.title_th + " - " + data.sn
+                        : data.title_th
                     );
                   }}
                 >
@@ -456,6 +480,11 @@ const ExpandableComponent = ({
                     ]}
                   />
                 </Pressable>
+                {data.staff_comment.length ? (
+                  <Text style={styles.expanded_label}>
+                    {data.staff_comment.length}
+                  </Text>
+                ) : null}
               </View>
             ) : (
               <View style={styles.expanded_value_container}>
@@ -559,10 +588,43 @@ const SummaryScreen = ({ navigation, route }) => {
                 sub_data.value = value;
               } else {
                 if (k === parseInt(order)) {
-                  sub_data.value = jobID + "_" + order + ".png";
-                  sub_data.uri = value;
+                  if (
+                    parseInt(jobType) === 1 ||
+                    parseInt(jobType) === 2 ||
+                    parseInt(jobType) === 6
+                  ) {
+                    sub_data.value =
+                      jobID + "_" + serial + "_" + order + ".png";
+                    sub_data.uri = value;
+                  } else {
+                    sub_data.value = jobID + "_" + order + ".png";
+                    sub_data.uri = value;
+                  }
                 }
               }
+            }
+
+            return sub_data;
+          });
+        }
+
+        return data;
+      });
+
+      return item;
+    });
+
+    setListData(result);
+  };
+
+  const updateTitle = (index, sub_index, value, serial, type, order) => {
+    let result = listData.map((item, key) => {
+      item.body.map((data, sub_key) => {
+        if (index === key && sub_index === sub_key) {
+          data.value.map((sub_data, k) => {
+            if (k === parseInt(order)) {
+              sub_data.title_en = value;
+              sub_data.title_th = value;
             }
 
             return sub_data;
@@ -630,39 +692,62 @@ const SummaryScreen = ({ navigation, route }) => {
         delete data["isExpanded"];
 
         data.value.map((sub_data) => {
-          if (parseInt(jobType) === 1 || parseInt(jobType) === 2) {
-            try {
-              (async () =>
-                await uploadPic(
+          if (
+            parseInt(jobType) === 1 ||
+            parseInt(jobType) === 2 ||
+            parseInt(jobType) === 6
+          ) {
+            if (
+              sub_data.unit === "before_image" ||
+              sub_data.unit === "after_image"
+            ) {
+              console.log(jobType);
+              try {
+                (async () =>
+                  await uploadPic(
+                    token,
+                    jobID,
+                    sub_data.sn,
+                    sub_data.order,
+                    sub_data.unit === "before_image" ? sub_data.uri : null,
+                    sub_data.unit === "after_image" ? sub_data.uri : null,
+                    null
+                  ))();
+                delete sub_data["uri"];
+              } catch (error) {
+                delete sub_data["uri"];
+                console.log(error.response.data.message);
+                console.log(
                   token,
                   jobID,
                   sub_data.sn,
                   sub_data.order,
                   sub_data.unit === "before_image" ? sub_data.uri : null,
-                  sub_data.unit === "after_image" ? sub_data.uri : null,
-                  null
-                ))();
-              delete sub_data["uri"];
-            } catch (error) {
-              delete sub_data["uri"];
-              console.log(error.response.data.message);
+                  sub_data.unit === "after_image" ? sub_data.uri : null
+                );
+              }
             }
           } else {
-            try {
-              (async () =>
-                await uploadInstallPic(
-                  token,
-                  jobID,
-                  sub_data.order,
-                  sub_data.unit === "before_image" ? sub_data.uri : null,
-                  sub_data.unit === "after_image" ? sub_data.uri : null,
-                  null
-                ))();
+            if (
+              sub_data.unit === "before_image" ||
+              sub_data.unit === "after_image"
+            ) {
+              try {
+                (async () =>
+                  await uploadInstallPic(
+                    token,
+                    jobID,
+                    sub_data.order,
+                    sub_data.unit === "before_image" ? sub_data.uri : null,
+                    sub_data.unit === "after_image" ? sub_data.uri : null,
+                    null
+                  ))();
 
-              delete sub_data["uri"];
-            } catch (error) {
-              delete sub_data["uri"];
-              console.log(error.response.data.message);
+                delete sub_data["uri"];
+              } catch (error) {
+                delete sub_data["uri"];
+                console.log(error.response.data.message);
+              }
             }
           }
 
@@ -709,7 +794,7 @@ const SummaryScreen = ({ navigation, route }) => {
       </Text>
 
       <KeyboardAvoidingView
-        behavior={"position"}
+        behavior={Platform.OS === "ios" ? "position" : ""}
         keyboardVerticalOffset={height * 0.1}
         style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}
       >
@@ -736,6 +821,9 @@ const SummaryScreen = ({ navigation, route }) => {
                     setModalTitle={setModalTitle}
                     updateValue={(key, val, serial, unit, order) =>
                       updateValue(index, key, val, serial, unit, order)
+                    }
+                    updateTitle={(key, val, serial, unit, order) =>
+                      updateTitle(index, key, val, serial, unit, order)
                     }
                   />
                 </View>

@@ -96,6 +96,12 @@ export default StyleSheet.create({
     padding: height * 0.01,
     paddingLeft: 0,
   },
+  expanded_title: {
+    fontSize: normalize(12),
+    fontFamily: "Sukhumvit_Medium",
+    color: "#000000",
+    paddingRight: "3%",
+  },
   expanded_value_container: {
     flex: 2.5,
     justifyContent: "center",
@@ -293,6 +299,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
+    minHeight: height * 0.04,
   },
   button_container: {
     flexDirection: "row",
@@ -365,10 +372,18 @@ export default StyleSheet.create({
     paddingHorizontal: "5%",
   },
   date_time_container: {
-    width: "100%",
     marginLeft: width * -0.015,
     paddingTop: "2%",
     paddingBottom: "5%",
-    width: "80%",
+    width: "72.5%",
+  },
+  title_input: {
+    borderBottomColor: "#b31117",
+    borderBottomWidth: 1,
+    width: "75%",
+    paddingTop: "4%",
+    fontSize: normalize(12) > 16 ? 16 : normalize(12),
+    fontFamily: "Sukhumvit_Medium",
+    // height: "100%",
   },
 });

@@ -106,7 +106,7 @@ const SignInScreen = ({ navigation }) => {
         style={styles.background}
       >
         <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          behavior={Platform.OS === "ios" ? "padding" : ""}
           style={styles.signin_container}
         >
           <Image

@@ -55,7 +55,7 @@ const uploadPic = async (
       ? {
           uri: after,
           type: "image/jpeg",
-          name: job_id + ".png",
+          name: job_id + ".jpg",
         }
       : null
   );

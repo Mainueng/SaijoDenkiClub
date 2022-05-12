@@ -257,7 +257,7 @@ const SignUpScreen = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === "ios" ? "padding" : ""}
         style={{ flex: 1, width: "100%" }}
       >
         <ScrollView
