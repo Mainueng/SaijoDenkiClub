@@ -38,7 +38,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1.1.15</string>
+	<string>1.1.17</string>
 	<key>FacebookAppID</key>
 	<string>1022758658679522</string>
 	<key>FacebookAutoInitEnabled</key>
@@ -68,17 +68,17 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to access your camera</string>
+	<string>Allow $(PRODUCT_NAME) to access your camera to update your user profile picture and scan e-warranties.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to access your location</string>
+	<string>Allow $(PRODUCT_NAME) to access your location to search for jobs within a 1km radius and check-in to verify the work.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to access your location</string>
+	<string>Allow $(PRODUCT_NAME) to access your location to search for jobs within a 1km radius and save your location to verify the work.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to access your location</string>
+	<string>Allow $(PRODUCT_NAME) to access your location to search for jobs within a 1km radius and check-in to verify the work.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to access your microphone</string>
+	<string>Allow $(PRODUCT_NAME) to access your microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to access your photos</string>
+	<string>Allow $(PRODUCT_NAME) to access your location to search for jobs within a 1km radius and check-in to verify the work.</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>This identifier will be used to deliver personalized ads to you.</string>
 	<key>SKAdNetworkItems</key>
