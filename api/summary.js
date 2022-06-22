@@ -6,7 +6,7 @@ const summaryForm = async (token, job_id) => {
   return await axios({
     url: SERV_API + "/v1/summary/" + job_id,
     method: "GET",
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -19,7 +19,7 @@ const saveSummaryForm = async (token, job_id, data) => {
   return await axios({
     url: SERV_API + "/v1/summary/" + job_id,
     method: "POST",
-    timeout: 5000,
+
     data: data,
     headers: {
       Accept: "application/json",
@@ -80,7 +80,7 @@ const uploadPic = async (
       "/" +
       order,
     method: "POST",
-    timeout: 5000,
+
     data: formData,
     headers: {
       Accept: "application/json",
@@ -133,7 +133,7 @@ const uploadInstallPic = async (
   return await axios({
     url: SERV_API + "/v1/summary/upload_install_pic/" + job_id + "/" + order,
     method: "POST",
-    timeout: 5000,
+
     data: formData,
     headers: {
       Accept: "application/json",
@@ -147,7 +147,7 @@ const assessmentForm = async (token, job_id) => {
   return await axios({
     url: SERV_API + "/v1/summary/assessment_form/" + job_id,
     method: "GET",
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -160,7 +160,7 @@ const saveAssessmentForm = async (token, job_id, data) => {
   return await axios({
     url: SERV_API + "/v1/summary/assessment_form/" + job_id,
     method: "POST",
-    timeout: 5000,
+
     data: data,
     headers: {
       Accept: "application/json",
@@ -186,7 +186,7 @@ const uploadAssessmentSign = async (token, job_id, signature) => {
   return await axios({
     url: SERV_API + "/v1/summary/upload_assessment_signature/" + job_id,
     method: "POST",
-    timeout: 5000,
+
     data: formData,
     headers: {
       Accept: "application/json",
@@ -200,7 +200,7 @@ const sendInvoice = async (token, job_id) => {
   return await axios({
     url: SERV_API + "/v1/jobs/invoice/" + job_id,
     method: "PUT",
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -213,7 +213,7 @@ const invoices = async (token) => {
   return await axios({
     url: SERV_API + "/v1/summary/invoices",
     method: "GET",
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -226,7 +226,7 @@ const invoiceInfo = async (token, job_id) => {
   return await axios({
     url: SERV_API + "/v1/summary/invoice/" + job_id,
     method: "GET",
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",

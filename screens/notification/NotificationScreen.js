@@ -95,6 +95,14 @@ const NotificationScreen = ({ navigation, route }) => {
           clean_count + repair_count + other_count
         );
       } catch (error) {
+        setCleanList([]);
+        setRepairList([]);
+        setOtherList([]);
+        setCleanTotal(0);
+        setRepairTotal(0);
+        setOtherTotal(0);
+
+        Notifications.setBadgeCountAsync(0);
         console.log(error.response.data.message);
       }
     } catch (error) {

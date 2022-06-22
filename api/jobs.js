@@ -6,7 +6,7 @@ const upcoming = async (token) => {
   return await axios({
     url: SERV_API + "/v1/jobs",
     method: "GET",
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -19,7 +19,7 @@ const recommend = async (token) => {
   return await axios({
     url: SERV_API + "/v1/jobs/recommend",
     method: "GET",
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -32,7 +32,7 @@ const history = async (token) => {
   return await axios({
     url: SERV_API + "/v1/jobs/history",
     method: "GET",
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -45,7 +45,7 @@ const jobInfo = async (token, job_id) => {
   return await axios({
     url: SERV_API + "/v1/jobs/job_info/" + job_id,
     method: "GET",
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -58,7 +58,7 @@ const jobStatusLog = async (token, job_id) => {
   return await axios({
     url: SERV_API + "/v1/jobs/status_log/" + job_id,
     method: "GET",
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -77,7 +77,7 @@ const checkIn = async (token, job_id, latitude, longitude) => {
     url: SERV_API + "/v1/jobs/checkin",
     method: "POST",
     data: formData,
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -90,7 +90,7 @@ const acceptJob = async (token, job_id) => {
   return await axios({
     url: SERV_API + "/v1/jobs/job_accept/" + job_id,
     method: "PUT",
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -103,7 +103,7 @@ const summary = async (token) => {
   return await axios({
     url: SERV_API + "/v1/jobs/summary",
     method: "GET",
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -116,7 +116,7 @@ const summaryDetail = async (token) => {
   return await axios({
     url: SERV_API + "/v1/jobs/detail-summary",
     method: "GET",
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -129,7 +129,7 @@ const summaryDetailSaijo = async (token) => {
   return await axios({
     url: SERV_API + "/v1/jobs/detail-summary-saijo",
     method: "GET",
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -142,7 +142,7 @@ const saijoTechnicianInvoice = async (token, job_id) => {
   return await axios({
     url: SERV_API + "/v1/summary/saijo_technician_invoice/" + job_id,
     method: "GET",
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",

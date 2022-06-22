@@ -418,9 +418,10 @@ const App = () => {
 
           if (token) {
             let decode = jwt_decode(token);
-            if (new Date(decode.time * 1000).getTime < new Date().getTime) {
+            if (new Date(decode.time * 1000).getTime() < new Date().getTime()) {
               token = null;
             }
+
             setProcess(false);
             dispatch({ type: "RETRIEVE_TOKEN", token: token });
           } else {

@@ -6,7 +6,7 @@ const user_info = async (token) => {
   return await axios({
     url: SERV_API + "/v1/technician/info",
     method: "GET",
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       Authorization: token,
@@ -86,7 +86,7 @@ const update_user_info = async (
     url: SERV_API + "/v1/technician/info",
     method: "POST",
     data: formData,
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -99,7 +99,7 @@ const certification_info = async (token) => {
   return await axios({
     url: SERV_API + "/v1/user/certification_info",
     method: "GET",
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       Authorization: token,

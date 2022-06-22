@@ -28,7 +28,7 @@ const warranty_info = async (token, indoor_serial, outdoor_serial) => {
     url: SERV_API + "/v1/technician/ewarranty/warranty_info",
     method: "POST",
     data: formData,
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",

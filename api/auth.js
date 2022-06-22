@@ -12,7 +12,7 @@ const sign_in = async (username, password, device_id) => {
     url: SERV_API + "/v1/technician/login",
     method: "POST",
     data: formData,
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -40,7 +40,7 @@ const sign_up = async (
     url: SERV_API + "/v1/technician",
     method: "POST",
     data: formData,
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -56,7 +56,7 @@ const forgot_password = async (email) => {
     url: SERV_API + "/v1/forgot_password_core",
     method: "POST",
     data: formData,
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -73,7 +73,7 @@ const facebook_auth = async (fb_token, device_id) => {
     url: SERV_API + "/v1/technician/login_facebook",
     method: "POST",
     data: formData,
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -92,7 +92,7 @@ const apple_auth = async (email, name, lastname, device_id) => {
     url: SERV_API + "/v1/technician/login_apple",
     method: "POST",
     data: formData,
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -110,7 +110,7 @@ const check_version = async (os, version) => {
     url: SERV_API + "/v1/check_version",
     method: "POST",
     data: formData,
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -126,7 +126,7 @@ const logout_app = async (token, device_id) => {
     url: SERV_API + "/v1/logout",
     method: "POST",
     data: formData,
-    timeout: 5000,
+
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
