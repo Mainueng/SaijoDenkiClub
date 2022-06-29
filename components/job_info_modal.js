@@ -18,14 +18,25 @@ import styles from "../assets/stylesheet/home/home";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { normalize } from "./font";
 
-import { jobInfo, jobStatusLog, checkIn, acceptJob } from "../api/jobs";
+import {
+  jobInfo,
+  jobStatusLog,
+  checkIn,
+  acceptJob,
+  denyJob,
+} from "../api/jobs";
 import { invoiceInfo } from "../api/summary";
 import logo from "../assets/image/home/logo.png";
 import { TabContext } from "./tab_context";
 import { user_info } from "../api/user";
 import { saijoTechnicianInvoice } from "../api/jobs";
 
-const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
+const JobInfoModal = ({
+  updateUpcoming,
+  updateRecommend,
+  nav,
+  getNotification,
+}) => {
   const [jobInfoData, setJobInfoData] = useState({});
   const [statusLog, setStatusLog] = useState([]);
   const [locationStatus, setLocationStatus] = useState("");
@@ -87,13 +98,7 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
             <Pressable
               style={styles.checkin_button}
               onPress={() => {
-                setJobInfoData({});
-                setStatusLog([]);
-                setCheckInStatus(false);
-                setModalData({
-                  ...modalData,
-                  openModal: false,
-                });
+                denyJobHandle(job_id);
               }}
             >
               <Text style={styles.modal_button_text}>ปฏิเสธ</Text>
@@ -208,10 +213,10 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
           setCheckInStatus(true);
           setCheckInModal(false);
 
-          Alert.alert("Success", "Check-in success.");
+          Alert.alert("สำเร็จ", "เช็คอินสำเร็จ");
         } catch (error) {
           setCheckInModal(false);
-          Alert.alert("Success", "Check-in failed!");
+          Alert.alert("ล้มเหลว", "เช็คอินไม่สำเร็จ");
           console.log(error);
         }
       } catch (error) {
@@ -220,7 +225,7 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
       }
     } else {
       Alert.alert(
-        "Check-in failed!",
+        "เช็คอินไม่สำเร็จ",
         "Permission to access location was denied."
       );
     }
@@ -369,6 +374,40 @@ const JobInfoModal = ({ updateUpcoming, updateRecommend, nav }) => {
       return val.split(",");
     } else {
       return [];
+    }
+  };
+
+  const denyJobHandle = async (job_id) => {
+    setJobInfoData({});
+    setStatusLog([]);
+    setCheckInStatus(false);
+    setModalData({
+      ...modalData,
+      openModal: false,
+    });
+
+    try {
+      let token = await AsyncStorage.getItem("token");
+
+      try {
+        await denyJob(token, job_id);
+
+        if (updateRecommend) {
+          updateRecommend();
+        }
+
+        if (updateUpcoming) {
+          updateUpcoming();
+        }
+
+        if (getNotification) {
+          getNotification();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

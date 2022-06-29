@@ -428,6 +428,7 @@ const ExpandableComponent = ({
                               data.order
                             )
                           }
+                          defaultValue={data.title_en}
                         />
                       </View>
                     ) : (
@@ -471,11 +472,25 @@ const ExpandableComponent = ({
                   }}
                 >
                   <Image
-                    source={{ uri: data.uri ? data.uri : null }}
+                    source={{
+                      uri: data.uri
+                        ? data.uri
+                        : data.value
+                        ? data.unit === "after_image"
+                          ? "https://api.saijo-denki.com/img/club/upload/after/" +
+                            data.value
+                          : "https://api.saijo-denki.com/img/club/upload/before/" +
+                            data.value
+                        : null,
+                    }}
                     style={[
                       styles.report_image,
                       {
-                        height: data.uri ? height * 0.25 : 0,
+                        height: data.uri
+                          ? height * 0.25
+                          : data.value
+                          ? height * 0.25
+                          : 0,
                       },
                     ]}
                   />

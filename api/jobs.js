@@ -99,6 +99,18 @@ const acceptJob = async (token, job_id) => {
   });
 };
 
+const denyJob = async (token, job_id) => {
+  return await axios({
+    url: SERV_API + "/v1/jobs/deny/" + job_id,
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+  });
+};
+
 const summary = async (token) => {
   return await axios({
     url: SERV_API + "/v1/jobs/summary",
@@ -159,6 +171,7 @@ export {
   jobStatusLog,
   checkIn,
   acceptJob,
+  denyJob,
   summary,
   summaryDetail,
   summaryDetailSaijo,

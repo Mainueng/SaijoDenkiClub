@@ -1300,6 +1300,7 @@ const HomeScreen = ({ navigation }) => {
         updateUpcoming={getUpcomingList}
         updateRecommend={getRecommendList}
         nav={navigation}
+        getNotification={null}
       />
     </SafeAreaView>
   );

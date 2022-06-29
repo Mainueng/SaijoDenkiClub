@@ -172,6 +172,7 @@ const JobLocationScreen = ({ navigation }) => {
         updateUpcoming={null}
         updateRecommend={getRecommendList}
         nav={navigation}
+        getNotification={null}
       />
     </SafeAreaView>
   );

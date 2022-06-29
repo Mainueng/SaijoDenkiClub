@@ -396,9 +396,9 @@ const App = () => {
         token = await AsyncStorage.getItem("token");
 
         if (Platform.OS === "ios") {
-          version = "4.1.3";
+          version = "4.1.4";
         } else {
-          version = "4.1.3";
+          version = "4.1.4";
         }
 
         try {

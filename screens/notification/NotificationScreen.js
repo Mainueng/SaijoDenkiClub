@@ -430,6 +430,7 @@ const NotificationScreen = ({ navigation, route }) => {
         updateUpcoming={null}
         updateRecommend={null}
         nav={navigation}
+        getNotification={getNotification}
       />
     </SafeAreaView>
   );

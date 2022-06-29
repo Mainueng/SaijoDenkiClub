@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import { Text, View, Pressable, Dimensions } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import styles from "../assets/stylesheet/notification/notification";

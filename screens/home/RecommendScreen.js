@@ -169,6 +169,7 @@ const RecommendScreen = ({ navigation }) => {
         updateUpcoming={null}
         updateRecommend={getRecommendList}
         nav={navigation}
+        getNotification={null}
       />
     </SafeAreaView>
   );
