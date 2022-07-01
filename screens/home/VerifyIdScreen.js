@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   ScrollView,
   Modal,
+  ActivityIndicator,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import * as Animatable from "react-native-animatable";
@@ -21,12 +22,12 @@ const VerifyIdScreen = ({ navigation, route }) => {
   const [backImage, setBackImage] = useState(null);
   const [data, setData] = useState({
     isValidFront: route.params?.frontID
-      ? route.params.frontID === "2"
+      ? route.params.frontID === "2" || route.params.frontID === "1"
         ? true
         : false
       : false,
     isValidBack: route.params?.backID
-      ? route.params.backID === "2"
+      ? route.params.backID === "2" || route.params.backID === "1"
         ? true
         : false
       : false,
@@ -35,6 +36,7 @@ const VerifyIdScreen = ({ navigation, route }) => {
   });
   const [modalFront, setModalFront] = useState(false);
   const [modalBack, setModalBack] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -57,24 +59,28 @@ const VerifyIdScreen = ({ navigation, route }) => {
     })();
 
     if (route.params?.frontID) {
-      if (route.params.frontID === "2") {
+      if (route.params.frontID === "2" || route.params.frontID === "1") {
         setFrontImage(
           route.params?.userID
             ? "https://api.saijo-denki.com/img/club/upload/id_card_front/" +
                 route.params.userID +
-                ".png"
+                ".png" +
+                "?" +
+                new Date()
             : null
         );
       }
     }
 
     if (route.params?.backID) {
-      if (route.params.backID === "2") {
+      if (route.params.backID === "2" || route.params.backID === "1") {
         setBackImage(
           route.params?.backID
             ? "https://api.saijo-denki.com/img/club/upload/id_card_back/" +
                 route.params.userID +
-                ".png"
+                ".png" +
+                "?" +
+                new Date()
             : null
         );
       }
@@ -105,7 +111,7 @@ const VerifyIdScreen = ({ navigation, route }) => {
           setData({
             ...data,
             isValidBack: true,
-            errorBack,
+            errorBack: "",
           });
         }
       }
@@ -158,7 +164,23 @@ const VerifyIdScreen = ({ navigation, route }) => {
   const submitHandle = async () => {
     if (data.isValidFront && data.isValidBack) {
       try {
+        setIsLoading(true);
+
         let token = await AsyncStorage.getItem("token");
+        let front = null;
+        let back = null;
+
+        if (frontImage.split("?").length > 1) {
+          front = null;
+        } else {
+          front = frontImage;
+        }
+
+        if (backImage.split("?").length > 1) {
+          back = null;
+        } else {
+          back = backImage;
+        }
 
         try {
           await update_user_info(
@@ -174,9 +196,11 @@ const VerifyIdScreen = ({ navigation, route }) => {
             route.params?.postalCode ? route.params.postalCode : "",
             route.params?.latitude ? route.params.latitude : "",
             route.params?.longitude ? route.params.longitude : "",
-            frontImage,
-            backImage
+            front,
+            back
           );
+
+          setIsLoading(false);
 
           Alert.alert("บันทึกข้อมูลสำเร็จ", "", [
             {
@@ -188,9 +212,11 @@ const VerifyIdScreen = ({ navigation, route }) => {
           ]);
         } catch (error) {
           Alert.alert(error.response.data.message);
+          setIsLoading(false);
         }
       } catch (error) {
         console.log(error);
+        setIsLoading(false);
       }
     } else {
       setData({
@@ -398,6 +424,14 @@ const VerifyIdScreen = ({ navigation, route }) => {
             >
               <Text style={styles.add_title}>ยกเลิก</Text>
             </Pressable>
+          </View>
+        </View>
+      </Modal>
+      <Modal animationType="slide" transparent={true} visible={isLoading}>
+        <View style={styles.modalBackground}>
+          <View style={styles.processingContainer}>
+            <ActivityIndicator size="large" color={"#999999"} />
+            <Text style={styles.processingText}>Processing...</Text>
           </View>
         </View>
       </Modal>

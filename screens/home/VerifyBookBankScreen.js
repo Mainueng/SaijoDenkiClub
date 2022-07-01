@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   ScrollView,
   Modal,
+  ActivityIndicator,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import * as Animatable from "react-native-animatable";
@@ -20,13 +21,14 @@ const VerifyBookBankScreen = ({ navigation, route }) => {
   const [bookBankImage, setBookBankImage] = useState(null);
   const [data, setData] = useState({
     isValidBookBank: route.params?.bookBank
-      ? route.params.bookBank === "2"
+      ? route.params.bookBank === "2" || route.params.bookBank === "1"
         ? true
         : false
       : false,
     errorBookBank: "",
   });
   const [modal, setModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -49,7 +51,7 @@ const VerifyBookBankScreen = ({ navigation, route }) => {
     })();
 
     if (route.params?.bookBank) {
-      if (route.params.bookBank === "2") {
+      if (route.params.bookBank === "2" || route.params.bookBank === "1") {
         setBookBankImage(
           route.params?.userID
             ? "https://api.saijo-denki.com/img/club/upload/book_bank/" +
@@ -118,7 +120,16 @@ const VerifyBookBankScreen = ({ navigation, route }) => {
   const submitHandle = async () => {
     if (data.isValidBookBank) {
       try {
+        setIsLoading(true);
+
         let token = await AsyncStorage.getItem("token");
+        let book = null;
+
+        if (bookBankImage.split("?").length > 1) {
+          book = null;
+        } else {
+          book = bookBankImage;
+        }
 
         try {
           await update_user_info(
@@ -136,8 +147,10 @@ const VerifyBookBankScreen = ({ navigation, route }) => {
             route.params?.longitude ? route.params.longitude : "",
             null,
             null,
-            bookBankImage
+            book
           );
+
+          setIsLoading(false);
 
           Alert.alert("บันทึกข้อมูลสำเร็จ", "", [
             {
@@ -149,9 +162,11 @@ const VerifyBookBankScreen = ({ navigation, route }) => {
           ]);
         } catch (error) {
           Alert.alert(error.response.data.message);
+          setIsLoading(false);
         }
       } catch (error) {
         console.log(error);
+        setIsLoading(false);
       }
     } else {
       setData({
@@ -268,6 +283,14 @@ const VerifyBookBankScreen = ({ navigation, route }) => {
             >
               <Text style={styles.add_title}>ยกเลิก</Text>
             </Pressable>
+          </View>
+        </View>
+      </Modal>
+      <Modal animationType="slide" transparent={true} visible={isLoading}>
+        <View style={styles.modalBackground}>
+          <View style={styles.processingContainer}>
+            <ActivityIndicator size="large" color={"#999999"} />
+            <Text style={styles.processingText}>Processing...</Text>
           </View>
         </View>
       </Modal>

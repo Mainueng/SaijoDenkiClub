@@ -370,4 +370,38 @@ export default StyleSheet.create({
     fontSize: normalize(14) > 18 ? 18 : normalize(14),
     padding: width * 0.025,
   },
+  modalBackground: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(0,0,0,0.45)",
+  },
+  modalContainer: {
+    width: "90%",
+    maxWidth: 500,
+    alignItems: "center",
+    backgroundColor: "#ffffff",
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    borderRadius: width * 0.0125,
+  },
+  processingContainer: {
+    backgroundColor: "rgba(68,68,68,0.75)",
+    paddingHorizontal: width * 0.05,
+    paddingVertical: width * 0.04,
+    borderRadius: width * 0.0125,
+  },
+  processingText: {
+    fontFamily: "Sukhumvit_Medium",
+    fontSize: normalize(14) > 18 ? 18 : normalize(14),
+    color: "#FFFFFF",
+    marginTop: 10,
+    marginBottom: -5,
+  },
 });
