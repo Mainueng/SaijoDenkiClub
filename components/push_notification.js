@@ -110,7 +110,7 @@ async function registerForPushNotificationsAsync() {
     }
     token = (
       await Notifications.getExpoPushTokenAsync({
-        experienceId: "@phanat/saijo_denki_connect",
+        experienceId: "@phanat/saijo-denki-club",
       })
     ).data;
     console.log(token);
