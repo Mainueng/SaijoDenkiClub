@@ -14,6 +14,7 @@ export default StyleSheet.create({
     width: width,
     justifyContent: "center",
     alignItems: "center",
+    zIndex: -1,
   },
   type_container: {
     flexDirection: "row",

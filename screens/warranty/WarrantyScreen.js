@@ -20,6 +20,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { warranty_validate } from "../../api/warranty";
+import { useIsFocused } from "@react-navigation/native";
 
 const WarrantyScreen = ({ navigation }) => {
   const [scanned, setScanned] = useState(true);
@@ -35,6 +36,8 @@ const WarrantyScreen = ({ navigation }) => {
   const [isValidOutdoor, setIsValidOutdoor] = useState(true);
 
   const { width, height } = Dimensions.get("window");
+
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     (async () => {
@@ -163,18 +166,19 @@ const WarrantyScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style={"light"} />
-      <View
+      {/* <View
         style={{
           height: "100%",
           width: width,
           justifyContent: "center",
           alignItems: "center",
         }}
-      >
+      > */}
+      {isFocused && (
         <BarCodeScanner
           onBarCodeScanned={scanned ? handleScan : undefined}
           style={[
-            StyleSheet.absoluteFillObject,
+            StyleSheet.absoluteFill,
             {
               height: "110%",
             },
@@ -264,7 +268,8 @@ const WarrantyScreen = ({ navigation }) => {
             </View>
           </ImageBackground>
         </BarCodeScanner>
-      </View>
+      )}
+      {/* </View> */}
       <Modal animationType="fade" transparent={true} visible={modalIndoor}>
         <View style={styles.modal_background}>
           <View style={styles.modal_container}>
