@@ -107,4 +107,37 @@ const certification_info = async (token) => {
   });
 };
 
-export { user_info, update_user_info, certification_info };
+const delete_account = async (token) => {
+  return await axios({
+    url: SERV_API + "/v1/technician/delete_account",
+    method: "DELETE",
+
+    headers: {
+      Accept: "application/json",
+      Authorization: token,
+    },
+  });
+};
+
+const change_password = async (token, password) => {
+  return await axios({
+    url: SERV_API + "/v1/password",
+    method: "PUT",
+    data: JSON.stringify({
+      password: password,
+    }),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+  });
+};
+
+export {
+  user_info,
+  update_user_info,
+  certification_info,
+  delete_account,
+  change_password,
+};

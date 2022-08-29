@@ -17,10 +17,11 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { normalize } from "../../components/font";
 import MapView, { Marker } from "react-native-maps";
 import * as ImagePicker from "expo-image-picker";
-import { user_info, update_user_info } from "../../api/user";
+import { user_info, update_user_info, delete_account } from "../../api/user";
 import { logout_app } from "../../api/auth";
 import jwt_decode from "jwt-decode";
 import { AuthContext } from "../../components/context";
+import { useIsFocused } from "@react-navigation/native";
 
 const ProfileScreen = ({ navigation }) => {
   const [modalMenu, setModalMenu] = useState(false);
@@ -44,8 +45,10 @@ const ProfileScreen = ({ navigation }) => {
 
   const { logout } = useContext(AuthContext);
 
+  const isFocused = useIsFocused();
+
   useEffect(() => {
-    navigation.addListener("focus", async () => {
+    (async () => {
       const camera = await ImagePicker.requestCameraPermissionsAsync();
       const gallery = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -96,8 +99,8 @@ const ProfileScreen = ({ navigation }) => {
       } catch (error) {
         console.log(error);
       }
-    });
-  }, []);
+    })();
+  }, [isFocused]);
 
   const logoutHandle = async () => {
     try {
@@ -201,6 +204,27 @@ const ProfileScreen = ({ navigation }) => {
         return "ไม่อนุมัติ";
       default:
         return "กรุณาอัพโหลดเอกสาร";
+    }
+  };
+
+  const deleteAccount = () => {
+    Alert.alert("คำเตือน", "คุณต้องการลบบัญชีนี้หรือไม่?", [
+      {
+        text: "ยกเลิก",
+        style: "cancel",
+      },
+      { text: "ตกลง", onPress: () => deleteAccountHandle() },
+    ]);
+  };
+
+  const deleteAccountHandle = async () => {
+    try {
+      let token = await AsyncStorage.getItem("token");
+      await delete_account(token);
+
+      logoutHandle();
+    } catch (error) {
+      console.log(error.response.data.message);
     }
   };
 
@@ -546,6 +570,22 @@ const ProfileScreen = ({ navigation }) => {
               <View style={styles.card_right}></View>
             </View>
           </View>
+          <Pressable
+            style={styles.change_password}
+            onPress={() =>
+              navigation.navigate({
+                name: "ChangePasswordScreen",
+              })
+            }
+          >
+            <Text style={styles.change_password_text}>เปลี่ยนรหัสผ่าน</Text>
+          </Pressable>
+          <Pressable
+            style={styles.delete_account}
+            onPress={() => deleteAccount()}
+          >
+            <Text style={styles.delete_account_text}>ลบบัญชี</Text>
+          </Pressable>
           <Pressable style={styles.sign_out} onPress={() => logoutHandle()}>
             <Text style={styles.sign_out_text}>ออกจากระบบ</Text>
           </Pressable>

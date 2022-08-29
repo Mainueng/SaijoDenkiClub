@@ -319,7 +319,7 @@
 					"FB_SONARKIT_ENABLED=1",
 				);
 				INFOPLIST_FILE = SaijoDenkiClub/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 4.1.2;
 				OTHER_LDFLAGS = (
@@ -347,7 +347,7 @@
 				CURRENT_PROJECT_VERSION = 1.0.14;
 				DEVELOPMENT_TEAM = FHGM7WP2X4;
 				INFOPLIST_FILE = SaijoDenkiClub/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 4.1.2;
 				OTHER_LDFLAGS = (

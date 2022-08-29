@@ -135,8 +135,8 @@ android {
         applicationId 'app.saijo.saijo_denki_club'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 35
-        versionName "4.1.5"
+        versionCode 39
+        versionName "4.2.1"
     }
     splits {
         abi {

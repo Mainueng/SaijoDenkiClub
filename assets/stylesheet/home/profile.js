@@ -161,11 +161,38 @@ export default StyleSheet.create({
   sign_out: {
     justifyContent: "center",
     alignItems: "center",
-    marginVertical: "8%",
+    marginVertical: "4%",
   },
   sign_out_text: {
     fontFamily: "Sukhumvit_SemiBold",
     color: "rgba(0,0,0,0.75)",
+    fontSize: normalize(14) > 18 ? 18 : normalize(14),
+  },
+  delete_account: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: "4%",
+    padding: "2%",
+    backgroundColor: "#b31117",
+    borderRadius: height * 0.01,
+  },
+  delete_account_text: {
+    fontFamily: "Sukhumvit_SemiBold",
+    color: "#ffffff",
+    fontSize: normalize(14) > 18 ? 18 : normalize(14),
+  },
+  change_password: {
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "2%",
+    backgroundColor: "#ffffff",
+    borderRadius: height * 0.01,
+    marginTop: "2.5%",
+    borderColor: "rgba(135,135,135, 0.35)",
+  },
+  change_password_text: {
+    fontFamily: "Sukhumvit_SemiBold",
+    color: "#000000",
     fontSize: normalize(14) > 18 ? 18 : normalize(14),
   },
 });

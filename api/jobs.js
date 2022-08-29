@@ -86,6 +86,25 @@ const checkIn = async (token, job_id, latitude, longitude) => {
   });
 };
 
+const checkOut = async (token, job_id, latitude, longitude) => {
+  const formData = new FormData();
+  formData.append("job_id", job_id);
+  formData.append("latitude", latitude);
+  formData.append("longitude", longitude);
+
+  return await axios({
+    url: SERV_API + "/v1/jobs/checkout",
+    method: "POST",
+    data: formData,
+
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data",
+      Authorization: token,
+    },
+  });
+};
+
 const acceptJob = async (token, job_id) => {
   return await axios({
     url: SERV_API + "/v1/jobs/job_accept/" + job_id,
@@ -163,6 +182,40 @@ const saijoTechnicianInvoice = async (token, job_id) => {
   });
 };
 
+const validateCheckIn = async (token, job_id, appointmentDateTime) => {
+  const formData = new FormData();
+  formData.append("appointment_datetime", appointmentDateTime);
+
+  return await axios({
+    url: SERV_API + "/v1/jobs/validate_checkin/" + job_id,
+    method: "POST",
+    data: formData,
+
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data",
+      Authorization: token,
+    },
+  });
+};
+
+const validateCheckOut = async (token, job_id, appointmentDateTime) => {
+  const formData = new FormData();
+  formData.append("appointment_datetime", appointmentDateTime);
+
+  return await axios({
+    url: SERV_API + "/v1/jobs/validate_checkout/" + job_id,
+    method: "POST",
+    data: formData,
+
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data",
+      Authorization: token,
+    },
+  });
+};
+
 export {
   upcoming,
   recommend,
@@ -170,10 +223,13 @@ export {
   jobInfo,
   jobStatusLog,
   checkIn,
+  checkOut,
   acceptJob,
   denyJob,
   summary,
   summaryDetail,
   summaryDetailSaijo,
   saijoTechnicianInvoice,
+  validateCheckIn,
+  validateCheckOut,
 };

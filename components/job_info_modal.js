@@ -17,13 +17,17 @@ import * as Location from "expo-location";
 import styles from "../assets/stylesheet/home/home";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { normalize } from "./font";
+import moment from "moment";
 
 import {
   jobInfo,
   jobStatusLog,
   checkIn,
+  checkOut,
   acceptJob,
   denyJob,
+  validateCheckIn,
+  validateCheckOut,
 } from "../api/jobs";
 import { invoiceInfo } from "../api/summary";
 import logo from "../assets/image/home/logo.png";
@@ -40,13 +44,15 @@ const JobInfoModal = ({
   const [jobInfoData, setJobInfoData] = useState({});
   const [statusLog, setStatusLog] = useState([]);
   const [locationStatus, setLocationStatus] = useState("");
-  const [checkInStatus, setCheckInStatus] = useState(false);
+  // const [checkInStatus, setCheckInStatus] = useState(false);
   const [checkInModal, setCheckInModal] = useState(false);
   const [invoiceModal, setInvoiceModal] = useState(false);
   const [invoiceData, setInvoiceData] = useState({});
   const [page, setPage] = useState(0);
   const [problemImageUri, setProblemImageUri] = useState(null);
   const [problemImageModal, setProblemImageModal] = useState(false);
+  const [checkout, setCheckout] = useState(false);
+  const [checkin, setCheckin] = useState(false);
 
   const { width } = Dimensions.get("window");
 
@@ -60,6 +66,37 @@ const JobInfoModal = ({
         let res = await jobInfo(token, job_id);
 
         setJobInfoData(res.data.data[0]);
+
+        let appointment_date = res.data.data[0].appointment_date;
+        let appointment_time = res.data.data[0].appointment_time;
+
+        appointment_date = moment(appointment_date, "DD-MM-YYYY").format(
+          "YYYY-MM-DD"
+        );
+
+        let validate_checkin = await validateCheckIn(
+          token,
+          job_id,
+          appointment_date + " " + appointment_time + ":00"
+        );
+
+        let validate_checkout = await validateCheckOut(
+          token,
+          job_id,
+          appointment_date + " " + appointment_time + ":00"
+        );
+
+        if (validate_checkin.data.data === true) {
+          setCheckin(true);
+        } else {
+          setCheckin(false);
+        }
+
+        if (validate_checkout.data.data === true) {
+          setCheckout(true);
+        } else {
+          setCheckout(false);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -128,7 +165,36 @@ const JobInfoModal = ({
             </Pressable>
           </View>
         );
-      case status_code === 7 || status_code === 8 || status_code === 100:
+      case status_code === 8 || status_code === 100:
+        return (
+          <View style={styles.modal_button_container}>
+            {checkin ? (
+              <Pressable
+                style={styles.checkin_button}
+                onPress={() => checkOutHandle(job_id)}
+              >
+                <Text style={styles.modal_button_text}>เช็คเอาท์</Text>
+              </Pressable>
+            ) : (
+              <Pressable
+                style={styles.checkin_button}
+                onPress={() => checkInHandle(job_id)}
+              >
+                <Text style={styles.modal_button_text}>เช็คอิน</Text>
+              </Pressable>
+            )}
+
+            <Pressable
+              style={styles.call_button}
+              onPress={() => summaryJobHandle(job_id, job_type_code)}
+            >
+              <Text style={styles.modal_button_text}>
+                {status_code === 7 ? "ดำเนินการแก้ไขงาน" : "สรุปการทำงาน"}
+              </Text>
+            </Pressable>
+          </View>
+        );
+      case status_code === 7:
         return (
           <View style={styles.modal_button_container}>
             <Pressable
@@ -168,6 +234,36 @@ const JobInfoModal = ({
             </Pressable>
           </View>
         );
+      case status_code === 4:
+        return (
+          <View style={styles.modal_button_container}>
+            {!checkout ? (
+              <Pressable
+                style={styles.checkin_button}
+                onPress={() => checkOutHandle(job_id)}
+              >
+                <Text style={styles.modal_button_text}>เช็คเอาท์</Text>
+              </Pressable>
+            ) : null}
+            {parseInt(review) ? (
+              <Pressable
+                style={styles.summary_button}
+                onPress={() => reportJobHandle(job_id, job_type_code)}
+              >
+                <Text style={styles.modal_button_text}>แสดงรายงาน</Text>
+              </Pressable>
+            ) : (
+              <Pressable
+                style={styles.summary_button}
+                onPress={() => reviewJobHandle(job_id)}
+              >
+                <Text style={styles.modal_button_text}>
+                  แบบประเมินความพึงพอใจ
+                </Text>
+              </Pressable>
+            )}
+          </View>
+        );
       default:
         return (
           <View style={styles.modal_button_container}>
@@ -176,9 +272,7 @@ const JobInfoModal = ({
                 style={styles.summary_button}
                 onPress={() => reportJobHandle(job_id, job_type_code)}
               >
-                <Text style={styles.modal_button_text}>
-                  {job_status_th} (แสดงรายงาน)
-                </Text>
+                <Text style={styles.modal_button_text}>แสดงรายงาน</Text>
               </Pressable>
             ) : (
               <Pressable
@@ -210,7 +304,7 @@ const JobInfoModal = ({
             location.coords.longitude
           );
 
-          setCheckInStatus(true);
+          // setCheckInStatus(true);
           setCheckInModal(false);
 
           Alert.alert("สำเร็จ", "เช็คอินสำเร็จ");
@@ -226,6 +320,41 @@ const JobInfoModal = ({
     } else {
       Alert.alert(
         "เช็คอินไม่สำเร็จ",
+        "Permission to access location was denied."
+      );
+    }
+  };
+
+  const checkOutHandle = async (job_id) => {
+    if (locationStatus === "granted") {
+      setCheckInModal(true);
+      let location = await Location.getCurrentPositionAsync({});
+      try {
+        let token = await AsyncStorage.getItem("token");
+
+        try {
+          await checkOut(
+            token,
+            job_id,
+            location.coords.latitude,
+            location.coords.longitude
+          );
+
+          setCheckInModal(false);
+
+          Alert.alert("สำเร็จ", "เช็คเอาท์สำเร็จ");
+        } catch (error) {
+          setCheckInModal(false);
+          Alert.alert("ล้มเหลว", "เช็คเอาท์ไม่สำเร็จ");
+          console.log(error);
+        }
+      } catch (error) {
+        console.log(error);
+        setCheckInModal(false);
+      }
+    } else {
+      Alert.alert(
+        "เช็คเอาท์ไม่สำเร็จ",
         "Permission to access location was denied."
       );
     }
@@ -253,7 +382,7 @@ const JobInfoModal = ({
           updateUpcoming();
         }
       } catch (error) {
-        console.log(error);
+        console.log(error.response.data);
       }
     } catch (error) {
       console.log(error);
@@ -261,24 +390,24 @@ const JobInfoModal = ({
   };
 
   const summaryJobHandle = async (job_id, job_type_code) => {
-    if (checkInStatus) {
-      setModalData({
-        ...modalData,
-        openModal: false,
-      });
-      setJobInfoData({});
-      setStatusLog([]);
+    //if (checkInStatus) {
+    setModalData({
+      ...modalData,
+      openModal: false,
+    });
+    setJobInfoData({});
+    setStatusLog([]);
 
-      nav.navigate({
-        name: "Summary",
-        params: {
-          job_id: job_id,
-          job_type: job_type_code,
-        },
-      });
-    } else {
-      Alert.alert("Warring!", "Please check-in.");
-    }
+    nav.navigate({
+      name: "Summary",
+      params: {
+        job_id: job_id,
+        job_type: job_type_code,
+      },
+    });
+    // } else {
+    //   Alert.alert("Warring!", "Please check-in.");
+    // }
   };
 
   const reportJobHandle = async (job_id, job_type_code) => {
@@ -380,7 +509,7 @@ const JobInfoModal = ({
   const denyJobHandle = async (job_id) => {
     setJobInfoData({});
     setStatusLog([]);
-    setCheckInStatus(false);
+    // setCheckInStatus(false);
     setModalData({
       ...modalData,
       openModal: false,
@@ -416,7 +545,7 @@ const JobInfoModal = ({
       let { status } = await Location.requestForegroundPermissionsAsync();
 
       if (status !== "granted") {
-        Alert.alert("Warring!", "Permission to access location was denied.");
+        // Alert.alert("Warring!", "Permission to access location was denied.");
 
         return;
       } else {
@@ -525,7 +654,7 @@ const JobInfoModal = ({
                   });
                   setJobInfoData({});
                   setStatusLog([]);
-                  setCheckInStatus(false);
+                  // setCheckInStatus(false);
                 }}
               >
                 <MaterialCommunityIcons
@@ -1032,7 +1161,9 @@ const JobInfoModal = ({
               jobInfoData.job_status_en,
               jobInfoData.job_status_th,
               jobInfoData.job_type_code,
-              jobInfoData.review
+              jobInfoData.review,
+              jobInfoData.appointment_date,
+              jobInfoData.appointment_time
             )}
           </View>
         </View>

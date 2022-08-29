@@ -14,6 +14,7 @@ import ProfileLocationScreen from "./ProfileLocationScreen";
 import VerifyScreen from "./VerifyScreen";
 import VerifyIdScreen from "./VerifyIdScreen";
 import VerifyBookBankScreen from "./VerifyBookBankScreen";
+import ChangePasswordScreen from "./ChangePasswordScreen";
 import { normalize } from "../../components/font";
 
 const HomeRootScreen = () => {
@@ -198,6 +199,19 @@ const HomeRootScreen = () => {
         options={{
           headerShown: true,
           title: "เลขที่บัญชี",
+          headerTitleStyle: {
+            fontFamily: "Sukhumvit_SemiBold",
+            fontSize: normalize(16) > 22 ? 22 : normalize(16),
+          },
+          headerTitleAlign: "center",
+        }}
+      />
+      <Stack.Screen
+        name="ChangePasswordScreen"
+        component={ChangePasswordScreen}
+        options={{
+          headerShown: true,
+          title: "เปลี่ยนรหัสผ่าน",
           headerTitleStyle: {
             fontFamily: "Sukhumvit_SemiBold",
             fontSize: normalize(16) > 22 ? 22 : normalize(16),

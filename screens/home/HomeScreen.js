@@ -36,6 +36,7 @@ import RepairIcon from "../../assets/image/home/repair_icon.png";
 import InstallIcon from "../../assets/image/home/install_icon.png";
 import { TabContext } from "../../components/tab_context";
 import * as Notifications from "expo-notifications";
+import { useIsFocused } from "@react-navigation/native";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -63,6 +64,8 @@ const HomeScreen = ({ navigation }) => {
   const [technicianGroup, setTechnicianGroup] = useState("2");
   const [expenseList, setExpenseList] = useState([]);
   const [expenseTotal, setExpenseTotal] = useState(0);
+
+  const isFocused = useIsFocused();
 
   const onRefreshUpcoming = useCallback(() => {
     setRefreshing(true);
@@ -774,7 +777,7 @@ const HomeScreen = ({ navigation }) => {
   const { update_badge, setModalData } = useContext(TabContext);
 
   useEffect(() => {
-    navigation.addListener("focus", async () => {
+    (async () => {
       try {
         let token = await AsyncStorage.getItem("token");
 
@@ -828,7 +831,7 @@ const HomeScreen = ({ navigation }) => {
       getHistoryList();
       getSummaryList();
       getInvoiceList();
-    });
+    })();
 
     navigation.addListener("blur", () => {
       clearInterval(jobInterval);
@@ -837,7 +840,7 @@ const HomeScreen = ({ navigation }) => {
     return () => {
       clearInterval(jobInterval);
     };
-  }, []);
+  }, [isFocused]);
 
   return (
     <SafeAreaView

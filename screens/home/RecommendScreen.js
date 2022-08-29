@@ -18,6 +18,7 @@ import TextTicker from "react-native-text-ticker";
 import { recommend } from "../../api/jobs";
 import JobInfoModal from "../../components/job_info_modal";
 import { TabContext } from "../../components/tab_context";
+import { useIsFocused } from "@react-navigation/native";
 
 import CleanIcon from "../../assets/image/home/clean_icon.png";
 import RepairIcon from "../../assets/image/home/repair_icon.png";
@@ -33,11 +34,11 @@ const RecommendScreen = ({ navigation }) => {
 
   const { setModalData } = useContext(TabContext);
 
+  const isFocused = useIsFocused();
+
   useEffect(() => {
-    navigation.addListener("focus", () => {
-      getRecommendList();
-    });
-  }, []);
+    getRecommendList();
+  }, [isFocused]);
 
   const onRefreshRecommend = useCallback(() => {
     setRefreshing(true);

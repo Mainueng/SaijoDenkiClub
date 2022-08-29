@@ -45,7 +45,21 @@ const ExpandableComponent = ({
   setModalTitle,
   updateValue,
   updateTitle,
+  summaryValidate,
 }) => {
+  useEffect(() => {
+    data.body.map((item) => {
+      item.value.map((data) => {
+        if (data.input_type === "textarea") {
+          if (data.value) {
+            summaryValidate(data.value ? true : false);
+          }
+        }
+      });
+    });
+  }),
+    [];
+
   const outputFormat = (value, type, unit, index, sn, order) => {
     switch (true) {
       case unit === "touch":
@@ -370,6 +384,7 @@ const ExpandableComponent = ({
                 <Text style={styles.expanded_label}>{data.sn}</Text>
               </View>
             )}
+
             {data.input_type === "textarea" ? (
               <View
                 style={[
@@ -383,14 +398,19 @@ const ExpandableComponent = ({
                 <TextInput
                   style={[
                     styles.from_input,
-                    { height: height * 0.1, marginBottom: height * 0.02 },
+                    {
+                      height: height * 0.1,
+                      marginBottom: height * 0.02,
+                      borderColor: data.value ? "rgba(0,0,0,0.75)" : "red",
+                    },
                   ]}
                   multiline={true}
                   value={data.value}
                   autoCapitalize="none"
-                  onChangeText={(val) =>
-                    updateValue(index, val, data.sn, data.unit, data.order)
-                  }
+                  onChangeText={(val) => {
+                    updateValue(index, val, data.sn, data.unit, data.order);
+                    summaryValidate(val.length ? true : false);
+                  }}
                 />
               </View>
             ) : data.input_type === "file" ? (
@@ -532,12 +552,14 @@ const SummaryScreen = ({ navigation, route }) => {
   const [imageUri, setImageUri] = useState("");
   const [modalTitle, setModalTitle] = useState("");
   const [modalSign, setModalSign] = useState(false);
+  const [summaryValidate, setSummaryValidate] = useState(false);
 
   if (Platform.OS === "android") {
     UIManager.setLayoutAnimationEnabledExperimental(true);
   }
 
   const ref = useRef();
+  const scrollViewRef = useRef();
 
   useEffect(() => {
     (async () => {
@@ -716,7 +738,6 @@ const SummaryScreen = ({ navigation, route }) => {
               sub_data.unit === "before_image" ||
               sub_data.unit === "after_image"
             ) {
-              console.log(jobType);
               try {
                 (async () =>
                   await uploadPic(
@@ -819,6 +840,7 @@ const SummaryScreen = ({ navigation, route }) => {
             marginTop: height * 0.01,
           }}
           showsVerticalScrollIndicator={false}
+          ref={scrollViewRef}
         >
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={{ width: width, alignItems: "center" }}>
@@ -840,6 +862,7 @@ const SummaryScreen = ({ navigation, route }) => {
                     updateTitle={(key, val, serial, unit, order) =>
                       updateTitle(index, key, val, serial, unit, order)
                     }
+                    summaryValidate={setSummaryValidate}
                   />
                 </View>
               ))}
@@ -856,7 +879,17 @@ const SummaryScreen = ({ navigation, route }) => {
         </Pressable>
         <Pressable
           style={styles.view_sign_button}
-          onPress={() => setModalSign(true)}
+          onPress={() => {
+            summaryValidate
+              ? setModalSign(true)
+              : Alert.alert(
+                  "คำเตือน!",
+                  'กรุณาสรุปงานในช่อง "สรุปผลการทำงาน" ก่อนทำการลงลายเซ็น'
+                );
+            summaryValidate
+              ? null
+              : scrollViewRef.current?.scrollToEnd({ animated: true });
+          }}
         >
           <Text style={styles.button_text}>ยืนยัน</Text>
         </Pressable>
