@@ -65,7 +65,11 @@ const ProfileScreen = ({ navigation }) => {
           "Please allow Saijo Denki Club to access gallery on your device."
         );
       }
+    })();
+  }, []);
 
+  useEffect(() => {
+    (async () => {
       try {
         let token = await AsyncStorage.getItem("token");
 

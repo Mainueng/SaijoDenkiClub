@@ -396,9 +396,9 @@ const App = () => {
         token = await AsyncStorage.getItem("token");
 
         if (Platform.OS === "ios") {
-          version = "4.3.1";
+          version = "4.3.3";
         } else {
-          version = "4.3.1";
+          version = "4.3.3";
         }
 
         try {
@@ -450,7 +450,7 @@ const App = () => {
   const openUrl = () => {
     (async () => {
       if (Platform.OS === "ios") {
-        url = "https://apps.apple.com/th/app/saijo-denki-app/id966825034";
+        url = "https://apps.apple.com/th/app/saijo-denki-club/id1192110397";
       } else {
         url =
           "https://play.google.com/store/apps/details?id=app.saijo.saijo_denki_air_con";

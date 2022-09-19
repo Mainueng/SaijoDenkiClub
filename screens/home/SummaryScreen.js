@@ -564,8 +564,6 @@ const SummaryScreen = ({ navigation, route }) => {
   useEffect(() => {
     (async () => {
       try {
-        let token = await AsyncStorage.getItem("token");
-
         const camera = await ImagePicker.requestCameraPermissionsAsync();
         const gallery = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -582,23 +580,25 @@ const SummaryScreen = ({ navigation, route }) => {
             "Please allow Saijo Denki Club to access gallery on your device."
           );
         }
+      } catch (error) {
+        console.log(error);
+      }
 
-        try {
-          let res = await summaryForm(token, jobID);
-          let report = res.data.data;
+      try {
+        let token = await AsyncStorage.getItem("token");
 
-          var result = report.map((data) => ({
-            ...data,
-            body: data.body.map((item) => ({
-              ...item,
-              isExpanded: true,
-            })),
-          }));
+        let res = await summaryForm(token, jobID);
+        let report = res.data.data;
 
-          setListData(result);
-        } catch (error) {
-          console.log(error);
-        }
+        var result = report.map((data) => ({
+          ...data,
+          body: data.body.map((item) => ({
+            ...item,
+            isExpanded: true,
+          })),
+        }));
+
+        setListData(result);
       } catch (error) {
         console.log(error);
       }
