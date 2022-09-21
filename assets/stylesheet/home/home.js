@@ -312,7 +312,7 @@ export default StyleSheet.create({
   },
   modal_button_text: {
     color: "#ffffff",
-    fontSize: normalize(14) > 18 ? 18 : normalize(14),
+    fontSize: normalize(12) > 16 ? 16 : normalize(12),
     fontFamily: "Sukhumvit_Medium",
   },
   cancel_button: {

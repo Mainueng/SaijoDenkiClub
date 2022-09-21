@@ -183,7 +183,17 @@ const JobInfoModal = ({
                 <Text style={styles.modal_button_text}>เช็คอิน</Text>
               </Pressable>
             )}
-
+            <Pressable
+              style={[
+                styles.call_button,
+                {
+                  marginHorizontal: "1.5%",
+                },
+              ]}
+              onPress={() => Linking.openURL(`tel:${phoneNumber}`)}
+            >
+              <Text style={styles.modal_button_text}>โทร</Text>
+            </Pressable>
             <Pressable
               style={styles.call_button}
               onPress={() => summaryJobHandle(job_id, job_type_code)}
@@ -202,6 +212,17 @@ const JobInfoModal = ({
               onPress={() => checkInHandle(job_id)}
             >
               <Text style={styles.modal_button_text}>เช็คอิน</Text>
+            </Pressable>
+            <Pressable
+              style={[
+                styles.call_button,
+                {
+                  marginHorizontal: "1.5%",
+                },
+              ]}
+              onPress={() => Linking.openURL(`tel:${phoneNumber}`)}
+            >
+              <Text style={styles.modal_button_text}>โทร</Text>
             </Pressable>
             <Pressable
               style={styles.call_button}
@@ -245,6 +266,18 @@ const JobInfoModal = ({
                 <Text style={styles.modal_button_text}>เช็คเอาท์</Text>
               </Pressable>
             ) : null}
+            <Pressable
+              style={[
+                styles.call_button,
+                {
+                  marginHorizontal: "1.5%",
+                  marginRight: "3%",
+                },
+              ]}
+              onPress={() => Linking.openURL(`tel:${phoneNumber}`)}
+            >
+              <Text style={styles.modal_button_text}>โทร</Text>
+            </Pressable>
             {parseInt(review) ? (
               <Pressable
                 style={styles.summary_button}
@@ -1016,6 +1049,32 @@ const JobInfoModal = ({
                                   jobInfoData.province +
                                   " " +
                                   jobInfoData.postal_code}
+                              </Text>
+                            </View>
+                          </View>
+                        </View>
+                      </View>
+                      <View style={{ marginBottom: "3%" }}>
+                        <View style={styles.modal_body_info_container}>
+                          <MaterialCommunityIcons
+                            name="domain"
+                            size={normalize(14) > 24 ? 24 : normalize(14)}
+                          />
+                          <Text style={styles.modal_info_title}>เบอร์โทร</Text>
+                        </View>
+                        <View style={styles.modal_body_info_container}>
+                          <View style={{ opacity: 0 }}>
+                            <MaterialCommunityIcons
+                              name="phone"
+                              size={normalize(14) > 24 ? 24 : normalize(14)}
+                            />
+                          </View>
+                          <View style={{ flex: 1 }}>
+                            <View
+                              style={styles.modal_info_description_container}
+                            >
+                              <Text style={styles.modal_info_description}>
+                                {jobInfoData.telephone}
                               </Text>
                             </View>
                           </View>
