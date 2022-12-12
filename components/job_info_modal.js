@@ -326,10 +326,15 @@ const JobInfoModal = ({
     if (locationStatus === "granted") {
       setCheckInModal(true);
       let location = await Location.getCurrentPositionAsync({});
-      try {
-        let token = await AsyncStorage.getItem("token");
 
+      let validate = radiusValidate(
+        location.coords.latitude,
+        location.coords.longitude
+      );
+
+      if (validate <= 1) {
         try {
+          let token = await AsyncStorage.getItem("token");
           await checkIn(
             token,
             job_id,
@@ -337,7 +342,6 @@ const JobInfoModal = ({
             location.coords.longitude
           );
 
-          // setCheckInStatus(true);
           setCheckInModal(false);
 
           Alert.alert("สำเร็จ", "เช็คอินสำเร็จ");
@@ -346,8 +350,11 @@ const JobInfoModal = ({
           Alert.alert("ล้มเหลว", "เช็คอินไม่สำเร็จ");
           console.log(error);
         }
-      } catch (error) {
-        console.log(error);
+      } else {
+        Alert.alert(
+          "เช็คอินไม่สำเร็จ",
+          "โปรดอยู่ในรัศมี 1 กิโลเมตรของตำแหน่งงาน"
+        );
         setCheckInModal(false);
       }
     } else {
@@ -362,10 +369,15 @@ const JobInfoModal = ({
     if (locationStatus === "granted") {
       setCheckInModal(true);
       let location = await Location.getCurrentPositionAsync({});
-      try {
-        let token = await AsyncStorage.getItem("token");
 
+      let validate = radiusValidate(
+        location.coords.latitude,
+        location.coords.longitude
+      );
+
+      if (validate <= 1) {
         try {
+          let token = await AsyncStorage.getItem("token");
           await checkOut(
             token,
             job_id,
@@ -381,8 +393,11 @@ const JobInfoModal = ({
           Alert.alert("ล้มเหลว", "เช็คเอาท์ไม่สำเร็จ");
           console.log(error);
         }
-      } catch (error) {
-        console.log(error);
+      } else {
+        Alert.alert(
+          "เช็คเอาท์ไม่สำเร็จ",
+          "โปรดอยู่ในรัศมี 1 กิโลเมตรของตำแหน่งงาน"
+        );
         setCheckInModal(false);
       }
     } else {
@@ -423,7 +438,6 @@ const JobInfoModal = ({
   };
 
   const summaryJobHandle = async (job_id, job_type_code) => {
-    //if (checkInStatus) {
     setModalData({
       ...modalData,
       openModal: false,
@@ -438,9 +452,6 @@ const JobInfoModal = ({
         job_type: job_type_code,
       },
     });
-    // } else {
-    //   Alert.alert("Warring!", "Please check-in.");
-    // }
   };
 
   const reportJobHandle = async (job_id, job_type_code) => {
@@ -542,7 +553,6 @@ const JobInfoModal = ({
   const denyJobHandle = async (job_id) => {
     setJobInfoData({});
     setStatusLog([]);
-    // setCheckInStatus(false);
     setModalData({
       ...modalData,
       openModal: false,
@@ -571,6 +581,22 @@ const JobInfoModal = ({
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const radiusValidate = (latitude, longitude) => {
+    let radians =
+      Math.acos(
+        Math.sin(deg2rad(latitude)) * Math.sin(deg2rad(jobInfoData.latitude)) +
+          Math.cos(deg2rad(latitude)) *
+            Math.cos(deg2rad(jobInfoData.latitude)) *
+            Math.cos(deg2rad(longitude) - deg2rad(jobInfoData.longitude))
+      ) * 6371;
+
+    return Math.ceil(radians * 10) / 10;
+  };
+
+  const deg2rad = (degrees) => {
+    return degrees * (Math.PI / 180);
   };
 
   useEffect(() => {

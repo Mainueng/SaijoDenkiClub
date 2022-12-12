@@ -178,7 +178,7 @@ const VerifyBookBankScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <ScrollView
         style={{
           width: "100%",

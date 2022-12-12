@@ -105,7 +105,7 @@ const ProfileLocationScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <Pressable style={styles.current_btn} onPress={() => goToMyLocation()}>
         <View
           style={{

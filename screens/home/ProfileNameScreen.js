@@ -125,7 +125,7 @@ const ProfileNameScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : ""}
         style={{ flex: 1, width: "100%" }}

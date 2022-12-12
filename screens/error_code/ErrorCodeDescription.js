@@ -13,7 +13,7 @@ const ErrorCodeDescriptionScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <View>
         <View style={styles.error_code_title_container}>
           <Text style={styles.error_code_title}>ปัญหา</Text>

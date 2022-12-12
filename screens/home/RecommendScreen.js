@@ -77,7 +77,7 @@ const RecommendScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <View style={styles.recommend_list_container}>
         <ScrollView
           showsVerticalScrollIndicator={false}

@@ -25,7 +25,7 @@ export default StyleSheet.create({
   },
   link_icon_container: {
     width: "100%",
-    borderStyle: "dashed",
+
     borderColor: "#ffffff",
     borderTopColor: "#e6e6e6",
     borderWidth: 1.5,

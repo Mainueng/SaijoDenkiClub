@@ -60,7 +60,7 @@ const WarrantyInfoScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={[styles.container]}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <View style={[styles.card, { marginTop: height * 0.01 }]}>
         <View style={styles.top_content}>
           <Text style={styles.title}>AC Modal</Text>

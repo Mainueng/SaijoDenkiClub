@@ -234,7 +234,7 @@ const ProfileScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <View style={{ width: "90%", maxWidth: 600, alignItems: "center" }}>
         <ScrollView
           style={{

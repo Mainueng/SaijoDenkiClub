@@ -24,7 +24,6 @@ import {
 } from "../../api/summary";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { normalize } from "../../components/font";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import SignatureScreen from "react-native-signature-canvas";
 import * as FileSystem from "expo-file-system";
@@ -396,7 +395,7 @@ const ReviewScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <KeyboardAvoidingView
         behavior={"position"}
         keyboardVerticalOffset={height * 0.1}

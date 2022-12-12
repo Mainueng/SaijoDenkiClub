@@ -133,7 +133,7 @@ const MoreScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <View style={styles.banner_container}>
         <Image
           source={Logo}
@@ -141,7 +141,7 @@ const MoreScreen = () => {
           resizeMode={"contain"}
         />
         <Text style={styles.version}>
-          {Platform.OS === "ios" ? "Version 4.3.4" : "Version 4.3.4"}
+          {Platform.OS === "ios" ? "Version 4.3.5" : "Version 4.3.5"}
         </Text>
       </View>
       <View style={styles.link_icon_container}>

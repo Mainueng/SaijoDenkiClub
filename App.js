@@ -24,6 +24,8 @@ import { AuthContext } from "./components/context";
 import { TabContext } from "./components/tab_context";
 import { apple_auth, check_version, facebook_auth, sign_in } from "./api/auth";
 import styles from "./assets/stylesheet/auth/auth";
+import * as Location from "expo-location";
+import * as TaskManager from "expo-task-manager";
 
 import SignInRootScreen from "./screens/auth/SignInRootScreen";
 import HomeRootScreen from "./screens/home/HomeRootScreen";
@@ -31,6 +33,45 @@ import NotificationRootScreen from "./screens/notification/NotificationRootScree
 import WarrantyRootScreen from "./screens/warranty/WarrantyRootScreen";
 import ErrorCodeRootScreen from "./screens/error_code/ErrorCodeRootScreen";
 import MoreRootScreen from "./screens/more/MoreRootScreen";
+
+const LOCATION_TASK_NAME = "background-location-task";
+
+TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
+  if (error) {
+    console.log(error);
+    return;
+  }
+  if (data) {
+    const { locations } = data;
+    let lat = locations[0].coords.latitude;
+    let long = locations[0].coords.longitude;
+
+    let lat_storage = await AsyncStorage.getItem("lat");
+    let long_storage = await AsyncStorage.getItem("lng");
+    let token = await AsyncStorage.getItem("token");
+
+    if ((lat !== lat_storage * 1 || long !== long_storage * 1) && token) {
+      await AsyncStorage.setItem("lat", lat.toString());
+      await AsyncStorage.setItem("lng", long.toString());
+
+      let decode = jwt_decode(token);
+
+      console.log(lat, long, decode.id);
+
+      // Storing Received Lat & Long to DB by logged In User Id
+      // axios({
+      //   method: "POST",
+      //   url: "http://000.000.0.000/phpServer/ajax.php",
+      //   data: {
+      //     action: "saveLocation",
+      //     userId: userId,
+      //     lat,
+      //     long
+      //   }
+      // });
+    }
+  }
+});
 
 const Tab = createBottomTabNavigator();
 
@@ -396,9 +437,9 @@ const App = () => {
         token = await AsyncStorage.getItem("token");
 
         if (Platform.OS === "ios") {
-          version = "4.3.4";
+          version = "4.3.5";
         } else {
-          version = "4.3.4";
+          version = "4.3.5";
         }
 
         try {
@@ -447,6 +488,19 @@ const App = () => {
     }, 2000);
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      const background = await Location.requestBackgroundPermissionsAsync();
+      const foreground = await Location.requestForegroundPermissionsAsync();
+
+      if (background.status === "granted" && foreground.status === "granted") {
+        getLocationAsync();
+      } else {
+        console.log("Locations services needed");
+      }
+    })();
+  }, []);
+
   const openUrl = () => {
     (async () => {
       if (Platform.OS === "ios") {
@@ -464,6 +518,14 @@ const App = () => {
         Alert.alert(`Can't open open link!`);
       }
     })();
+  };
+
+  const getLocationAsync = async () => {
+    await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
+      enableHighAccuracy: true,
+      distanceInterval: 1,
+      timeInterval: 5000,
+    });
   };
 
   if (!loaded) {

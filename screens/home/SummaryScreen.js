@@ -27,6 +27,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import * as ImagePicker from "expo-image-picker";
 import SignatureScreen from "react-native-signature-canvas";
 import * as FileSystem from "expo-file-system";
+import * as Location from "expo-location";
 import {
   summaryForm,
   saveSummaryForm,
@@ -553,6 +554,7 @@ const SummaryScreen = ({ navigation, route }) => {
   const [modalTitle, setModalTitle] = useState("");
   const [modalSign, setModalSign] = useState(false);
   const [summaryValidate, setSummaryValidate] = useState(false);
+  const [locationStatus, setLocationStatus] = useState("");
 
   if (Platform.OS === "android") {
     UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -601,6 +603,20 @@ const SummaryScreen = ({ navigation, route }) => {
         setListData(result);
       } catch (error) {
         console.log(error);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status !== "granted") {
+        // Alert.alert("Warring!", "Permission to access location was denied.");
+
+        return;
+      } else {
+        setLocationStatus("granted");
       }
     })();
   }, []);
@@ -798,6 +814,16 @@ const SummaryScreen = ({ navigation, route }) => {
 
     (async () => {
       try {
+        if (locationStatus === "granted") {
+          let location = await Location.getCurrentPositionAsync({});
+          await checkOut(
+            token,
+            jobID,
+            location.coords.latitude,
+            location.coords.longitude
+          );
+        }
+
         await saveSummaryForm(token, jobID, result);
 
         setModalSign(false);
@@ -824,7 +850,7 @@ const SummaryScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <Text style={styles.report_sub_header}>
         ข้อกำหนดในการตรวจสอบ รอให้เครื่องทำงานอย่างน้อย 10 นาที
       </Text>
