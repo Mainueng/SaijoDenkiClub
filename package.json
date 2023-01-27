@@ -13,8 +13,9 @@
     "@react-navigation/bottom-tabs": "^6.4.3",
     "@react-navigation/native": "^6.0.16",
     "@react-navigation/stack": "^6.3.7",
+    "@supersami/rn-foreground-service": "^2.1.0",
     "axios": "^1.2.1",
-    "expo": "~47.0.8",
+    "expo": "~47.0.12",
     "expo-apple-authentication": "~5.0.1",
     "expo-barcode-scanner": "~12.1.0",
     "expo-facebook": "^12.2.0",
@@ -26,6 +27,7 @@
     "expo-notifications": "~0.17.0",
     "expo-splash-screen": "~0.17.5",
     "expo-status-bar": "~1.4.2",
+    "expo-task-manager": "~11.0.1",
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.4",
     "react": "18.1.0",
@@ -40,7 +42,8 @@
     "react-native-signature-canvas": "^4.5.0",
     "react-native-swipe-list-view": "^3.2.9",
     "react-native-text-ticker": "^1.14.0",
-    "expo-task-manager": "~11.0.1"
+    "react-native-webview": "11.23.1",
+    "socket.io-client": "^4.5.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

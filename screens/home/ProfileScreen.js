@@ -140,7 +140,7 @@ const ProfileScreen = ({ navigation }) => {
     } catch {
       Alert.alert(
         "Warring!",
-        "Please allow Saijo Denki Connect to access camera on your device."
+        "Please allow Saijo Denki Club to access camera on your device."
       );
     }
 
@@ -166,7 +166,7 @@ const ProfileScreen = ({ navigation }) => {
     } catch {
       Alert.alert(
         "Warring!",
-        "Please allow Saijo Denki Connect to access gallery on your device."
+        "Please allow Saijo Denki Club to access gallery on your device."
       );
     }
   };

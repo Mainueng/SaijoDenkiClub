@@ -29,7 +29,7 @@ PODS:
     - ExpoModulesCore
   - EXNotifications (0.17.0):
     - ExpoModulesCore
-  - Expo (47.0.8):
+  - Expo (47.0.13):
     - ExpoModulesCore
   - ExpoImagePicker (14.0.2):
     - ExpoModulesCore
@@ -37,7 +37,7 @@ PODS:
     - ExpoModulesCore
   - ExpoLinearGradient (12.0.1):
     - ExpoModulesCore
-  - ExpoModulesCore (1.0.3):
+  - ExpoModulesCore (1.1.1):
     - React-Core
     - ReactCommon/turbomodule/core
   - EXSplashScreen (0.17.5):
@@ -283,6 +283,8 @@ PODS:
     - RCTTypeSafety
     - React-Core
     - ReactCommon/turbomodule/core
+  - react-native-webview (11.23.1):
+    - React-Core
   - React-perflogger (0.70.5)
   - React-RCTActionSheet (0.70.5):
     - React-Core/RCTActionSheetHeaders (= 0.70.5)
@@ -432,6 +434,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -537,6 +540,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-maps"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-webview:
+    :path: "../node_modules/react-native-webview"
   React-perflogger:
     :path: "../node_modules/react-native/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -588,11 +593,11 @@ SPEC CHECKSUMS:
   EXImageLoader: 84b65e6bd9d3345d6fbb3ab936a546c54496a64d
   EXLocation: 7d08926d931f4fb619bfa25e73669f1e19b102c6
   EXNotifications: babce2a87b7922051354fcfe7a74dd279b7e272a
-  Expo: 36b5f625d36728adbdd1934d4d57182f319ab832
+  Expo: b9fa98bf260992312ee3c424400819fb9beadafe
   ExpoImagePicker: d2a1cea4023008ae2fb0d95f33422b80772cc76e
   ExpoKeepAwake: 69b59d0a8d2b24de9f82759c39b3821fec030318
   ExpoLinearGradient: b40c2133ad57ae105b1b12a319e314463c817f6b
-  ExpoModulesCore: b5d21c8880afda6fb6ee95469f9ac2ec9b98e995
+  ExpoModulesCore: 485dff3a59b036a33b6050c0a5aea3cf1037fdd1
   EXSplashScreen: 3e989924f61a8dd07ee4ea584c6ba14be9b51949
   EXTaskManager: 0afcc6fd813dec5dee98aa5ec4f22c2a840dd4a7
   FacebookSDK: 4b9bb8e2824898b47f18c666dc145c09b40609e6
@@ -617,6 +622,7 @@ SPEC CHECKSUMS:
   React-logger: fdda34dd285bdb0232e059b19d9606fa0ec3bb9c
   react-native-maps: 085f614cf14d3637b2048bb9752da5b1c27c2886
   react-native-safe-area-context: 99b24a0c5acd0d5dcac2b1a7f18c49ea317be99a
+  react-native-webview: d33e2db8925d090871ffeb232dfa50cb3a727581
   React-perflogger: e68d3795cf5d247a0379735cbac7309adf2fb931
   React-RCTActionSheet: 05452c3b281edb27850253db13ecd4c5a65bc247
   React-RCTAnimation: 578eebac706428e68466118e84aeacf3a282b4da

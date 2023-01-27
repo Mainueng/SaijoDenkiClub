@@ -88,55 +88,40 @@ const HomeScreen = ({ navigation }) => {
   const getUpcomingList = async () => {
     try {
       let token = await AsyncStorage.getItem("token");
+      let res = await upcoming(token);
 
-      try {
-        let res = await upcoming(token);
+      countDown(res.data.data);
 
+      let data = setInterval(() => {
         countDown(res.data.data);
+      }, 60000);
 
-        let data = setInterval(() => {
-          countDown(res.data.data);
-        }, 60000);
-
-        setJobInterval(data);
-      } catch (error) {
-        setUpcomingList([]);
-        console.log(error.response.data.message);
-      }
+      setJobInterval(data);
     } catch (error) {
-      console.log(error);
+      setUpcomingList([]);
+      // console.log(error.response.data.message);
     }
   };
 
   const getRecommendList = async () => {
     try {
       let token = await AsyncStorage.getItem("token");
-
-      try {
-        let res = await recommend(token);
-        setRecommendList(res.data.data);
-      } catch (error) {
-        setRecommendList([]);
-        console.log(error.response.data.message);
-      }
+      let res = await recommend(token);
+      setRecommendList(res.data.data);
     } catch (error) {
-      console.log(error);
+      setRecommendList([]);
+      // console.log(error.response.data.message);
     }
   };
 
   const getHistoryList = async () => {
     try {
       let token = await AsyncStorage.getItem("token");
-
-      try {
-        let res = await history(token);
-        setHistoryList(res.data.data);
-      } catch (error) {
-        setHistoryList([]);
-        console.log(error.response.data.message);
-      }
+      let res = await history(token);
+      setHistoryList(res.data.data);
     } catch (error) {
-      console.log(error);
+      setHistoryList([]);
+      // console.log(error.response.data.message);
     }
   };
 
@@ -194,7 +179,7 @@ const HomeScreen = ({ navigation }) => {
 
         result = res.data.data;
       } catch (error) {
-        console.log(error.response.data.message);
+        // console.log(error.response.data.message);
       }
 
       try {
@@ -271,10 +256,10 @@ const HomeScreen = ({ navigation }) => {
         }
       } catch (error) {
         setSummaryDetailList([]);
-        console.log(error.response.data.message);
+        // console.log(error.response.data.message);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -311,7 +296,7 @@ const HomeScreen = ({ navigation }) => {
         setInvoiceList(invoice_array);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

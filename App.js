@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState, useMemo } from "react";
+import React, { useEffect, useReducer, useState, useMemo, useRef } from "react";
 import {
   View,
   Alert,
@@ -24,8 +24,7 @@ import { AuthContext } from "./components/context";
 import { TabContext } from "./components/tab_context";
 import { apple_auth, check_version, facebook_auth, sign_in } from "./api/auth";
 import styles from "./assets/stylesheet/auth/auth";
-import * as Location from "expo-location";
-import * as TaskManager from "expo-task-manager";
+import ReactNativeForegroundService from "@supersami/rn-foreground-service";
 
 import SignInRootScreen from "./screens/auth/SignInRootScreen";
 import HomeRootScreen from "./screens/home/HomeRootScreen";
@@ -33,45 +32,7 @@ import NotificationRootScreen from "./screens/notification/NotificationRootScree
 import WarrantyRootScreen from "./screens/warranty/WarrantyRootScreen";
 import ErrorCodeRootScreen from "./screens/error_code/ErrorCodeRootScreen";
 import MoreRootScreen from "./screens/more/MoreRootScreen";
-
-const LOCATION_TASK_NAME = "background-location-task";
-
-TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
-  if (error) {
-    console.log(error);
-    return;
-  }
-  if (data) {
-    const { locations } = data;
-    let lat = locations[0].coords.latitude;
-    let long = locations[0].coords.longitude;
-
-    let lat_storage = await AsyncStorage.getItem("lat");
-    let long_storage = await AsyncStorage.getItem("lng");
-    let token = await AsyncStorage.getItem("token");
-
-    if ((lat !== lat_storage * 1 || long !== long_storage * 1) && token) {
-      await AsyncStorage.setItem("lat", lat.toString());
-      await AsyncStorage.setItem("lng", long.toString());
-
-      let decode = jwt_decode(token);
-
-      console.log(lat, long, decode.id);
-
-      // Storing Received Lat & Long to DB by logged In User Id
-      // axios({
-      //   method: "POST",
-      //   url: "http://000.000.0.000/phpServer/ajax.php",
-      //   data: {
-      //     action: "saveLocation",
-      //     userId: userId,
-      //     lat,
-      //     long
-      //   }
-      // });
-    }
-  }
-});
+import BackgroundService from "./components/background_service";
 
 const Tab = createBottomTabNavigator();
 
@@ -262,8 +223,8 @@ const App = () => {
         let device_id = null;
 
         try {
-          registerForPushNotificationsAsync().then(
-            async (push_notification_token) => {
+          registerForPushNotificationsAsync()
+            .then(async (push_notification_token) => {
               device_id = push_notification_token;
 
               try {
@@ -283,19 +244,30 @@ const App = () => {
                     "token",
                     token.data.data[0].auth_token
                   );
+
                   dispatch({ type: "LOGIN", token: token });
                 } catch (error) {
                   console.log(error);
+                } finally {
+                  setProcess(false);
                 }
-
-                setProcess(false);
               } catch (error) {
                 setProcess(false);
-                console.log(username, password, device_id);
+
                 Alert.alert(error.response.data.message);
               }
-            }
-          );
+            })
+            .catch((e) => {
+              console.log(e.message);
+              setProcess(false);
+              Alert.alert("เข้าสู่ระบบไม่สำเร็จ");
+
+              // dispatch({
+              //   type: "LOGIN",
+              //   token:
+              //     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI0MTk2IiwidXNlcl9pZCI6IjI0MTk2IiwidXNlcl9pbWFnZSI6bnVsbCwibmFtZSI6IlNhaWpvIiwibGFzdG5hbWUiOiJEZW5raSIsImVtYWlsIjoiY2hhbm9rdHJ1ZUBtZS5jb20iLCJ0ZWxlcGhvbmUiOiIwMTIzNDU2NzgiLCJsYXRpdHVkZSI6IjEzLjg0NjQ5NjkwNDg5Nzc5NiIsImxvbmdpdHVkZSI6IjEwMC41MzI4NjQwNjE1NTQ4NiIsInJhdGluZyI6NSwidXNlcl9yb2xlX2lkIjoiMyIsImN1c19ncm91cF9pZCI6IjAiLCJzdGF0dXMiOiIxIiwidGltZSI6MTY3NzIyODk5OCwiZGV2aWNlX2lkIjoiRXhwb25lbnRQdXNoVG9rZW5bTFBKeFQ5TmhnVTBKaDRBc3cxaDhxa10iLCJsb2dpbl9mYWNlYm9vayI6ZmFsc2V9.KAyNPw-m_S3pdnS9w3NqAk86IciGhXpJobbVFSyHNs4",
+              // });
+            });
         } catch (error) {
           console.log(error);
           setProcess(false);
@@ -329,6 +301,7 @@ const App = () => {
                     "token",
                     token.data.data[0].auth_token
                   );
+
                   dispatch({ type: "LOGIN", token: token });
                 } catch (error) {
                   console.log(error);
@@ -383,6 +356,7 @@ const App = () => {
                     token.data.data[0].auth_token
                   );
                   setProcess(false);
+
                   dispatch({ type: "LOGIN", token: token });
                 } catch (error) {
                   console.log(error);
@@ -403,6 +377,9 @@ const App = () => {
       logout: async () => {
         try {
           await AsyncStorage.removeItem("token");
+          if (Platform.OS === "android") {
+            ReactNativeForegroundService.stopAll();
+          }
         } catch (error) {
           console.log(error);
         }
@@ -437,9 +414,9 @@ const App = () => {
         token = await AsyncStorage.getItem("token");
 
         if (Platform.OS === "ios") {
-          version = "4.3.5";
+          version = "4.4.3";
         } else {
-          version = "4.3.5";
+          version = "4.4.3";
         }
 
         try {
@@ -488,26 +465,13 @@ const App = () => {
     }, 2000);
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      const background = await Location.requestBackgroundPermissionsAsync();
-      const foreground = await Location.requestForegroundPermissionsAsync();
-
-      if (background.status === "granted" && foreground.status === "granted") {
-        getLocationAsync();
-      } else {
-        console.log("Locations services needed");
-      }
-    })();
-  }, []);
-
   const openUrl = () => {
     (async () => {
       if (Platform.OS === "ios") {
         url = "https://apps.apple.com/th/app/saijo-denki-club/id1192110397";
       } else {
         url =
-          "https://play.google.com/store/apps/details?id=app.saijo.saijo_denki_air_con";
+          "https://play.google.com/store/apps/details?id=app.saijo.saijo_denki_club";
       }
 
       const supported = await Linking.canOpenURL(url);
@@ -518,14 +482,6 @@ const App = () => {
         Alert.alert(`Can't open open link!`);
       }
     })();
-  };
-
-  const getLocationAsync = async () => {
-    await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
-      enableHighAccuracy: true,
-      distanceInterval: 1,
-      timeInterval: 5000,
-    });
   };
 
   if (!loaded) {
@@ -562,6 +518,9 @@ const App = () => {
           </View>
         </View>
         {loginState.userToken !== null ? <Tabs /> : <SignInRootScreen />}
+        {loginState.userToken !== null && Platform.OS === "android" ? (
+          <BackgroundService />
+        ) : null}
       </NavigationContainer>
     </AuthContext.Provider>
   );

@@ -34,6 +34,7 @@ import {
   uploadPic,
   uploadInstallPic,
 } from "../../api/summary";
+import { checkOut } from "../../api/jobs";
 
 const { width, height } = Dimensions.get("window");
 
@@ -835,7 +836,7 @@ const SummaryScreen = ({ navigation, route }) => {
           },
         });
       } catch (error) {
-        console.log(error.response.data.message);
+        console.log(error);
       }
     })();
   };
