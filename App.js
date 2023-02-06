@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState, useMemo, useRef } from "react";
+import React, { useEffect, useReducer, useState, useMemo } from "react";
 import {
   View,
   Alert,
@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Platform,
   Linking,
+  BackHandler,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
@@ -32,6 +33,7 @@ import NotificationRootScreen from "./screens/notification/NotificationRootScree
 import WarrantyRootScreen from "./screens/warranty/WarrantyRootScreen";
 import ErrorCodeRootScreen from "./screens/error_code/ErrorCodeRootScreen";
 import MoreRootScreen from "./screens/more/MoreRootScreen";
+// import TimeSheetRootScreen from "./screens/time_sheet/TimeSheetRootScreen";
 import BackgroundService from "./components/background_service";
 
 const Tab = createBottomTabNavigator();
@@ -265,7 +267,7 @@ const App = () => {
               // dispatch({
               //   type: "LOGIN",
               //   token:
-              //     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI0MTk2IiwidXNlcl9pZCI6IjI0MTk2IiwidXNlcl9pbWFnZSI6bnVsbCwibmFtZSI6IlNhaWpvIiwibGFzdG5hbWUiOiJEZW5raSIsImVtYWlsIjoiY2hhbm9rdHJ1ZUBtZS5jb20iLCJ0ZWxlcGhvbmUiOiIwMTIzNDU2NzgiLCJsYXRpdHVkZSI6IjEzLjg0NjQ5NjkwNDg5Nzc5NiIsImxvbmdpdHVkZSI6IjEwMC41MzI4NjQwNjE1NTQ4NiIsInJhdGluZyI6NSwidXNlcl9yb2xlX2lkIjoiMyIsImN1c19ncm91cF9pZCI6IjAiLCJzdGF0dXMiOiIxIiwidGltZSI6MTY3NzIyODk5OCwiZGV2aWNlX2lkIjoiRXhwb25lbnRQdXNoVG9rZW5bTFBKeFQ5TmhnVTBKaDRBc3cxaDhxa10iLCJsb2dpbl9mYWNlYm9vayI6ZmFsc2V9.KAyNPw-m_S3pdnS9w3NqAk86IciGhXpJobbVFSyHNs4",
+              //     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI0MTk2IiwidXNlcl9pZCI6IjI0MTk2IiwidXNlcl9pbWFnZSI6bnVsbCwibmFtZSI6IlNhaWpvIiwibGFzdG5hbWUiOiJEZW5raSIsImVtYWlsIjoiY2hhbm9rdHJ1ZUBtZS5jb20iLCJ0ZWxlcGhvbmUiOiIwMTIzNDU2NzgiLCJsYXRpdHVkZSI6IjEzLjg0NjQ5NjkwNDg5Nzc5NiIsImxvbmdpdHVkZSI6IjEwMC41MzI4NjQwNjE1NTQ4NiIsInJhdGluZyI6NSwidXNlcl9yb2xlX2lkIjoiMyIsImN1c19ncm91cF9pZCI6IjAiLCJzdGF0dXMiOiIxIiwidGltZSI6MTY3NzkxMTA1OSwiZGV2aWNlX2lkIjoiRXhwb25lbnRQdXNoVG9rZW5bX09RQ3NvT0J0Ylk4NlpLenhCN2FqbV0iLCJsb2dpbl9mYWNlYm9vayI6ZmFsc2V9.iOTpetrtvwVYK6ho0e_eudp7q-Ml0ZDdszyesOfzuTw",
               // });
             });
         } catch (error) {
@@ -391,78 +393,67 @@ const App = () => {
   );
 
   useEffect(() => {
-    let i = 0;
-    let loading_text = "Loading";
+    let version = "";
 
-    let loading = setInterval(() => {
-      if (i > 2) {
-        loading_text = "Loading";
-        i = 0;
-      } else {
-        loading_text = loading_text + ".";
-        i++;
-      }
-      setText(loading_text);
-    }, 500);
+    if (Platform.OS === "ios") {
+      version = "4.4.5";
+    } else {
+      version = "4.4.5";
+    }
 
-    setTimeout(async () => {
-      let token = null;
-      setProcess(true);
-      clearInterval(loading);
-
+    (async () => {
       try {
-        token = await AsyncStorage.getItem("token");
+        let res = await check_version(Platform.OS, version);
 
-        if (Platform.OS === "ios") {
-          version = "4.4.3";
-        } else {
-          version = "4.4.3";
-        }
-
-        try {
-          let res = await check_version(Platform.OS, version);
-
-          if (!res.data.status) {
-            Alert.alert("โปรดอัปเดตเวอร์ชันใหม่", "", [
-              {
-                text: "ยกเลิก",
-              },
-              {
-                text: "อัพเดต",
-                onPress: () => openUrl(),
-              },
-            ]);
-          }
-
-          if (token) {
-            let decode = jwt_decode(token);
-            if (new Date(decode.time * 1000).getTime() < new Date().getTime()) {
-              token = null;
-            }
-
-            setProcess(false);
-            dispatch({ type: "RETRIEVE_TOKEN", token: token });
-          } else {
-            setProcess(false);
-            dispatch({ type: "RETRIEVE_TOKEN", token: null });
-          }
-        } catch (error) {
+        if (!res.data.status) {
           Alert.alert("โปรดอัปเดตเวอร์ชันใหม่", "", [
-            {
-              text: "ยกเลิก",
-            },
             {
               text: "อัพเดต",
               onPress: () => openUrl(),
             },
           ]);
+        } else {
+          let i = 0;
+          let loading_text = "Loading";
+
+          let loading = setInterval(() => {
+            if (i > 2) {
+              loading_text = "Loading";
+              i = 0;
+            } else {
+              loading_text = loading_text + ".";
+              i++;
+            }
+            setText(loading_text);
+          }, 500);
+
+          setTimeout(async () => {
+            let token = null;
+            setProcess(true);
+            clearInterval(loading);
+
+            try {
+              token = await AsyncStorage.getItem("token");
+              let decode = jwt_decode(token);
+              if (
+                new Date(decode.time * 1000).getTime() < new Date().getTime()
+              ) {
+                token = null;
+              }
+
+              setProcess(false);
+              dispatch({ type: "RETRIEVE_TOKEN", token: token });
+            } catch (error) {
+              setProcess(false);
+              dispatch({ type: "RETRIEVE_TOKEN", token: null });
+              console.log(error);
+            }
+          }, 2000);
         }
-      } catch (error) {
-        setProcess(false);
-        dispatch({ type: "RETRIEVE_TOKEN", token: null });
-        console.log(error);
+      } catch (e) {
+        BackHandler.exitApp();
       }
-    }, 2000);
+    })();
   }, []);
 
   const openUrl = () => {

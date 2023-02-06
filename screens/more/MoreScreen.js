@@ -141,7 +141,7 @@ const MoreScreen = () => {
           resizeMode={"contain"}
         />
         <Text style={styles.version}>
-          {Platform.OS === "ios" ? "Version 4.4.3" : "Version 4.4.3"}
+          {Platform.OS === "ios" ? "Version 4.4.5" : "Version 4.4.5"}
         </Text>
       </View>
       <View style={styles.link_icon_container}>

@@ -120,7 +120,9 @@ const ProfileScreen = ({ navigation }) => {
 
         logout();
       }
-    } catch {}
+    } catch {
+      logout();
+    }
   };
 
   const cameraImage = async () => {
