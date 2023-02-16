@@ -16,6 +16,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  ActivityIndicator,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -48,6 +49,7 @@ const ExpandableComponent = ({
   updateValue,
   updateTitle,
   summaryValidate,
+  jobID,
 }) => {
   useEffect(() => {
     data.body.map((item) => {
@@ -290,7 +292,7 @@ const ExpandableComponent = ({
     }
   };
 
-  const pickImage = async (index, sn, order) => {
+  const pickImage = async (index, sn, order, unit) => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Image,
@@ -301,8 +303,36 @@ const ExpandableComponent = ({
 
       if (!result.cancelled) {
         updateValue(index, result.uri, sn, "image", order);
+
+        let token = await AsyncStorage.getItem("token");
+
+        if (
+          parseInt(jobType) === 1 ||
+          parseInt(jobType) === 2 ||
+          parseInt(jobType) === 6
+        ) {
+          await uploadPic(
+            token,
+            jobID,
+            sn,
+            order,
+            unit === "before_image" ? result.uri : null,
+            unit === "after_image" ? result.uri : null,
+            null
+          );
+        } else {
+          await uploadInstallPic(
+            token,
+            jobID,
+            order,
+            unit === "before_image" ? result.uri : null,
+            unit === "after_image" ? result.uri : null,
+            null
+          );
+        }
       }
-    } catch {
+    } catch (e) {
+      console.log(e);
       Alert.alert(
         "Warring!",
         "Please allow Saijo Denki Club to access gallery on your device."
@@ -310,7 +340,7 @@ const ExpandableComponent = ({
     }
   };
 
-  const cameraImage = async (index, sn, order) => {
+  const cameraImage = async (index, sn, order, unit) => {
     try {
       let result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Image,
@@ -321,8 +351,36 @@ const ExpandableComponent = ({
 
       if (!result.cancelled) {
         updateValue(index, result.uri, sn, "image", order);
+
+        let token = await AsyncStorage.getItem("token");
+
+        if (
+          parseInt(jobType) === 1 ||
+          parseInt(jobType) === 2 ||
+          parseInt(jobType) === 6
+        ) {
+          await uploadPic(
+            token,
+            jobID,
+            sn,
+            order,
+            unit === "before_image" ? result.uri : null,
+            unit === "after_image" ? result.uri : null,
+            null
+          );
+        } else {
+          await uploadInstallPic(
+            token,
+            jobID,
+            order,
+            unit === "before_image" ? result.uri : null,
+            unit === "after_image" ? result.uri : null,
+            null
+          );
+        }
       }
-    } catch {
+    } catch (e) {
+      console.log(e);
       Alert.alert(
         "Warring!",
         "Please allow Saijo Denki Club to access camera on your device."
@@ -463,7 +521,9 @@ const ExpandableComponent = ({
                   </View>
                   <View style={styles.image_button_container}>
                     <Pressable
-                      onPress={() => cameraImage(index, data.sn, data.order)}
+                      onPress={() =>
+                        cameraImage(index, data.sn, data.order, data.unit)
+                      }
                     >
                       <MaterialCommunityIcons
                         name="camera"
@@ -472,7 +532,9 @@ const ExpandableComponent = ({
                       />
                     </Pressable>
                     <Pressable
-                      onPress={() => pickImage(index, data.sn, data.order)}
+                      onPress={() =>
+                        pickImage(index, data.sn, data.order, data.unit)
+                      }
                     >
                       <MaterialCommunityIcons
                         name="folder-multiple-image"
@@ -485,7 +547,21 @@ const ExpandableComponent = ({
                 <Pressable
                   onPress={() => {
                     setModalVisible(true);
-                    setImageUri(data.uri ? data.uri : null);
+                    setImageUri(
+                      data.uri
+                        ? data.uri
+                        : data.value
+                        ? data.unit === "after_image"
+                          ? "https://api.saijo-denki.com/img/club/upload/after/" +
+                            data.value +
+                            "?" +
+                            new Date()
+                          : "https://api.saijo-denki.com/img/club/upload/before/" +
+                            data.value +
+                            "?" +
+                            new Date()
+                        : null
+                    );
                     setModalTitle(
                       jobType === "1" || jobType === "2"
                         ? data.title_th + " - " + data.sn
@@ -500,9 +576,13 @@ const ExpandableComponent = ({
                         : data.value
                         ? data.unit === "after_image"
                           ? "https://api.saijo-denki.com/img/club/upload/after/" +
-                            data.value
+                            data.value +
+                            "?" +
+                            new Date()
                           : "https://api.saijo-denki.com/img/club/upload/before/" +
-                            data.value
+                            data.value +
+                            "?" +
+                            new Date()
                         : null,
                     }}
                     style={[
@@ -556,6 +636,7 @@ const SummaryScreen = ({ navigation, route }) => {
   const [modalSign, setModalSign] = useState(false);
   const [summaryValidate, setSummaryValidate] = useState(false);
   const [locationStatus, setLocationStatus] = useState("");
+  const [loading, setLoading] = useState(false);
 
   if (Platform.OS === "android") {
     UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -707,138 +788,76 @@ const SummaryScreen = ({ navigation, route }) => {
     )
       .then(() => FileSystem.getInfoAsync(path))
       .then(async (e) => {
-        try {
-          let token = await AsyncStorage.getItem("token");
+        setLoading(true);
 
-          if (parseInt(jobType) === 1 || parseInt(jobType) === 2) {
-            try {
-              await uploadPic(token, jobID, "", "0", null, null, e.uri);
-            } catch (error) {
-              console.log(error.response.data.message);
-            }
-          } else {
-            try {
-              await uploadInstallPic(token, jobID, "0", null, null, e.uri);
-            } catch (error) {
-              console.log(error.response);
-            }
+        if (parseInt(jobType) === 1 || parseInt(jobType) === 2) {
+          try {
+            let token = await AsyncStorage.getItem("token");
+            await uploadPic(token, jobID, "", "0", null, null, e.uri);
+          } catch (error) {
+            console.log(error.response.data.message);
           }
-        } catch (error) {
-          console.log(error);
+        } else {
+          try {
+            let token = await AsyncStorage.getItem("token");
+            await uploadInstallPic(token, jobID, "0", null, null, e.uri);
+          } catch (error) {
+            console.log(error.response);
+          }
         }
       })
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => {
+        let result = listData.map((item) => {
+          item.body.map((data) => {
+            delete data["isExpanded"];
+
+            data.value.map((sub_data) => {
+              delete sub_data["uri"];
+
+              return sub_data;
+            });
+
+            return data;
+          });
+
+          return item;
+        });
+
+        (async () => {
+          try {
+            let token = await AsyncStorage.getItem("token");
+
+            if (locationStatus === "granted") {
+              //   let location = await Location.getCurrentPositionAsync({});
+              //   await checkOut(
+              //     token,
+              //     jobID,
+              //     location.coords.latitude,
+              //     location.coords.longitude
+              //   );
+            }
+
+            await saveSummaryForm(token, jobID, result);
+
+            setModalSign(false);
+            setLoading(false);
+
+            navigation.navigate({
+              name: "Review",
+              params: {
+                job_id: jobID,
+              },
+            });
+          } catch (error) {
+            console.log(error);
+          }
+        })();
+      });
   };
 
-  const handleConfirm = async () => {
+  const handleConfirm = () => {
     ref.current.readSignature();
-
-    let token = null;
-
-    try {
-      token = await AsyncStorage.getItem("token");
-    } catch (error) {
-      console.log(error);
-    }
-
-    let result = listData.map((item) => {
-      item.body.map((data) => {
-        delete data["isExpanded"];
-
-        data.value.map((sub_data) => {
-          if (
-            parseInt(jobType) === 1 ||
-            parseInt(jobType) === 2 ||
-            parseInt(jobType) === 6
-          ) {
-            if (
-              sub_data.unit === "before_image" ||
-              sub_data.unit === "after_image"
-            ) {
-              try {
-                (async () =>
-                  await uploadPic(
-                    token,
-                    jobID,
-                    sub_data.sn,
-                    sub_data.order,
-                    sub_data.unit === "before_image" ? sub_data.uri : null,
-                    sub_data.unit === "after_image" ? sub_data.uri : null,
-                    null
-                  ))();
-                delete sub_data["uri"];
-              } catch (error) {
-                delete sub_data["uri"];
-                console.log(error.response.data.message);
-                console.log(
-                  token,
-                  jobID,
-                  sub_data.sn,
-                  sub_data.order,
-                  sub_data.unit === "before_image" ? sub_data.uri : null,
-                  sub_data.unit === "after_image" ? sub_data.uri : null
-                );
-              }
-            }
-          } else {
-            if (
-              sub_data.unit === "before_image" ||
-              sub_data.unit === "after_image"
-            ) {
-              try {
-                (async () =>
-                  await uploadInstallPic(
-                    token,
-                    jobID,
-                    sub_data.order,
-                    sub_data.unit === "before_image" ? sub_data.uri : null,
-                    sub_data.unit === "after_image" ? sub_data.uri : null,
-                    null
-                  ))();
-
-                delete sub_data["uri"];
-              } catch (error) {
-                delete sub_data["uri"];
-                console.log(error.response.data.message);
-              }
-            }
-          }
-
-          return sub_data;
-        });
-
-        return data;
-      });
-
-      return item;
-    });
-
-    (async () => {
-      try {
-        if (locationStatus === "granted") {
-          let location = await Location.getCurrentPositionAsync({});
-          await checkOut(
-            token,
-            jobID,
-            location.coords.latitude,
-            location.coords.longitude
-          );
-        }
-
-        await saveSummaryForm(token, jobID, result);
-
-        setModalSign(false);
-
-        navigation.navigate({
-          name: "Review",
-          params: {
-            job_id: jobID,
-          },
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    })();
   };
 
   const imgWidth = "100%";
@@ -890,6 +909,7 @@ const SummaryScreen = ({ navigation, route }) => {
                       updateTitle(index, key, val, serial, unit, order)
                     }
                     summaryValidate={setSummaryValidate}
+                    jobID={jobID}
                   />
                 </View>
               ))}
@@ -1019,6 +1039,11 @@ const SummaryScreen = ({ navigation, route }) => {
               </View>
             </View>
           </View>
+        </View>
+      </Modal>
+      <Modal animationType="fade" transparent={true} visible={loading}>
+        <View style={styles.modal_background}>
+          <ActivityIndicator size="large" color={"#999999"} />
         </View>
       </Modal>
     </SafeAreaView>

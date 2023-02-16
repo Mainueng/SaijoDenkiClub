@@ -77,7 +77,7 @@ const checkIn = async (token, job_id, latitude, longitude) => {
     url: SERV_API + "/v1/jobs/checkin",
     method: "POST",
     data: formData,
-
+    timeout: 5000,
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -96,7 +96,7 @@ const checkOut = async (token, job_id, latitude, longitude) => {
     url: SERV_API + "/v1/jobs/checkout",
     method: "POST",
     data: formData,
-
+    timeout: 5000,
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",

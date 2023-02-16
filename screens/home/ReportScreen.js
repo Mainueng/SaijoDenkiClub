@@ -317,9 +317,13 @@ const ExpandableComponent = ({
                         setImageUri(
                           data.unit === "before_image"
                             ? "https://api.saijo-denki.com/img/club/upload/before/" +
-                                data.value
+                                data.value +
+                                "?" +
+                                new Date()
                             : "https://api.saijo-denki.com/img/club/upload/after/" +
-                                data.value
+                                data.value +
+                                "?" +
+                                new Date()
                         );
                         setModalTitle(
                           jobType === "1" || jobType === "2"
@@ -335,9 +339,13 @@ const ExpandableComponent = ({
                                 uri:
                                   data.unit === "before_image"
                                     ? "https://api.saijo-denki.com/img/club/upload/before/" +
-                                      data.value
+                                      data.value +
+                                      "?" +
+                                      new Date()
                                     : "https://api.saijo-denki.com/img/club/upload/after/" +
-                                      data.value,
+                                      data.value +
+                                      "?" +
+                                      new Date(),
                               }
                             : null
                         }

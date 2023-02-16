@@ -2,7 +2,7 @@
   "expo": {
     "name": "Saijo Denki Club",
     "slug": "saijo-denki-club",
-    "version": "4.4.3",
+    "version": "4.4.6",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -38,7 +38,7 @@
       },
       "package": "app.saijo.saijo_denki_club",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 48
+      "versionCode": 51
     },
     "web": {
       "favicon": "./assets/favicon.png"

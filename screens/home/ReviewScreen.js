@@ -12,6 +12,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -35,6 +36,7 @@ const ReviewScreen = ({ navigation, route }) => {
   const [listData, setListData] = useState([]);
   const [date, setDate] = useState(new Date());
   const [modalSign, setModalSign] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const ref = useRef();
 
@@ -301,6 +303,8 @@ const ReviewScreen = ({ navigation, route }) => {
     )
       .then(() => FileSystem.getInfoAsync(path))
       .then(async (e) => {
+        setLoading(true);
+
         try {
           let token = await AsyncStorage.getItem("token");
           let job_id = route.params?.job_id ? route.params.job_id : 0;
@@ -314,46 +318,40 @@ const ReviewScreen = ({ navigation, route }) => {
           console.log(error);
         }
       })
-      .catch(console.error);
+      .catch(console.error)
+      .finally(async () => {
+        try {
+          let token = await AsyncStorage.getItem("token");
+
+          let result = listData.map((item) => {
+            item.body.map((data) => {
+              delete data["error"];
+
+              return data;
+            });
+
+            return item;
+          });
+
+          let job_id = route.params?.job_id ? route.params.job_id : 0;
+
+          setModalSign(false);
+          setLoading(false);
+
+          await saveAssessmentForm(token, job_id, result);
+          // await sendInvoice(token, job_id);
+
+          navigation.navigate({
+            name: "Home",
+          });
+        } catch (e) {
+          console.log(e);
+        }
+      });
   };
 
-  const handleConfirm = async () => {
+  const handleConfirm = () => {
     ref.current.readSignature();
-
-    let token = null;
-
-    try {
-      token = await AsyncStorage.getItem("token");
-    } catch (error) {
-      console.log(error);
-    }
-
-    let result = listData.map((item) => {
-      item.body.map((data) => {
-        delete data["error"];
-
-        return data;
-      });
-
-      return item;
-    });
-
-    (async () => {
-      let job_id = route.params?.job_id ? route.params.job_id : 0;
-
-      try {
-        await saveAssessmentForm(token, job_id, result);
-        // await sendInvoice(token, job_id);
-
-        setModalSign(false);
-
-        navigation.navigate({
-          name: "Home",
-        });
-      } catch (error) {
-        console.log(error.response.data.message);
-      }
-    })();
   };
 
   const validate = async () => {
@@ -537,6 +535,11 @@ const ReviewScreen = ({ navigation, route }) => {
               </View>
             </View>
           </View>
+        </View>
+      </Modal>
+      <Modal animationType="fade" transparent={true} visible={loading}>
+        <View style={styles.modal_background}>
+          <ActivityIndicator size="large" color={"#999999"} />
         </View>
       </Modal>
     </SafeAreaView>

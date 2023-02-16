@@ -349,6 +349,8 @@ const JobInfoModal = ({
           setCheckInModal(false);
           Alert.alert("ล้มเหลว", "เช็คอินไม่สำเร็จ");
           console.log(error);
+        } finally {
+          setCheckInModal(false);
         }
       } else {
         Alert.alert(
@@ -358,6 +360,7 @@ const JobInfoModal = ({
         setCheckInModal(false);
       }
     } else {
+      setCheckInModal(false);
       Alert.alert(
         "เช็คอินไม่สำเร็จ",
         "Permission to access location was denied."
@@ -392,6 +395,8 @@ const JobInfoModal = ({
           setCheckInModal(false);
           Alert.alert("ล้มเหลว", "เช็คเอาท์ไม่สำเร็จ");
           console.log(error);
+        } finally {
+          setCheckInModal(false);
         }
       } else {
         Alert.alert(
@@ -401,6 +406,7 @@ const JobInfoModal = ({
         setCheckInModal(false);
       }
     } else {
+      setCheckInModal(false);
       Alert.alert(
         "เช็คเอาท์ไม่สำเร็จ",
         "Permission to access location was denied."

@@ -1,6 +1,10 @@
 import axios from "axios";
-
+import { Platform } from "react-native";
 const SERV_API = "https://api.saijo-denki.com";
+
+const fileType = (string, char) => {
+  return string.slice(string.indexOf(char) + 1);
+};
 
 const summaryForm = async (token, job_id) => {
   return await axios({
@@ -44,21 +48,35 @@ const uploadPic = async (
     before
       ? {
           uri: before,
-          type: "image/jpeg",
-          name: job_id + ".jpg",
+          type:
+            Platform.OS === "android"
+              ? "image/.jpeg"
+              : "image/" + fileType(before, "."),
+          name:
+            Platform.OS === "android"
+              ? job_id + ".jpeg"
+              : job_id + "." + fileType(before, "."),
         }
       : null
   );
+
   formData.append(
     "after",
     after
       ? {
           uri: after,
-          type: "image/jpeg",
-          name: job_id + ".jpg",
+          type:
+            Platform.OS === "android"
+              ? "image/.jpeg"
+              : "image/" + fileType(after, "."),
+          name:
+            Platform.OS === "android"
+              ? job_id + ".jpeg"
+              : job_id + "." + fileType(after, "."),
         }
       : null
   );
+
   formData.append(
     "signature",
     signature
@@ -80,7 +98,7 @@ const uploadPic = async (
       "/" +
       order,
     method: "POST",
-
+    timeout: 5000,
     data: formData,
     headers: {
       Accept: "application/json",
@@ -104,21 +122,35 @@ const uploadInstallPic = async (
     before
       ? {
           uri: before,
-          type: "image/jpeg",
-          name: job_id + ".jpg",
+          type:
+            Platform.OS === "android"
+              ? "image/.jpeg"
+              : "image/" + fileType(before, "."),
+          name:
+            Platform.OS === "android"
+              ? job_id + ".jpeg"
+              : job_id + "." + fileType(before, "."),
         }
       : null
   );
+
   formData.append(
     "after",
     after
       ? {
           uri: after,
-          type: "image/jpeg",
-          name: job_id + ".jpg",
+          type:
+            Platform.OS === "android"
+              ? "image/.jpeg"
+              : "image/" + fileType(after, "."),
+          name:
+            Platform.OS === "android"
+              ? job_id + ".jpeg"
+              : job_id + "." + fileType(after, "."),
         }
       : null
   );
+
   formData.append(
     "signature",
     signature
@@ -133,7 +165,7 @@ const uploadInstallPic = async (
   return await axios({
     url: SERV_API + "/v1/summary/upload_install_pic/" + job_id + "/" + order,
     method: "POST",
-
+    timeout: 5000,
     data: formData,
     headers: {
       Accept: "application/json",

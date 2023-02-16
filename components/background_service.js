@@ -5,6 +5,7 @@ import io from "socket.io-client";
 import ReactNativeForegroundService from "@supersami/rn-foreground-service";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwt_decode from "jwt-decode";
+import moment from "moment";
 
 import { user_info } from "../api/user";
 
@@ -32,7 +33,7 @@ const BackgroundService = () => {
           await Location.requestBackgroundPermissionsAsync();
         if (backgroundStatus === "granted") {
           try {
-            let count = 0;
+            let count = 1;
             if (Platform.OS === "android") {
               ReactNativeForegroundService.add_task(
                 async () => {
@@ -49,7 +50,7 @@ const BackgroundService = () => {
 
                   // if (!token) {
                   //   token =
-                  //     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI0MTk2IiwidXNlcl9pZCI6IjI0MTk2IiwidXNlcl9pbWFnZSI6bnVsbCwibmFtZSI6IlNhaWpvIiwibGFzdG5hbWUiOiJEZW5raSIsImVtYWlsIjoiY2hhbm9rdHJ1ZUBtZS5jb20iLCJ0ZWxlcGhvbmUiOiIwMTIzNDU2NzgiLCJsYXRpdHVkZSI6IjEzLjg0NjQ5NjkwNDg5Nzc5NiIsImxvbmdpdHVkZSI6IjEwMC41MzI4NjQwNjE1NTQ4NiIsInJhdGluZyI6NSwidXNlcl9yb2xlX2lkIjoiMyIsImN1c19ncm91cF9pZCI6IjAiLCJzdGF0dXMiOiIxIiwidGltZSI6MTY3NzkxMTA1OSwiZGV2aWNlX2lkIjoiRXhwb25lbnRQdXNoVG9rZW5bX09RQ3NvT0J0Ylk4NlpLenhCN2FqbV0iLCJsb2dpbl9mYWNlYm9vayI6ZmFsc2V9.iOTpetrtvwVYK6ho0e_eudp7q-Ml0ZDdszyesOfzuTw";
+                  //     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI0MTk2IiwidXNlcl9pZCI6IjI0MTk2IiwidXNlcl9pbWFnZSI6bnVsbCwibmFtZSI6IlNhaWpvIiwibGFzdG5hbWUiOiJEZW5raSIsImVtYWlsIjoiY2hhbm9rdHJ1ZUBtZS5jb20iLCJ0ZWxlcGhvbmUiOiIwMTIzNDU2NzgiLCJsYXRpdHVkZSI6IjEzLjg0NjQ5NjkwNDg5Nzc5NiIsImxvbmdpdHVkZSI6IjEwMC41MzI4NjQwNjE1NTQ4NiIsInJhdGluZyI6NSwidXNlcl9yb2xlX2lkIjoiMyIsImN1c19ncm91cF9pZCI6IjAiLCJzdGF0dXMiOiIxIiwidGltZSI6MTY3OTAxOTA1NCwiZGV2aWNlX2lkIjoiMTExIiwibG9naW5fZmFjZWJvb2siOmZhbHNlfQ.zcLP0ysM7OrbwrAwqyabJCRyR3G-T5gAOErHZQ_PJfQ";
                   //   await AsyncStorage.setItem("token", token);
                   // }
 
@@ -70,8 +71,8 @@ const BackgroundService = () => {
                       device_id: device_id,
                       tech_id: tech_id,
                       car_no: car_no,
-                      lat: location.coords.latitude * 1,
-                      lng: location.coords.longitude * 1,
+                      lat: location.coords.latitude * 1 + count * 0.001,
+                      lng: location.coords.longitude * 1 + count * 0.001,
                       datetime: new Date(),
                     },
                   ];
@@ -79,15 +80,59 @@ const BackgroundService = () => {
                   let dataJSON = JSON.stringify(data);
 
                   if (token) {
+                    count++;
                     socket.emit("/", dataJSON);
                   } else {
                     socket.disconnect();
                   }
 
-                  console.log(data, count++);
+                  // console.log(count, data);
+
+                  const message = {
+                    to: decode.device_id,
+                    sound: "default",
+                    title: " ",
+                  };
+
+                  let day = moment().format("ddd");
+
+                  let startTime = "08:00:00";
+                  let endTime = "17:00:00";
+
+                  currentDate = new Date();
+
+                  startDate = new Date(currentDate.getTime());
+                  startDate.setHours(startTime.split(":")[0]);
+                  startDate.setMinutes(startTime.split(":")[1]);
+                  startDate.setSeconds(startTime.split(":")[2]);
+
+                  endDate = new Date(currentDate.getTime());
+                  endDate.setHours(endTime.split(":")[0]);
+                  endDate.setMinutes(endTime.split(":")[1]);
+                  endDate.setSeconds(endTime.split(":")[2]);
+
+                  if (
+                    count >= 15 &&
+                    day !== "Sun" &&
+                    startDate <= currentDate &&
+                    endDate >= currentDate
+                  ) {
+                    await fetch("https://exp.host/--/api/v2/push/send", {
+                      method: "POST",
+                      headers: {
+                        Accept: "application/json",
+                        "Accept-encoding": "gzip, deflate",
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify(message),
+                    });
+
+                    count = 1;
+                  }
                 },
                 {
-                  delay: 60000,
+                  //delay: 60000 * 1, // delay 1 minute
+                  delay: 10000,
                   onLoop: true,
                   taskId: "taskid",
                   onError: (e) => console.log(`Error logging:`, e),
@@ -113,9 +158,9 @@ const BackgroundService = () => {
       }
     })();
 
-    return () => {
-      socket.disconnect;
-    };
+    // return () => {
+    //   socket.disconnect();
+    // };
   }, []);
 
   return null;
