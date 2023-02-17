@@ -40,7 +40,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1.2.6</string>
+	<string>1.2.7</string>
 	<key>FacebookAppID</key>
 	<string>1022758658679522</string>
 	<key>FacebookAutoInitEnabled</key>
@@ -72,7 +72,7 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to access your picture to change your profile picture and scan e-warranty.</string>
+	<string>Allow $(PRODUCT_NAME) to access your camera to change your profile picture and scan e-warranty.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Allow $(PRODUCT_NAME) to access your location for check-in and check-out purposes.</string>
 	<key>NSLocationAlwaysUsageDescription</key>

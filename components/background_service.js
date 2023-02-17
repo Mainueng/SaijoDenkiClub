@@ -88,11 +88,11 @@ const BackgroundService = () => {
 
                   // console.log(count, data);
 
-                  const message = {
-                    to: decode.device_id,
-                    sound: "default",
-                    title: " ",
-                  };
+                  // const message = {
+                  //   to: decode.device_id,
+                  //   sound: "default",
+                  //   title: " ",
+                  // };
 
                   let day = moment().format("ddd");
 
@@ -111,24 +111,24 @@ const BackgroundService = () => {
                   endDate.setMinutes(endTime.split(":")[1]);
                   endDate.setSeconds(endTime.split(":")[2]);
 
-                  if (
-                    count >= 15 &&
-                    day !== "Sun" &&
-                    startDate <= currentDate &&
-                    endDate >= currentDate
-                  ) {
-                    await fetch("https://exp.host/--/api/v2/push/send", {
-                      method: "POST",
-                      headers: {
-                        Accept: "application/json",
-                        "Accept-encoding": "gzip, deflate",
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify(message),
-                    });
+                  // if (
+                  //   count >= 15 &&
+                  //   day !== "Sun" &&
+                  //   startDate <= currentDate &&
+                  //   endDate >= currentDate
+                  // ) {
+                  //   await fetch("https://exp.host/--/api/v2/push/send", {
+                  //     method: "POST",
+                  //     headers: {
+                  //       Accept: "application/json",
+                  //       "Accept-encoding": "gzip, deflate",
+                  //       "Content-Type": "application/json",
+                  //     },
+                  //     body: JSON.stringify(message),
+                  //   });
 
-                    count = 1;
-                  }
+                  //   count = 1;
+                  // }
                 },
                 {
                   delay: 60000 * 1, // delay 1 minute

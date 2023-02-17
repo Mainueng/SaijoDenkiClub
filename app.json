@@ -38,7 +38,7 @@
       },
       "package": "app.saijo.saijo_denki_club",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 53
+      "versionCode": 54
     },
     "web": {
       "favicon": "./assets/favicon.png"
