@@ -130,7 +130,7 @@ const ProfileScreen = ({ navigation }) => {
       let result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Image,
         allowsEditing: true,
-        aspect: [16, 9],
+        aspect: [1, 1],
         quality: 1,
       });
 
@@ -156,7 +156,7 @@ const ProfileScreen = ({ navigation }) => {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Image,
         allowsEditing: true,
-        aspect: [16, 9],
+        aspect: [1, 1],
         quality: 1,
       });
 

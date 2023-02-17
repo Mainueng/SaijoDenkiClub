@@ -35,7 +35,8 @@ import {
   uploadPic,
   uploadInstallPic,
 } from "../../api/summary";
-import { checkOut } from "../../api/jobs";
+import { useIsFocused } from "@react-navigation/native";
+// import { checkOut } from "../../api/jobs";
 
 const { width, height } = Dimensions.get("window");
 
@@ -124,7 +125,7 @@ const ExpandableComponent = ({
         );
       case unit === "boolean" && type === "radio":
         return (
-          <View style={{ flexDirection: "row" }}>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Pressable
               onPress={() => updateValue(index, "true", sn, unit, order)}
               style={[
@@ -296,8 +297,8 @@ const ExpandableComponent = ({
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Image,
-        allowsEditing: true,
-        aspect: [16, 9],
+        allowsEditing: false,
+        // aspect: [1, 1],
         quality: 1,
       });
 
@@ -333,10 +334,7 @@ const ExpandableComponent = ({
       }
     } catch (e) {
       console.log(e);
-      Alert.alert(
-        "Warring!",
-        "Please allow Saijo Denki Club to access gallery on your device."
-      );
+      Alert.alert("Error!", "ีอัพโหลดรูปไม่สำเร็จ");
     }
   };
 
@@ -344,8 +342,8 @@ const ExpandableComponent = ({
     try {
       let result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Image,
-        allowsEditing: true,
-        aspect: [16, 9],
+        allowsEditing: false,
+        // aspect: [1, 1],
         quality: 1,
       });
 
@@ -381,10 +379,7 @@ const ExpandableComponent = ({
       }
     } catch (e) {
       console.log(e);
-      Alert.alert(
-        "Warring!",
-        "Please allow Saijo Denki Club to access camera on your device."
-      );
+      Alert.alert("Error!", "ีอัพโหลดรูปไม่สำเร็จ");
     }
   };
 
@@ -454,13 +449,15 @@ const ExpandableComponent = ({
                   },
                 ]}
               >
-                <Text style={styles.expanded_label}>{data.title_en}</Text>
+                {data.unit !== "etc" && (
+                  <Text style={styles.expanded_label}>{data.title_en}</Text>
+                )}
                 <TextInput
                   style={[
                     styles.from_input,
                     {
-                      height: height * 0.1,
                       marginBottom: height * 0.02,
+                      marginTop: height * 0.02,
                       borderColor: data.value ? "rgba(0,0,0,0.75)" : "red",
                     },
                   ]}
@@ -637,6 +634,7 @@ const SummaryScreen = ({ navigation, route }) => {
   const [summaryValidate, setSummaryValidate] = useState(false);
   const [locationStatus, setLocationStatus] = useState("");
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
 
   if (Platform.OS === "android") {
     UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -645,7 +643,29 @@ const SummaryScreen = ({ navigation, route }) => {
   const ref = useRef();
   const scrollViewRef = useRef();
 
+  const isFocused = useIsFocused();
+
   useEffect(() => {
+    const findType = (data) => {
+      let x = data.map((i) => {
+        let y = i.value.filter((j) => {
+          return j.input_type === "file" || j.input_type === "textarea";
+        });
+
+        if (y.length) {
+          i.show = false;
+        } else {
+          i.show = true;
+        }
+
+        return i;
+      });
+
+      let a = x.filter((i) => i.show === true);
+
+      return a.length ? true : false;
+    };
+
     (async () => {
       try {
         const camera = await ImagePicker.requestCameraPermissionsAsync();
@@ -676,6 +696,7 @@ const SummaryScreen = ({ navigation, route }) => {
 
         var result = report.map((data) => ({
           ...data,
+          show: findType(data.body),
           body: data.body.map((item) => ({
             ...item,
             isExpanded: true,
@@ -687,7 +708,7 @@ const SummaryScreen = ({ navigation, route }) => {
         console.log(error);
       }
     })();
-  }, []);
+  }, [isFocused]);
 
   useEffect(() => {
     (async () => {
@@ -809,6 +830,8 @@ const SummaryScreen = ({ navigation, route }) => {
       .catch(console.error)
       .finally(() => {
         let result = listData.map((item) => {
+          delete item["show"];
+
           item.body.map((data) => {
             delete data["isExpanded"];
 
@@ -842,6 +865,7 @@ const SummaryScreen = ({ navigation, route }) => {
 
             setModalSign(false);
             setLoading(false);
+            setPage(1);
 
             navigation.navigate({
               name: "Review",
@@ -851,6 +875,8 @@ const SummaryScreen = ({ navigation, route }) => {
             });
           } catch (error) {
             console.log(error);
+
+            Alert.alert("Error!", "บันทึกไม่สำเร็จ");
           }
         })();
       });
@@ -888,59 +914,128 @@ const SummaryScreen = ({ navigation, route }) => {
           showsVerticalScrollIndicator={false}
           ref={scrollViewRef}
         >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={{ width: width, alignItems: "center" }}>
-              {listData.map((item, index) => (
-                <View key={index} style={styles.report_container}>
-                  <Text style={[styles.report_title, { marginTop: 0 }]}>
-                    {item.header_th}
-                  </Text>
-                  <ExpandableComponent
-                    data={item}
-                    onPressFunction={(val) => updateLayout(index, val)}
-                    jobType={jobType}
-                    setModalVisible={setModalVisible}
-                    setImageUri={setImageUri}
-                    setModalTitle={setModalTitle}
-                    updateValue={(key, val, serial, unit, order) =>
-                      updateValue(index, key, val, serial, unit, order)
-                    }
-                    updateTitle={(key, val, serial, unit, order) =>
-                      updateTitle(index, key, val, serial, unit, order)
-                    }
-                    summaryValidate={setSummaryValidate}
-                    jobID={jobID}
-                  />
-                </View>
-              ))}
-            </View>
-          </TouchableWithoutFeedback>
+          {page === 1 && (
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View style={{ width: width, alignItems: "center" }}>
+                {listData.map((item, index) => (
+                  <View key={index} style={styles.report_container}>
+                    <Text
+                      style={[
+                        styles.report_title,
+                        { marginTop: 0, display: item.show ? "flex" : "none" },
+                      ]}
+                    >
+                      {item.header_th}
+                    </Text>
+                    {item.show && (
+                      <ExpandableComponent
+                        data={item}
+                        onPressFunction={(val) => updateLayout(index, val)}
+                        jobType={jobType}
+                        setModalVisible={setModalVisible}
+                        setImageUri={setImageUri}
+                        setModalTitle={setModalTitle}
+                        updateValue={(key, val, serial, unit, order) =>
+                          updateValue(index, key, val, serial, unit, order)
+                        }
+                        updateTitle={(key, val, serial, unit, order) =>
+                          updateTitle(index, key, val, serial, unit, order)
+                        }
+                        summaryValidate={setSummaryValidate}
+                        jobID={jobID}
+                      />
+                    )}
+                  </View>
+                ))}
+              </View>
+            </TouchableWithoutFeedback>
+          )}
+          {page === 2 && (
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View style={{ width: width, alignItems: "center" }}>
+                {listData.map((item, index) => (
+                  <View key={index} style={styles.report_container}>
+                    <Text
+                      style={[
+                        styles.report_title,
+                        { marginTop: 0, display: !item.show ? "flex" : "none" },
+                      ]}
+                    >
+                      {item.header_th}
+                    </Text>
+                    {!item.show && (
+                      <ExpandableComponent
+                        data={item}
+                        onPressFunction={(val) => updateLayout(index, val)}
+                        jobType={jobType}
+                        setModalVisible={setModalVisible}
+                        setImageUri={setImageUri}
+                        setModalTitle={setModalTitle}
+                        updateValue={(key, val, serial, unit, order) =>
+                          updateValue(index, key, val, serial, unit, order)
+                        }
+                        updateTitle={(key, val, serial, unit, order) =>
+                          updateTitle(index, key, val, serial, unit, order)
+                        }
+                        summaryValidate={setSummaryValidate}
+                        jobID={jobID}
+                      />
+                    )}
+                  </View>
+                ))}
+              </View>
+            </TouchableWithoutFeedback>
+          )}
         </ScrollView>
       </KeyboardAvoidingView>
-      <View style={styles.button_container}>
-        <Pressable
-          style={styles.cancel_button}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.cancel_text}>ยกเลิก</Text>
-        </Pressable>
-        <Pressable
-          style={styles.view_sign_button}
-          onPress={() => {
-            summaryValidate
-              ? setModalSign(true)
-              : Alert.alert(
-                  "คำเตือน!",
-                  'กรุณาสรุปงานในช่อง "สรุปผลการทำงาน" ก่อนทำการลงลายเซ็น'
-                );
-            summaryValidate
-              ? null
-              : scrollViewRef.current?.scrollToEnd({ animated: true });
-          }}
-        >
-          <Text style={styles.button_text}>ยืนยัน</Text>
-        </Pressable>
-      </View>
+      {page === 1 && (
+        <View style={styles.button_container}>
+          <Pressable
+            style={styles.cancel_button}
+            onPress={() => navigation.goBack()}
+          >
+            <Text style={styles.cancel_text}>ยกเลิก</Text>
+          </Pressable>
+          <Pressable
+            style={styles.view_sign_button}
+            onPress={() => {
+              scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+              setPage(2);
+            }}
+          >
+            <Text style={styles.button_text}>ต่อไป</Text>
+          </Pressable>
+        </View>
+      )}
+      {page === 2 && (
+        <View style={styles.button_container}>
+          <Pressable
+            style={styles.cancel_button}
+            onPress={() => {
+              scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+              setPage(1);
+            }}
+          >
+            <Text style={styles.cancel_text}>ย้อนกลับ</Text>
+          </Pressable>
+          <Pressable
+            style={styles.view_sign_button}
+            onPress={() => {
+              summaryValidate
+                ? setModalSign(true)
+                : Alert.alert(
+                    "คำเตือน!",
+                    'กรุณาสรุปงานในช่อง "สรุปผลการทำงาน" ก่อนทำการลงลายเซ็น'
+                  );
+              summaryValidate
+                ? null
+                : scrollViewRef.current?.scrollToEnd({ animated: true });
+            }}
+          >
+            <Text style={styles.button_text}>ยืนยัน</Text>
+          </Pressable>
+        </View>
+      )}
       <Modal animationType="fade" transparent={true} visible={modalVisible}>
         <View style={styles.modal_background}>
           <View style={styles.modal_container}>

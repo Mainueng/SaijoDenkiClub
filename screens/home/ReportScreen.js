@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Pressable,
@@ -387,12 +387,35 @@ const ReportScreen = ({ navigation, route }) => {
   const [imageUri, setImageUri] = useState("");
   const [modalTitle, setModalTitle] = useState("");
   const [modalSign, setModalSign] = useState(false);
+  const [page, setPage] = useState(1);
+
+  const scrollViewRef = useRef();
 
   if (Platform.OS === "android") {
     UIManager.setLayoutAnimationEnabledExperimental(true);
   }
 
   useEffect(() => {
+    const findType = (data) => {
+      let x = data.map((i) => {
+        let y = i.value.filter((j) => {
+          return j.input_type === "file" || j.input_type === "textarea";
+        });
+
+        if (y.length) {
+          i.show = false;
+        } else {
+          i.show = true;
+        }
+
+        return i;
+      });
+
+      let a = x.filter((i) => i.show === true);
+
+      return a.length ? true : false;
+    };
+
     (async () => {
       try {
         let token = await AsyncStorage.getItem("token");
@@ -404,6 +427,7 @@ const ReportScreen = ({ navigation, route }) => {
 
           var result = report.map((data) => ({
             ...data,
+            show: findType(data.body),
             body: data.body.map((item) => ({
               ...item,
               isExpanded: true,
@@ -444,31 +468,100 @@ const ReportScreen = ({ navigation, route }) => {
           marginTop: height * 0.01,
         }}
         showsVerticalScrollIndicator={false}
+        ref={scrollViewRef}
       >
-        <View style={{ width: width, alignItems: "center" }}>
-          {listData.map((item, index) => (
-            <View key={index} style={styles.report_container}>
-              <Text style={[styles.report_title, { marginTop: 0 }]}>
-                {item.header_th}
-              </Text>
-              <ExpandableComponent
-                data={item}
-                onPressFunction={(val) => updateLayout(index, val)}
-                jobType={jobType}
-                setModalVisible={setModalVisible}
-                setImageUri={setImageUri}
-                setModalTitle={setModalTitle}
-              />
-            </View>
-          ))}
-        </View>
+        {page === 1 && (
+          <View style={{ width: width, alignItems: "center" }}>
+            {listData.map((item, index) => (
+              <View key={index} style={styles.report_container}>
+                <Text
+                  style={[
+                    styles.report_title,
+                    { marginTop: 0, display: item.show ? "flex" : "none" },
+                  ]}
+                >
+                  {item.header_th}
+                </Text>
+                {item.show && (
+                  <ExpandableComponent
+                    data={item}
+                    onPressFunction={(val) => updateLayout(index, val)}
+                    jobType={jobType}
+                    setModalVisible={setModalVisible}
+                    setImageUri={setImageUri}
+                    setModalTitle={setModalTitle}
+                  />
+                )}
+              </View>
+            ))}
+          </View>
+        )}
+        {page === 2 && (
+          <View style={{ width: width, alignItems: "center" }}>
+            {listData.map((item, index) => (
+              <View key={index} style={styles.report_container}>
+                <Text
+                  style={[
+                    styles.report_title,
+                    { marginTop: 0, display: !item.show ? "flex" : "none" },
+                  ]}
+                >
+                  {item.header_th}
+                </Text>
+                {!item.show && (
+                  <ExpandableComponent
+                    data={item}
+                    onPressFunction={(val) => updateLayout(index, val)}
+                    jobType={jobType}
+                    setModalVisible={setModalVisible}
+                    setImageUri={setImageUri}
+                    setModalTitle={setModalTitle}
+                  />
+                )}
+              </View>
+            ))}
+          </View>
+        )}
       </ScrollView>
-      <Pressable
-        style={styles.view_sign_button}
-        onPress={() => setModalSign(true)}
-      >
-        <Text style={styles.button_text}>ดูลายเซ็น</Text>
-      </Pressable>
+      {page === 1 && (
+        <View style={styles.button_container}>
+          <Pressable
+            style={styles.cancel_button}
+            onPress={() => navigation.goBack()}
+          >
+            <Text style={styles.cancel_text}>ย้อนกลับ</Text>
+          </Pressable>
+          <Pressable
+            style={styles.view_sign_button}
+            onPress={() => {
+              scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+              setPage(2);
+            }}
+          >
+            <Text style={styles.button_text}>ต่อไป</Text>
+          </Pressable>
+        </View>
+      )}
+      {page === 2 && (
+        <View style={styles.button_container}>
+          <Pressable
+            style={styles.cancel_button}
+            onPress={() => {
+              scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+              setPage(1);
+            }}
+          >
+            <Text style={styles.cancel_text}>ย้อนกลับ</Text>
+          </Pressable>
+          <Pressable
+            style={styles.view_sign_button}
+            onPress={() => setModalSign(true)}
+          >
+            <Text style={styles.button_text}>ดูลายเซ็น</Text>
+          </Pressable>
+        </View>
+      )}
+
       <Modal animationType="fade" transparent={true} visible={modalVisible}>
         <View style={styles.modal_background}>
           <View style={styles.modal_container}>

@@ -396,7 +396,7 @@ const App = () => {
     let version = "";
 
     if (Platform.OS === "ios") {
-      version = "4.4.7";
+      version = "4.4.8";
     } else {
       version = "4.4.7";
     }

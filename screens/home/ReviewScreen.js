@@ -67,10 +67,7 @@ const ReviewScreen = ({ navigation, route }) => {
         return (
           <View style={styles.assessment_note_container}>
             <TextInput
-              style={[
-                styles.from_input,
-                { height: height * 0.1, marginBottom: height * 0.02 },
-              ]}
+              style={[styles.from_input, { marginBottom: height * 0.02 }]}
               multiline={true}
               value={value}
               autoCapitalize="none"
@@ -340,12 +337,12 @@ const ReviewScreen = ({ navigation, route }) => {
 
           await saveAssessmentForm(token, job_id, result);
           // await sendInvoice(token, job_id);
-
+        } catch (e) {
+          console.log(e);
+        } finally {
           navigation.navigate({
             name: "Home",
           });
-        } catch (e) {
-          console.log(e);
         }
       });
   };
@@ -395,7 +392,7 @@ const ReviewScreen = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
       <KeyboardAvoidingView
-        behavior={"position"}
+        behavior={Platform.OS === "ios" ? "position" : ""}
         keyboardVerticalOffset={height * 0.1}
         style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}
       >

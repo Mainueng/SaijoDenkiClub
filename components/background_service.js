@@ -71,8 +71,8 @@ const BackgroundService = () => {
                       device_id: device_id,
                       tech_id: tech_id,
                       car_no: car_no,
-                      lat: location.coords.latitude * 1 + count * 0.001,
-                      lng: location.coords.longitude * 1 + count * 0.001,
+                      lat: location.coords.latitude,
+                      lng: location.coords.longitude,
                       datetime: new Date(),
                     },
                   ];
@@ -131,8 +131,8 @@ const BackgroundService = () => {
                   }
                 },
                 {
-                  //delay: 60000 * 1, // delay 1 minute
-                  delay: 10000,
+                  delay: 60000 * 1, // delay 1 minute
+                  //delay: 10000,
                   onLoop: true,
                   taskId: "taskid",
                   onError: (e) => console.log(`Error logging:`, e),

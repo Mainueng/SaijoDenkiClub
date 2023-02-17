@@ -145,8 +145,8 @@ android {
         applicationId 'app.saijo.saijo_denki_club'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 52
-        versionName "4.4.7"
+        versionCode 53
+        versionName "4.4.8"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {
