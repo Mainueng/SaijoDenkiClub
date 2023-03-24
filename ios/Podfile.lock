@@ -10,6 +10,8 @@ PODS:
     - ExpoModulesCore
     - ZXingObjC/OneD
     - ZXingObjC/PDF417
+  - EXCamera (13.1.0):
+    - ExpoModulesCore
   - EXConstants (14.0.2):
     - ExpoModulesCore
   - EXErrorRecovery (4.0.1):
@@ -399,6 +401,7 @@ DEPENDENCIES:
   - EXAppleAuthentication (from `../node_modules/expo-apple-authentication/ios`)
   - EXApplication (from `../node_modules/expo-application/ios`)
   - EXBarCodeScanner (from `../node_modules/expo-barcode-scanner/ios`)
+  - EXCamera (from `../node_modules/expo-camera/ios`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
   - EXErrorRecovery (from `../node_modules/expo-error-recovery/ios`)
   - EXFacebook (from `../node_modules/expo-facebook/ios`)
@@ -472,6 +475,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-application/ios"
   EXBarCodeScanner:
     :path: "../node_modules/expo-barcode-scanner/ios"
+  EXCamera:
+    :path: "../node_modules/expo-camera/ios"
   EXConstants:
     :path: "../node_modules/expo-constants/ios"
   EXErrorRecovery:
@@ -585,6 +590,7 @@ SPEC CHECKSUMS:
   EXAppleAuthentication: d93f7acd71fb3dcfa14eb6cb12ada053e06d4b66
   EXApplication: 034b1c40a8e9fe1bff76a1e511ee90dff64ad834
   EXBarCodeScanner: cb4deb49e59b6c7ed6bbf38d187802359908d2a8
+  EXCamera: eaf52a96480d4ae1505a9b5e139c244581b5f8ca
   EXConstants: 3c86653c422dd77e40d10cbbabb3025003977415
   EXErrorRecovery: ae43433feb0608a64dc5b1c8363b3e7769a9ea24
   EXFacebook: 7ba828e0aac5f3aa6c10d8fce7652a3eaf63466a
@@ -645,4 +651,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 91bdf2901e571d4ddb587d07ee722a6b5ae362f2
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.11.2

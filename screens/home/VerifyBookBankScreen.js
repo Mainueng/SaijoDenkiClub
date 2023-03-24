@@ -16,6 +16,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../../assets/stylesheet/auth/auth";
 import * as ImagePicker from "expo-image-picker";
 import { update_user_info } from "../../api/user";
+import * as FileSystem from "expo-file-system";
 
 const VerifyBookBankScreen = ({ navigation, route }) => {
   const [bookBankImage, setBookBankImage] = useState(null);
@@ -67,13 +68,12 @@ const VerifyBookBankScreen = ({ navigation, route }) => {
     try {
       let result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Image,
-        allowsEditing: true,
-        aspect: [16, 9],
+        allowsEditing: false,
         quality: 1,
       });
 
-      if (!result.cancelled) {
-        setBookBankImage(result.uri);
+      if (!result.canceled) {
+        setBookBankImage(result.assets[0].uri);
         setModal(false);
         setData({
           ...data,
@@ -90,17 +90,16 @@ const VerifyBookBankScreen = ({ navigation, route }) => {
     }
   };
 
-  const pickImage = async (type) => {
+  const pickImage = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Image,
-        allowsEditing: true,
-        aspect: [16, 9],
+        allowsEditing: false,
         quality: 1,
       });
 
-      if (!result.cancelled) {
-        setBookBankImage(result.uri);
+      if (!result.canceled) {
+        setBookBankImage(result.assets[0].uri);
         setModal(false);
         setData({
           ...data,
@@ -131,6 +130,9 @@ const VerifyBookBankScreen = ({ navigation, route }) => {
           book = bookBankImage;
         }
 
+        let info = await FileSystem.getInfoAsync(book);
+        let imageType = getUrlExtension(info.uri);
+
         try {
           await update_user_info(
             token,
@@ -147,7 +149,8 @@ const VerifyBookBankScreen = ({ navigation, route }) => {
             route.params?.longitude ? route.params.longitude : "",
             null,
             null,
-            book
+            book,
+            imageType
           );
 
           setIsLoading(false);
@@ -174,6 +177,10 @@ const VerifyBookBankScreen = ({ navigation, route }) => {
         errorBookBank: !data.isValidBookBank ? "กรุณาอัพโหลดรูป!" : "",
       });
     }
+  };
+
+  const getUrlExtension = (uri) => {
+    return uri.split(/[#?]/)[0].split(".").pop().trim();
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import {
   View,
   Pressable,
@@ -11,24 +11,24 @@ import {
   LayoutAnimation,
   UIManager,
   SafeAreaView,
+  TextInput,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { normalize } from "../../components/font";
+import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
+import styles from "../../assets/stylesheet/home/summary";
 import { summaryForm } from "../../api/summary";
-import styles from "../../assets/stylesheet/home/report";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-const { width, height } = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 
 const ExpandableComponent = ({
   data,
-  onPressFunction,
   jobType,
   setModalVisible,
   setImageUri,
   setModalTitle,
+  toggleReportInput,
 }) => {
   const outputFormat = (value, type, unit) => {
     switch (true) {
@@ -37,15 +37,15 @@ const ExpandableComponent = ({
           <Text
             style={[styles.touch, { opacity: value === "false" ? 0.5 : 1 }]}
           >
-            {"สัมผัส"}
+            สัมผัส
           </Text>
         );
       case unit === "sound":
         return (
           <View style={{ flexDirection: "row" }}>
-            <View
+            <Pressable
               style={[
-                styles.input_circle,
+                styles.inputCircle,
                 {
                   backgroundColor: value === "true" ? "#b31117" : "transparent",
                 },
@@ -56,10 +56,10 @@ const ExpandableComponent = ({
                 color={value === "true" ? "#ffffff" : "#b31117"}
                 size={normalize(10) > 14 ? 14 : normalize(10)}
               />
-            </View>
-            <View
+            </Pressable>
+            <Pressable
               style={[
-                styles.input_circle,
+                styles.inputCircle,
                 {
                   backgroundColor:
                     value === "false" ? "#b31117" : "transparent",
@@ -71,15 +71,15 @@ const ExpandableComponent = ({
                 color={value === "false" ? "#ffffff" : "#b31117"}
                 size={normalize(10) > 14 ? 14 : normalize(10)}
               />
-            </View>
+            </Pressable>
           </View>
         );
       case unit === "boolean" && type === "radio":
         return (
-          <View style={{ flexDirection: "row" }}>
-            <View
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Pressable
               style={[
-                styles.input_circle,
+                styles.inputCircle,
                 {
                   backgroundColor: value === "true" ? "#b31117" : "transparent",
                 },
@@ -90,10 +90,10 @@ const ExpandableComponent = ({
                 color={value === "true" ? "#ffffff" : "#b31117"}
                 size={normalize(10) > 14 ? 14 : normalize(10)}
               />
-            </View>
-            <View
+            </Pressable>
+            <Pressable
               style={[
-                styles.input_circle,
+                styles.inputCircle,
                 {
                   backgroundColor:
                     value === "false" ? "#b31117" : "transparent",
@@ -105,80 +105,24 @@ const ExpandableComponent = ({
                 color={value === "false" ? "#ffffff" : "#b31117"}
                 size={normalize(10) > 14 ? 14 : normalize(10)}
               />
-            </View>
+            </Pressable>
           </View>
         );
       case unit === "speed":
         return (
-          <View style={{ flexDirection: "row" }}>
-            <View
-              style={[
-                styles.input_circle,
-                {
-                  backgroundColor: value === "1" ? "#b31117" : "transparent",
-                  height: height * 0.0225,
-                  width: height * 0.0225,
-                  margin: height * 0.0025,
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.speed,
-                  { color: value === "1" ? "#f2f2f2" : "#b31117" },
-                ]}
-              >
-                1
-              </Text>
-            </View>
-            <View
-              style={[
-                styles.input_circle,
-                {
-                  backgroundColor: value === "2" ? "#b31117" : "transparent",
-                  height: height * 0.0225,
-                  width: height * 0.0225,
-                  margin: height * 0.0025,
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.speed,
-                  { color: value === "2" ? "#f2f2f2" : "#b31117" },
-                ]}
-              >
-                2
-              </Text>
-            </View>
-            <View
-              style={[
-                styles.input_circle,
-                {
-                  backgroundColor: value === "3" ? "#b31117" : "transparent",
-                  height: height * 0.0225,
-                  width: height * 0.0225,
-                  margin: height * 0.0025,
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.speed,
-                  { color: value === "3" ? "#f2f2f2" : "#b31117" },
-                ]}
-              >
-                3
-              </Text>
-            </View>
-          </View>
+          <Text
+            style={[styles.expandedLabel, { paddingRight: 0 }]}
+            numberOfLines={1}
+          >
+            {value}
+          </Text>
         );
       case unit === "sound_error":
         return (
           <View style={{ flexDirection: "row" }}>
-            <View
+            <Pressable
               style={[
-                styles.input_circle,
+                styles.inputCircle,
                 {
                   backgroundColor: value === "true" ? "#b31117" : "transparent",
                 },
@@ -189,10 +133,10 @@ const ExpandableComponent = ({
                 color={value === "true" ? "#ffffff" : "#b31117"}
                 size={normalize(10) > 14 ? 14 : normalize(10)}
               />
-            </View>
-            <View
+            </Pressable>
+            <Pressable
               style={[
-                styles.input_circle,
+                styles.inputCircle,
                 {
                   backgroundColor:
                     value === "false" ? "#b31117" : "transparent",
@@ -204,13 +148,13 @@ const ExpandableComponent = ({
                 color={value === "false" ? "#ffffff" : "#b31117"}
                 size={normalize(10) > 14 ? 14 : normalize(10)}
               />
-            </View>
+            </Pressable>
           </View>
         );
       case unit === "fan_speed":
         return (
           <Text
-            style={[styles.expanded_label, { paddingRight: 0 }]}
+            style={[styles.expandedLabel, { paddingRight: 0 }]}
             numberOfLines={1}
           >
             {value}
@@ -219,7 +163,7 @@ const ExpandableComponent = ({
       default:
         return (
           <Text
-            style={[styles.expanded_label, { paddingRight: 0 }]}
+            style={[styles.expandedLabel, { paddingRight: 0 }]}
             numberOfLines={1}
           >
             {value + " " + unit}
@@ -228,166 +172,226 @@ const ExpandableComponent = ({
     }
   };
 
-  return data.body.map((item, index) => (
-    <View key={index}>
-      <View style={styles.report_card}>
-        <View style={styles.report_card_header} />
-        <Text style={styles.report_label}>{item.title_th}</Text>
-        <Pressable
-          style={styles.report_expand_btn}
-          onPress={() => onPressFunction(index)}
-        >
-          <View style={styles.report_card_circle} />
-          <FontAwesome5
-            name="chevron-down"
-            color={"#b31117"}
-            size={normalize(14) > 18 ? 18 : normalize(14)}
-            style={{
-              transform: [{ rotate: item.isExpanded ? "180deg" : "0deg" }],
-            }}
-          />
-        </Pressable>
-      </View>
-      <View
-        style={[
-          styles.expanded_card,
-          {
-            height: item.isExpanded ? null : 0,
-            marginBottom: item.isExpanded ? height * 0.01 : 0,
-            overflow: "hidden",
-          },
-        ]}
-      >
-        {item.value.map((data, index) => (
-          <View
-            key={index}
-            style={[
-              styles.expanded_card_container,
-              {
-                flexDirection:
-                  data.input_type === "textarea" || data.input_type === "file"
-                    ? "column"
-                    : "row",
-              },
-            ]}
-          >
-            {data.input_type === "textarea" ||
-            data.input_type === "file" ? null : (
-              <View
-                style={[
-                  styles.expanded_card_label_container,
-                  {
-                    borderBottomWidth: item.value.length - 1 === index ? 0 : 1,
-                  },
-                ]}
-              >
-                <Text style={styles.expanded_label}>{data.sn}</Text>
-              </View>
-            )}
-            {data.input_type === "textarea" ? (
-              <View
-                style={[
-                  styles.expanded_card_label_container,
-                  {
-                    borderBottomWidth: 0,
-                  },
-                ]}
-              >
-                <Text style={styles.expanded_label}>{data.value}</Text>
-              </View>
-            ) : data.input_type === "file" ? (
-              <View
-                style={[
-                  styles.expanded_card_label_container,
-                  {
-                    borderBottomWidth: 0,
-                  },
-                ]}
-              >
-                {data.value.length ? (
-                  <>
-                    <Text style={styles.expanded_label}>
-                      {jobType === "1" || jobType === "2"
-                        ? data.title_en + " - " + data.sn
-                        : data.title_en}
-                    </Text>
-                    <Pressable
-                      onPress={() => {
-                        setModalVisible(true);
-                        setImageUri(
-                          data.unit === "before_image"
-                            ? "https://api.saijo-denki.com/img/club/upload/before/" +
-                                data.value +
-                                "?" +
-                                new Date()
-                            : "https://api.saijo-denki.com/img/club/upload/after/" +
-                                data.value +
-                                "?" +
-                                new Date()
-                        );
-                        setModalTitle(
-                          jobType === "1" || jobType === "2"
-                            ? data.title_en + " - " + data.sn
-                            : data.title_en
-                        );
-                      }}
-                    >
-                      <Image
-                        source={
-                          data.value.length
-                            ? {
-                                uri:
-                                  data.unit === "before_image"
-                                    ? "https://api.saijo-denki.com/img/club/upload/before/" +
-                                      data.value +
-                                      "?" +
-                                      new Date()
-                                    : "https://api.saijo-denki.com/img/club/upload/after/" +
-                                      data.value +
-                                      "?" +
-                                      new Date(),
-                              }
-                            : null
-                        }
-                        style={[
-                          styles.report_image,
-                          {
-                            height: data.value.length ? height * 0.2 : 0,
-                          },
-                        ]}
-                      />
-                    </Pressable>
-                  </>
-                ) : null}
-                {data.staff_comment.length ? (
-                  <Text style={styles.expanded_label}>
-                    {data.staff_comment.length}
-                  </Text>
-                ) : null}
-              </View>
-            ) : (
-              <View style={styles.expanded_value_container}>
-                <View style={styles.report_card_circle} />
-
-                {outputFormat(data.value, data.input_type, data.unit)}
-              </View>
-            )}
+  return data.body.length
+    ? data.body.map((item, index) => (
+        <View key={index}>
+          <View style={styles.reportCard}>
+            <View style={styles.reportCardHeader}></View>
+            <Text style={styles.reportLabel}>{item.title_th}</Text>
+            <Pressable
+              style={styles.reportExpandBtn}
+              onPress={() => toggleReportInput(index)}
+            >
+              <FontAwesome5
+                name="chevron-down"
+                color={"#b31117"}
+                size={normalize(14) > 18 ? 18 : normalize(14)}
+                style={{
+                  transform: [{ rotate: item.isExpanded ? "180deg" : "0deg" }],
+                }}
+              />
+            </Pressable>
           </View>
-        ))}
-      </View>
-    </View>
-  ));
+          <View
+            style={{
+              width: width * 0.9,
+            }}
+          >
+            {item.value.map((data, key) => (
+              <View
+                key={key}
+                style={{
+                  height: item.isExpanded ? null : 0,
+                  marginBottom: item.isExpanded ? 10 : 0,
+                  overflow: "hidden",
+                }}
+              >
+                {data.input_type === "file" ? (
+                  data.uri || data.value ? (
+                    <>
+                      <View
+                        style={{
+                          width: width * 0.9,
+                          flexDirection: "row",
+                          marginTop: 10,
+                        }}
+                      >
+                        <Pressable
+                          style={{ position: "relative" }}
+                          onPress={() => {
+                            setModalVisible(true);
+                            setImageUri(
+                              data.uri
+                                ? data.uri
+                                : data.value
+                                ? data.unit === "after_image"
+                                  ? "https://api.saijo-denki.com/img/club/upload/after/" +
+                                    data.value +
+                                    "?" +
+                                    new Date()
+                                  : "https://api.saijo-denki.com/img/club/upload/before/" +
+                                    data.value +
+                                    "?" +
+                                    new Date()
+                                : null
+                            );
+                            setModalTitle(
+                              jobType === 1 || jobType === 2
+                                ? data.title_th + " - " + data.sn
+                                : data.title_th
+                            );
+                          }}
+                        >
+                          <Image
+                            source={{
+                              uri: data.uri
+                                ? data.uri
+                                : data.value
+                                ? data.unit === "after_image"
+                                  ? "https://api.saijo-denki.com/img/club/upload/after/" +
+                                    data.value +
+                                    "?" +
+                                    new Date()
+                                  : "https://api.saijo-denki.com/img/club/upload/before/" +
+                                    data.value +
+                                    "?" +
+                                    new Date()
+                                : null,
+                            }}
+                            style={{
+                              marginHorizontal: 5,
+                              height: data.uri
+                                ? (width * 0.9) / 3 - 10
+                                : data.value
+                                ? (width * 0.9) / 3 - 10
+                                : 0,
+                              width: data.uri
+                                ? (width * 0.9) / 3 - 10
+                                : data.value
+                                ? (width * 0.9) / 3 - 10
+                                : 0,
+                              borderRadius: 8,
+                            }}
+                          />
+                        </Pressable>
+                        <View style={styles.imageDescriptionContainer}>
+                          <Text style={styles.inputLabel}>รายละเอียด</Text>
+                          <TextInput
+                            style={styles.input}
+                            placeholder={"รายละเอียด"}
+                            placeholderTextColor="rgba(102,102,102,0.5)"
+                            autoCapitalize="none"
+                            multiline={true}
+                            defaultValue={data.title_th}
+                            editable={false}
+                          />
+                        </View>
+                      </View>
+                      {data.staff_checked === "ไม่ผ่าน" ? (
+                        <Text
+                          style={[
+                            styles.expandedLabel,
+                            {
+                              marginHorizontal: 5,
+                              marginTop: 10,
+                              padding: 0,
+                              color: "#b31117",
+                            },
+                          ]}
+                        >
+                          {"หมายเหตุ: " + data.staff_comment}
+                        </Text>
+                      ) : null}
+                    </>
+                  ) : null
+                ) : (
+                  <View
+                    key={key}
+                    style={[
+                      styles.expandedCard,
+                      {
+                        height: item.isExpanded ? null : 0,
+                        marginBottom: item.isExpanded ? 10 : 0,
+                        overflow: "hidden",
+                      },
+                    ]}
+                  >
+                    <View
+                      style={[
+                        styles.expandedCardContainer,
+                        {
+                          flexDirection:
+                            data.input_type === "textarea" ? "column" : "row",
+                        },
+                      ]}
+                    >
+                      {data.input_type === "textarea" ||
+                      data.input_type === "file" ? null : (
+                        <View
+                          style={[
+                            styles.expandedCardLabelContainer,
+                            {
+                              borderBottomWidth:
+                                item.value.length - 1 === key ? 0 : 1,
+                            },
+                          ]}
+                        >
+                          <Text style={styles.expandedLabel}>{data.sn}</Text>
+                        </View>
+                      )}
+                      {data.input_type === "textarea" ? (
+                        <View>
+                          <View style={styles.imageDescriptionContainer}>
+                            <Text style={styles.inputLabel}>
+                              {data.unit !== "etc" && data.title_en
+                                ? data.title_en + " "
+                                : null}
+                              รายละเอียด
+                            </Text>
+                            <TextInput
+                              style={styles.input}
+                              placeholder={"รายละเอียด"}
+                              placeholderTextColor="rgba(102,102,102,0.5)"
+                              autoCapitalize="none"
+                              editable={false}
+                              multiline={true}
+                              defaultValue={data.value}
+                            />
+                          </View>
+                        </View>
+                      ) : (
+                        <View style={styles.expandedValueContainer}>
+                          {outputFormat(
+                            data.value,
+                            data.input_type,
+                            data.unit,
+                            index,
+                            data.sn,
+                            data.order
+                          )}
+                        </View>
+                      )}
+                    </View>
+                  </View>
+                )}
+              </View>
+            ))}
+          </View>
+        </View>
+      ))
+    : null;
 };
 
 const ReportScreen = ({ navigation, route }) => {
   const [listData, setListData] = useState([]);
-  const [jobID, setJobID] = useState(0);
-  const [jobType, setJobType] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
   const [imageUri, setImageUri] = useState("");
   const [modalTitle, setModalTitle] = useState("");
   const [modalSign, setModalSign] = useState(false);
   const [page, setPage] = useState(1);
+
+  const jobType = route.params?.job_type ? route.params.job_type : 0;
+  const jobID = route.params?.job_id ? route.params.job_id : 0;
 
   const scrollViewRef = useRef();
 
@@ -419,229 +423,255 @@ const ReportScreen = ({ navigation, route }) => {
     (async () => {
       try {
         let token = await AsyncStorage.getItem("token");
+        let res = await summaryForm(token, jobID);
+        let report = res.data.data;
 
-        try {
-          let job_id = route.params?.job_id ? route.params.job_id : 0;
-          let res = await summaryForm(token, job_id);
-          let report = res.data.data;
+        let result = report.map((data) => ({
+          ...data,
+          show: findType(data.body),
+          body: data.body.map((item) => ({
+            ...item,
+            isExpanded: true,
+          })),
+        }));
 
-          var result = report.map((data) => ({
-            ...data,
-            show: findType(data.body),
-            body: data.body.map((item) => ({
-              ...item,
-              isExpanded: true,
-            })),
-          }));
-
-          setListData(result);
-          setJobType(route.params?.job_type ? route.params.job_type : 0);
-          setJobID(route.params?.job_id ? route.params.job_id : 0);
-        } catch (error) {
-          console.log(error.response.data.message);
-        }
-      } catch (error) {
-        console.log(error);
+        setListData(result);
+      } catch (e) {
+        console.log(e);
       }
     })();
   }, []);
 
-  const updateLayout = (index, sub_index) => {
+  const updateLayout = (index, subIndex) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     const array = [...listData];
 
-    array[index]["body"][sub_index]["isExpanded"] =
-      !array[index]["body"][sub_index]["isExpanded"];
+    array[index]["body"][subIndex]["isExpanded"] =
+      !array[index]["body"][subIndex]["isExpanded"];
 
     setListData(array);
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar style="dark" />
-      <Text style={styles.report_sub_header}>
-        ข้อกำหนดในการตรวจสอบ รอให้เครื่องทำงานอย่างน้อย 10 นาที
-      </Text>
-      <ScrollView
-        style={{
-          width: "100%",
-          marginTop: height * 0.01,
-        }}
-        showsVerticalScrollIndicator={false}
-        ref={scrollViewRef}
-      >
-        {page === 1 && (
-          <View style={{ width: width, alignItems: "center" }}>
-            {listData.map((item, index) => (
-              <View key={index} style={styles.report_container}>
-                <Text
-                  style={[
-                    styles.report_title,
-                    { marginTop: 0, display: item.show ? "flex" : "none" },
-                  ]}
-                >
-                  {item.header_th}
-                </Text>
-                {item.show && (
-                  <ExpandableComponent
-                    data={item}
-                    onPressFunction={(val) => updateLayout(index, val)}
-                    jobType={jobType}
-                    setModalVisible={setModalVisible}
-                    setImageUri={setImageUri}
-                    setModalTitle={setModalTitle}
-                  />
-                )}
-              </View>
-            ))}
-          </View>
-        )}
-        {page === 2 && (
-          <View style={{ width: width, alignItems: "center" }}>
-            {listData.map((item, index) => (
-              <View key={index} style={styles.report_container}>
-                <Text
-                  style={[
-                    styles.report_title,
-                    { marginTop: 0, display: !item.show ? "flex" : "none" },
-                  ]}
-                >
-                  {item.header_th}
-                </Text>
-                {!item.show && (
-                  <ExpandableComponent
-                    data={item}
-                    onPressFunction={(val) => updateLayout(index, val)}
-                    jobType={jobType}
-                    setModalVisible={setModalVisible}
-                    setImageUri={setImageUri}
-                    setModalTitle={setModalTitle}
-                  />
-                )}
-              </View>
-            ))}
-          </View>
-        )}
-      </ScrollView>
-      {page === 1 && (
-        <View style={styles.button_container}>
-          <Pressable
-            style={styles.cancel_button}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={styles.cancel_text}>ย้อนกลับ</Text>
-          </Pressable>
-          <Pressable
-            style={styles.view_sign_button}
-            onPress={() => {
-              scrollViewRef.current?.scrollTo({ y: 0, animated: true });
-              setPage(2);
+    <Fragment>
+      <SafeAreaView style={styles.container}>
+        <StatusBar style="light" />
+        <View style={styles.summaryFormContainer}>
+          <Text style={styles.reportHeader}>
+            ข้อกำหนดในการตรวจสอบ รอให้เครื่องทำงานอย่างน้อย 10 นาที
+          </Text>
+          <ScrollView
+            style={{
+              width: "100%",
             }}
+            showsVerticalScrollIndicator={false}
+            ref={scrollViewRef}
           >
-            <Text style={styles.button_text}>ต่อไป</Text>
-          </Pressable>
-        </View>
-      )}
-      {page === 2 && (
-        <View style={styles.button_container}>
-          <Pressable
-            style={styles.cancel_button}
-            onPress={() => {
-              scrollViewRef.current?.scrollTo({ y: 0, animated: true });
-              setPage(1);
-            }}
-          >
-            <Text style={styles.cancel_text}>ย้อนกลับ</Text>
-          </Pressable>
-          <Pressable
-            style={styles.view_sign_button}
-            onPress={() => setModalSign(true)}
-          >
-            <Text style={styles.button_text}>ดูลายเซ็น</Text>
-          </Pressable>
-        </View>
-      )}
-
-      <Modal animationType="fade" transparent={true} visible={modalVisible}>
-        <View style={styles.modal_background}>
-          <View style={styles.modal_container}>
-            <View style={styles.modal_header}>
-              <Text style={styles.modal_header_text}>{modalTitle}</Text>
+            {page === 1 && (
+              <View style={styles.formContainer}>
+                {listData.map((item, index) => (
+                  <View key={index}>
+                    <Text
+                      style={[
+                        styles.formTitle,
+                        { display: item.show ? "flex" : "none" },
+                      ]}
+                    >
+                      {item.header_th}
+                    </Text>
+                    {item.show && (
+                      <ExpandableComponent
+                        data={item}
+                        jobID={jobID}
+                        jobType={jobType}
+                        setModalVisible={setModalVisible}
+                        setImageUri={setImageUri}
+                        setModalTitle={setModalTitle}
+                        toggleReportInput={(val) => updateLayout(index, val)}
+                      />
+                    )}
+                  </View>
+                ))}
+              </View>
+            )}
+            {page === 2 && (
+              <View style={styles.formContainer}>
+                {listData.map((item, index) => (
+                  <View key={index}>
+                    <Text
+                      style={[
+                        styles.formTitle,
+                        { display: !item.show ? "flex" : "none" },
+                      ]}
+                    >
+                      {item.header_th}
+                    </Text>
+                    {!item.show && (
+                      <ExpandableComponent
+                        data={item}
+                        jobID={jobID}
+                        jobType={jobType}
+                        setModalVisible={setModalVisible}
+                        setImageUri={setImageUri}
+                        setModalTitle={setModalTitle}
+                        toggleReportInput={(val) => updateLayout(index, val)}
+                      />
+                    )}
+                  </View>
+                ))}
+              </View>
+            )}
+          </ScrollView>
+          {page === 1 && (
+            <View style={styles.buttonContainer}>
               <Pressable
-                style={styles.close_modal_btn}
+                style={styles.cancelBtn}
+                onPress={() => navigation.goBack()}
+              >
+                <Text style={styles.cancelText}>ยกเลิก</Text>
+              </Pressable>
+              <Pressable
+                style={styles.confirmBtn}
                 onPress={() => {
-                  setModalVisible(false);
-                  setImageUri("");
-                  setModalTitle("");
+                  scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+                  setPage(2);
                 }}
               >
-                <MaterialCommunityIcons
-                  name="close"
-                  color="#ffffff"
-                  size={normalize(20) > 30 ? 30 : normalize(20)}
-                />
+                <Text style={styles.confirmText}>ต่อไป</Text>
               </Pressable>
             </View>
-            <View style={styles.modal_body}>
-              <Image
-                source={{ uri: imageUri }}
-                style={styles.modal_report_image}
-                resizeMode={"cover"}
-              />
-            </View>
-          </View>
-        </View>
-      </Modal>
-      <Modal animationType="fade" transparent={true} visible={modalSign}>
-        <View style={styles.modal_background}>
-          <View style={styles.modal_container}>
-            <View style={styles.modal_header}>
-              <Text style={styles.modal_header_text}>
-                ยืนยันรายงานผลการตรวจสอบบริการ
-              </Text>
+          )}
+          {page === 2 && (
+            <View style={styles.buttonContainer}>
               <Pressable
-                style={styles.close_modal_btn}
+                style={styles.cancelBtn}
                 onPress={() => {
-                  setModalSign(false);
+                  scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+                  setPage(1);
                 }}
               >
-                <MaterialCommunityIcons
-                  name="close"
-                  color="#ffffff"
-                  size={normalize(20) > 30 ? 30 : normalize(20)}
-                />
+                <Text style={styles.cancelText}>ย้อนกลับ</Text>
+              </Pressable>
+              <Pressable
+                style={styles.confirmBtn}
+                onPress={() => {
+                  setModalSign(true);
+                }}
+              >
+                <Text style={styles.confirmText}>ดูลายเซ็น</Text>
               </Pressable>
             </View>
-            <View
-              style={[
-                styles.modal_body,
-                {
-                  paddingLeft: "6%",
-                  paddingRight: "6%",
-                  paddingTop: "3%",
-                  paddingBottom: "3%",
-                },
-              ]}
-            >
-              <Text style={styles.sign_title}>ลงชื่อ</Text>
-              <View style={styles.sign_container}>
-                <View style={styles.sign_bar} />
+          )}
+        </View>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onDismiss={() => {
+            setImageUri("");
+            setModalTitle("");
+          }}
+        >
+          <View style={styles.modalBackground}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalHeaderContainer}>
+                <View style={styles.modalHeaderTitleContainer}>
+                  <Text style={styles.modalHeaderTitle}>
+                    {jobType === 1 || jobType === 2 ? modalTitle : ""}
+                  </Text>
+                </View>
+                <Pressable
+                  style={styles.closeModalBtn}
+                  onPress={() => {
+                    setModalVisible(false);
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="close"
+                    size={26}
+                    color={"#ffffff"}
+                  />
+                </Pressable>
+              </View>
+              <View
+                style={[
+                  styles.modalBodyContainer,
+                  {
+                    paddingHorizontal: 0,
+                    paddingVertical: 0,
+                    paddingBottom: 0,
+                    paddingTop: 0,
+                    justifyContent: "center",
+                  },
+                ]}
+              >
                 <Image
                   source={{
-                    uri:
-                      "https://api.saijo-denki.com/img/club/upload/signature/" +
-                      jobID +
-                      ".png",
+                    uri: imageUri,
                   }}
-                  style={{ height: "100%", width: "100%" }}
+                  style={styles.modalReportImage}
                   resizeMode={"contain"}
                 />
               </View>
             </View>
           </View>
-        </View>
-      </Modal>
-    </SafeAreaView>
+        </Modal>
+        <Modal animationType="fade" transparent={true} visible={modalSign}>
+          <View style={styles.modalBackground}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalHeaderContainer}>
+                <View style={styles.modalHeaderTitleContainer}>
+                  <Text style={styles.modalHeaderTitle}>
+                    ยืนยันรายงานผลการตรวจสอบบริการ
+                  </Text>
+                </View>
+                <Pressable
+                  style={styles.closeModalBtn}
+                  onPress={() => {
+                    setModalSign(false);
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="close"
+                    size={26}
+                    color={"#ffffff"}
+                  />
+                </Pressable>
+              </View>
+              <View
+                style={[
+                  styles.modalBodyContainer,
+                  {
+                    paddingHorizontal: 25,
+                  },
+                ]}
+              >
+                <Text style={styles.signTitle}>ลงชื่อ</Text>
+                <View style={styles.signContainer}>
+                  <View style={styles.signBar} />
+                  <Image
+                    source={{
+                      uri:
+                        "https://api.saijo-denki.com/img/club/upload/signature/" +
+                        jobID +
+                        ".png",
+                    }}
+                    style={{ height: "100%", width: "100%" }}
+                    resizeMode={"contain"}
+                  />
+                </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </SafeAreaView>
+      <SafeAreaView
+        style={{
+          flex: 0,
+          backgroundColor: "#f2f2f2",
+        }}
+      />
+    </Fragment>
   );
 };
 

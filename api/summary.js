@@ -1,16 +1,12 @@
 import axios from "axios";
-import { Platform } from "react-native";
-const SERV_API = "https://api.saijo-denki.com";
 
-const fileType = (string, char) => {
-  return string.slice(string.indexOf(char) + 1);
-};
+const SERV_API = "https://api.saijo-denki.com";
 
 const summaryForm = async (token, job_id) => {
   return await axios({
     url: SERV_API + "/v1/summary/" + job_id,
     method: "GET",
-
+    timeout: 5000,
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -23,7 +19,7 @@ const saveSummaryForm = async (token, job_id, data) => {
   return await axios({
     url: SERV_API + "/v1/summary/" + job_id,
     method: "POST",
-
+    timeout: 5000,
     data: data,
     headers: {
       Accept: "application/json",
@@ -40,7 +36,8 @@ const uploadPic = async (
   order,
   before,
   after,
-  signature
+  signature,
+  imageType
 ) => {
   const formData = new FormData();
   formData.append(
@@ -48,14 +45,8 @@ const uploadPic = async (
     before
       ? {
           uri: before,
-          type:
-            Platform.OS === "android"
-              ? "image/.jpeg"
-              : "image/" + fileType(before, "."),
-          name:
-            Platform.OS === "android"
-              ? job_id + ".jpeg"
-              : job_id + "." + fileType(before, "."),
+          type: "image/" + imageType,
+          name: job_id + "." + imageType,
         }
       : null
   );
@@ -65,14 +56,8 @@ const uploadPic = async (
     after
       ? {
           uri: after,
-          type:
-            Platform.OS === "android"
-              ? "image/.jpeg"
-              : "image/" + fileType(after, "."),
-          name:
-            Platform.OS === "android"
-              ? job_id + ".jpeg"
-              : job_id + "." + fileType(after, "."),
+          type: "image/" + imageType,
+          name: job_id + "." + imageType,
         }
       : null
   );
@@ -114,7 +99,8 @@ const uploadInstallPic = async (
   order,
   before,
   after,
-  signature
+  signature,
+  imageType
 ) => {
   const formData = new FormData();
   formData.append(
@@ -122,14 +108,8 @@ const uploadInstallPic = async (
     before
       ? {
           uri: before,
-          type:
-            Platform.OS === "android"
-              ? "image/.jpeg"
-              : "image/" + fileType(before, "."),
-          name:
-            Platform.OS === "android"
-              ? job_id + ".jpeg"
-              : job_id + "." + fileType(before, "."),
+          type: "image/" + imageType,
+          name: job_id + "." + imageType,
         }
       : null
   );
@@ -139,14 +119,8 @@ const uploadInstallPic = async (
     after
       ? {
           uri: after,
-          type:
-            Platform.OS === "android"
-              ? "image/.jpeg"
-              : "image/" + fileType(after, "."),
-          name:
-            Platform.OS === "android"
-              ? job_id + ".jpeg"
-              : job_id + "." + fileType(after, "."),
+          type: "image/" + imageType,
+          name: job_id + "." + imageType,
         }
       : null
   );
@@ -232,7 +206,7 @@ const sendInvoice = async (token, job_id) => {
   return await axios({
     url: SERV_API + "/v1/jobs/invoice/" + job_id,
     method: "PUT",
-
+    timeout: 5000,
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -245,7 +219,7 @@ const invoices = async (token) => {
   return await axios({
     url: SERV_API + "/v1/summary/invoices",
     method: "GET",
-
+    timeout: 5000,
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",
@@ -258,7 +232,7 @@ const invoiceInfo = async (token, job_id) => {
   return await axios({
     url: SERV_API + "/v1/summary/invoice/" + job_id,
     method: "GET",
-
+    timeout: 5000,
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",

@@ -22,6 +22,7 @@ import { logout_app } from "../../api/auth";
 import jwt_decode from "jwt-decode";
 import { AuthContext } from "../../components/context";
 import { useIsFocused } from "@react-navigation/native";
+import * as FileSystem from "expo-file-system";
 
 const ProfileScreen = ({ navigation }) => {
   const [modalMenu, setModalMenu] = useState(false);
@@ -129,15 +130,13 @@ const ProfileScreen = ({ navigation }) => {
     try {
       let result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Image,
-        allowsEditing: true,
-        aspect: [1, 1],
+        allowsEditing: false,
         quality: 1,
       });
 
-      if (!result.cancelled) {
-        setImage(result.uri);
-
-        updateUserInfo(result.uri);
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+        updateUserInfo(result.assets[0].uri);
       }
     } catch {
       Alert.alert(
@@ -155,15 +154,13 @@ const ProfileScreen = ({ navigation }) => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Image,
-        allowsEditing: true,
-        aspect: [1, 1],
+        allowsEditing: false,
         quality: 1,
       });
 
-      if (!result.cancelled) {
-        setImage(result.uri);
-
-        updateUserInfo(result.uri);
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+        updateUserInfo(result.assets[0].uri);
       }
     } catch {
       Alert.alert(
@@ -176,25 +173,27 @@ const ProfileScreen = ({ navigation }) => {
   const updateUserInfo = async (uri) => {
     try {
       let token = await AsyncStorage.getItem("token");
+      let info = await FileSystem.getInfoAsync(uri);
+      let imageType = getUrlExtension(info.uri);
 
-      try {
-        await update_user_info(
-          token,
-          userID,
-          name,
-          lastName,
-          phoneNumber,
-          uri,
-          address,
-          district,
-          province,
-          postalCode,
-          latitude,
-          longitude
-        );
-      } catch (error) {
-        console.log(error.response.data.message);
-      }
+      await update_user_info(
+        token,
+        userID,
+        name,
+        lastName,
+        phoneNumber,
+        uri,
+        address,
+        district,
+        province,
+        postalCode,
+        latitude,
+        longitude,
+        null,
+        null,
+        null,
+        imageType
+      );
     } catch (error) {
       console.log(error);
     }
@@ -232,6 +231,10 @@ const ProfileScreen = ({ navigation }) => {
     } catch (error) {
       console.log(error.response.data.message);
     }
+  };
+
+  const getUrlExtension = (uri) => {
+    return uri.split(/[#?]/)[0].split(".").pop().trim();
   };
 
   return (

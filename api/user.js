@@ -29,7 +29,8 @@ const update_user_info = async (
   longitude = "",
   idCardFront = null,
   idCardBack = null,
-  bookBank = null
+  bookBank = null,
+  imageType
 ) => {
   const formData = new FormData();
   formData.append("name", firstName);
@@ -40,8 +41,8 @@ const update_user_info = async (
     profileImage
       ? {
           uri: profileImage,
-          type: "image/jpeg",
-          name: userID + ".jpg",
+          type: "image/" + imageType,
+          name: userID + "." + imageType,
         }
       : null
   );
@@ -56,8 +57,8 @@ const update_user_info = async (
     idCardFront
       ? {
           uri: idCardFront,
-          type: "image/jpeg",
-          name: userID + ".jpg",
+          type: "image/" + imageType,
+          name: userID + "." + imageType,
         }
       : null
   );
@@ -66,8 +67,8 @@ const update_user_info = async (
     idCardBack
       ? {
           uri: idCardBack,
-          type: "image/jpeg",
-          name: userID + ".jpg",
+          type: "image/" + imageType,
+          name: userID + "." + imageType,
         }
       : null
   );
@@ -76,8 +77,8 @@ const update_user_info = async (
     bookBank
       ? {
           uri: bookBank,
-          type: "image/jpeg",
-          name: userID + ".jpg",
+          type: "image/" + imageType,
+          name: userID + "." + imageType,
         }
       : null
   );
@@ -86,7 +87,7 @@ const update_user_info = async (
     url: SERV_API + "/v1/technician/info",
     method: "POST",
     data: formData,
-
+    timeout: 5000,
     headers: {
       Accept: "application/json",
       "Content-Type": "multipart/form-data",

@@ -16,6 +16,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../../assets/stylesheet/auth/auth";
 import * as ImagePicker from "expo-image-picker";
 import { update_user_info } from "../../api/user";
+import * as FileSystem from "expo-file-system";
 
 const VerifyIdScreen = ({ navigation, route }) => {
   const [frontImage, setFrontImage] = useState(null);
@@ -37,6 +38,7 @@ const VerifyIdScreen = ({ navigation, route }) => {
   const [modalFront, setModalFront] = useState(false);
   const [modalBack, setModalBack] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [type, setType] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -87,18 +89,17 @@ const VerifyIdScreen = ({ navigation, route }) => {
     }
   }, []);
 
-  const cameraImage = async (type) => {
+  const cameraImage = async (img) => {
     try {
       let result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Image,
-        allowsEditing: true,
-        aspect: [16, 9],
+        allowsEditing: false,
         quality: 1,
       });
 
-      if (!result.cancelled) {
-        if (type === "front") {
-          setFrontImage(result.uri);
+      if (!result.canceled) {
+        if (img === "front") {
+          setFrontImage(result.assets[0].uri);
           setModalFront(false);
           setData({
             ...data,
@@ -106,7 +107,7 @@ const VerifyIdScreen = ({ navigation, route }) => {
             errorFront: "",
           });
         } else {
-          setBackImage(result.uri);
+          setBackImage(result.assets[0].uri);
           setModalBack(false);
           setData({
             ...data,
@@ -115,6 +116,10 @@ const VerifyIdScreen = ({ navigation, route }) => {
           });
         }
       }
+
+      let info = await FileSystem.getInfoAsync(result.assets[0].uri);
+      let imageType = getUrlExtension(info.uri);
+      setType(imageType);
     } catch (error) {
       console.log(error);
       Alert.alert(
@@ -124,18 +129,17 @@ const VerifyIdScreen = ({ navigation, route }) => {
     }
   };
 
-  const pickImage = async (type) => {
+  const pickImage = async (img) => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Image,
-        allowsEditing: true,
-        aspect: [16, 9],
+        allowsEditing: false,
         quality: 1,
       });
 
-      if (!result.cancelled) {
-        if (type === "front") {
-          setFrontImage(result.uri);
+      if (!result.canceled) {
+        if (img === "front") {
+          setFrontImage(result.assets[0].uri);
           setModalFront(false);
           setData({
             ...data,
@@ -143,7 +147,7 @@ const VerifyIdScreen = ({ navigation, route }) => {
             errorFront: "",
           });
         } else {
-          setBackImage(result.uri);
+          setBackImage(result.assets[0].uri);
           setModalBack(false);
           setData({
             ...data,
@@ -152,6 +156,10 @@ const VerifyIdScreen = ({ navigation, route }) => {
           });
         }
       }
+
+      let info = await FileSystem.getInfoAsync(result.assets[0].uri);
+      let imageType = getUrlExtension(info.uri);
+      setType(imageType);
     } catch (error) {
       console.log(error);
       Alert.alert(
@@ -197,7 +205,8 @@ const VerifyIdScreen = ({ navigation, route }) => {
             route.params?.latitude ? route.params.latitude : "",
             route.params?.longitude ? route.params.longitude : "",
             front,
-            back
+            back,
+            type
           );
 
           setIsLoading(false);
@@ -225,6 +234,10 @@ const VerifyIdScreen = ({ navigation, route }) => {
         errorBack: !data.isValidBack ? "กรุณาอัพโหลดรูป!" : "",
       });
     }
+  };
+
+  const getUrlExtension = (uri) => {
+    return uri.split(/[#?]/)[0].split(".").pop().trim();
   };
 
   return (

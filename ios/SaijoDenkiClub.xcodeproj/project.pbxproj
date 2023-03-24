@@ -307,7 +307,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SaijoDenkiClub/SaijoDenkiClub.entitlements;
-				CURRENT_PROJECT_VERSION = 1.2.7;
+				CURRENT_PROJECT_VERSION = 1.2.11;
 				DEVELOPMENT_TEAM = FHGM7WP2X4;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -319,7 +319,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 4.4.8;
+				MARKETING_VERSION = 4.4.10;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -342,20 +342,20 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SaijoDenkiClub/SaijoDenkiClub.entitlements;
-				CURRENT_PROJECT_VERSION = 1.2.7;
+				CURRENT_PROJECT_VERSION = 1.2.11;
 				DEVELOPMENT_TEAM = FHGM7WP2X4;
 				INFOPLIST_FILE = SaijoDenkiClub/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Saijo Denki Club";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 4.4.8;
+				MARKETING_VERSION = 4.4.10;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "th.co.saijo-denki.Saijo-Denki-Club";
 				PRODUCT_NAME = SaijoDenkiClub;
 				SWIFT_VERSION = 5.0;

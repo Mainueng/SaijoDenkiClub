@@ -2,7 +2,7 @@
   "expo": {
     "name": "Saijo Denki Club",
     "slug": "saijo-denki-club",
-    "version": "4.4.8",
+    "version": "4.4.10",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,14 +17,8 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "th.co.saijo-denki.Saijo-Denki-Club",
-      "buildNumber": "1.2.6",
-      "usesAppleSignIn": true,
-      "infoPlist": {
-        "UIBackgroundModes": [
-          "location",
-          "fetch"
-        ]
-      }
+      "buildNumber": "1.2.10",
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {
@@ -38,7 +32,7 @@
       },
       "package": "app.saijo.saijo_denki_club",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 54
+      "versionCode": 56
     },
     "web": {
       "favicon": "./assets/favicon.png"

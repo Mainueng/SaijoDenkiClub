@@ -116,7 +116,7 @@ export default StyleSheet.create({
     fontSize: normalize(12) > 16 ? 16 : normalize(12),
   },
   speed: {
-    fontSize: normalize(10) > 14 ? 14 : normalize(14),
+    fontSize: normalize(10) > 14 ? 14 : normalize(10),
   },
   input_circle: {
     borderWidth: 1,

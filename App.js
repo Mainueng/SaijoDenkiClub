@@ -267,7 +267,7 @@ const App = () => {
               // dispatch({
               //   type: "LOGIN",
               //   token:
-              //     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI0MTk2IiwidXNlcl9pZCI6IjI0MTk2IiwidXNlcl9pbWFnZSI6bnVsbCwibmFtZSI6IlNhaWpvIiwibGFzdG5hbWUiOiJEZW5raSIsImVtYWlsIjoiY2hhbm9rdHJ1ZUBtZS5jb20iLCJ0ZWxlcGhvbmUiOiIwMTIzNDU2NzgiLCJsYXRpdHVkZSI6IjEzLjg0NjQ5NjkwNDg5Nzc5NiIsImxvbmdpdHVkZSI6IjEwMC41MzI4NjQwNjE1NTQ4NiIsInJhdGluZyI6NSwidXNlcl9yb2xlX2lkIjoiMyIsImN1c19ncm91cF9pZCI6IjAiLCJzdGF0dXMiOiIxIiwidGltZSI6MTY3OTAxOTA1NCwiZGV2aWNlX2lkIjoiMTExIiwibG9naW5fZmFjZWJvb2siOmZhbHNlfQ.zcLP0ysM7OrbwrAwqyabJCRyR3G-T5gAOErHZQ_PJfQ",
+              //     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI0MTk2IiwidXNlcl9pZCI6IjI0MTk2IiwidXNlcl9pbWFnZSI6bnVsbCwibmFtZSI6IlNhaWpvIiwibGFzdG5hbWUiOiJEZW5raSIsImVtYWlsIjoiY2hhbm9rdHJ1ZUBtZS5jb20iLCJ0ZWxlcGhvbmUiOiIwODEyMzQ1Njc4IiwibGF0aXR1ZGUiOiIwIiwibG9uZ2l0dWRlIjoiMCIsInJhdGluZyI6NSwidXNlcl9yb2xlX2lkIjoiMyIsImN1c19ncm91cF9pZCI6IjAiLCJzdGF0dXMiOiIxIiwidGltZSI6MTY4MTYyNjk2NSwiZGV2aWNlX2lkIjoiRXhwb25lbnRQdXNoVG9rZW5bN2hPa2RLSk52bjBaSmdodElTamFJV10iLCJsb2dpbl9mYWNlYm9vayI6ZmFsc2V9.11voPZsfTVdA9Y4hMMiJpOjBp6UwtLVwK7d2vorAjro",
               // });
             });
         } catch (error) {
@@ -396,9 +396,9 @@ const App = () => {
     let version = "";
 
     if (Platform.OS === "ios") {
-      version = "4.4.8";
+      version = "4.4.10";
     } else {
-      version = "4.4.8";
+      version = "4.4.10";
     }
 
     (async () => {

@@ -207,12 +207,21 @@ const JobInfoModal = ({
       case status_code === 7:
         return (
           <View style={styles.modal_button_container}>
-            <Pressable
-              style={styles.checkin_button}
-              onPress={() => checkInHandle(job_id)}
-            >
-              <Text style={styles.modal_button_text}>เช็คอิน</Text>
-            </Pressable>
+            {checkin ? (
+              <Pressable
+                style={styles.checkin_button}
+                onPress={() => checkOutHandle(job_id)}
+              >
+                <Text style={styles.modal_button_text}>เช็คเอาท์</Text>
+              </Pressable>
+            ) : (
+              <Pressable
+                style={styles.checkin_button}
+                onPress={() => checkInHandle(job_id)}
+              >
+                <Text style={styles.modal_button_text}>เช็คอิน</Text>
+              </Pressable>
+            )}
             <Pressable
               style={[
                 styles.call_button,
@@ -745,6 +754,7 @@ const JobInfoModal = ({
                   style={{
                     height: "100%",
                     width: width * 0.9,
+                    maxWidth: 500,
                   }}
                 >
                   <View style={styles.modal_body_container}>
@@ -1176,6 +1186,7 @@ const JobInfoModal = ({
                   style={{
                     height: "100%",
                     width: width * 0.9,
+                    maxWidth: 500,
                   }}
                 >
                   <View style={styles.modal_body_container}>

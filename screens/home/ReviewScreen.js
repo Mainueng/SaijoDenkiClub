@@ -380,6 +380,16 @@ const ReviewScreen = ({ navigation, route }) => {
     }
   };
 
+  const goBack = () => {
+    navigation.navigate({
+      name: "Summary",
+      params: {
+        job_id: route.params?.job_id ? route.params.job_id : 0,
+        job_type: route.params?.job_type ? route.params.job_type : 0,
+      },
+    });
+  };
+
   const imgWidth = "100%";
   const imgHeight = height * 0.2;
   const style = `.m-signature-pad {box-shadow: none; border: none; } 
@@ -449,10 +459,7 @@ const ReviewScreen = ({ navigation, route }) => {
             </View>
           </TouchableWithoutFeedback>
           <View style={styles.button_container}>
-            <Pressable
-              style={styles.cancel_button}
-              onPress={() => navigation.goBack()}
-            >
+            <Pressable style={styles.cancel_button} onPress={() => goBack()}>
               <Text style={styles.cancel_text}>ยกเลิก</Text>
             </Pressable>
             <Pressable
